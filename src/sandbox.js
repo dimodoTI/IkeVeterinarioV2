@@ -12,9 +12,9 @@ import {
     viewManager
 } from "./views/manager"
 import {
-
     captureMedia
 } from "./redux/ui/actions";
+
 
 
 store.dispatch(captureMedia())

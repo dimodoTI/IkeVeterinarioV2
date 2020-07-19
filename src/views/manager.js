@@ -15,18 +15,24 @@ import {
 } from "./ui/layouts"
 
 import {
+    blueHeader
+} from "./headers/blueHeader"
+import {
     redFoot
 } from "./foots/redFoot"
 import {
-    showScreen
-} from "../redux/screens/actions";
+    greenDashboard
+} from "./bodies/greenDashboard"
+
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
 export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
     constructor() {
         super();
+
     }
+
 
     static get styles() {
         return css `
@@ -41,16 +47,17 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
 
         ${layoutsCSS};
 
-        
- 
-        
-
 
         `
     }
+
+
+
     render() {
         return html `
-            <input type="button" @click="${this.changeLauout}" style="height:2rem;width:2rem"/>
+
+            <blue-header class="header"></blue-header>
+            <green-dashboard class="body"></green-dashboard>
             <red-foot class="foot"></red-foot>
 
        
@@ -60,20 +67,12 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
     stateChanged(state, name) {
         if ((name == MEDIA_CHANGE || name == SCREEN)) {
             this.mediaSize = state.ui.media.size
-            this.layout = state.screen.layouts[this.mediaSize]
+            this.layout = state.screen.layouts[this.mediaSize].name
         }
-
-
 
         this.update();
     }
-    changeLauout() {
-        if (store.getState().screen.name == "splash") {
-            store.dispatch(showScreen("agenda", "splash"))
-        } else {
-            store.dispatch(showScreen("splash", "agenda"))
-        }
-    }
+
 
     static get properties() {
         return {

@@ -7,20 +7,41 @@ import {
 } from "./layouts"
 
 
-
 export const SHOW_SCREEN = "[screen] show screen";
+
 
 const screenLayuts = {
     splash: {
         small: ALL_BODY,
-        medium: ALL_BODY,
-        large: ALL_BODY
+        medium: HEADER_BODY,
+        large: HEADER_BODY
     },
     agenda: {
-        small: HEADER_BODY_FOOT,
+        small: HEADER_BODY,
+        medium: HEADER_BODY_FOOT,
+        large: HEADER_BODY_FOOT
+    },
+    cardA: {
+        small: HEADER_BODY,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
+    },
+    cardB: {
+        small: HEADER_BODY,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
+    },
+    cardC: {
+        small: HEADER_BODY,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
+    },
+    cardD: {
+        small: HEADER_BODY,
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
     }
+
 }
 
 export const showScreen = (name, prevScreen) => {

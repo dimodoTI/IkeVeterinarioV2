@@ -12,7 +12,7 @@ import {
 
 export const layoutsCSS = css `
 
-    :host([layout="${unsafeCSS(SLIDER_HEADER_BODY)}"]){
+    :host([layout="${unsafeCSS(SLIDER_HEADER_BODY.name)}"]){
         grid-template-areas:"header  header  header"
                             "foot    body    body";
         grid-template-rows:2fr 8fr;
@@ -20,7 +20,7 @@ export const layoutsCSS = css `
         grid-gap:.3rem
     }
 
-    :host([layout="${unsafeCSS(HEADER_BODY)}"]){
+    :host([layout="${unsafeCSS(HEADER_BODY.name)}"]){
         grid-template-areas:"header"
                             "body";
         grid-template-rows:2fr 8fr;
@@ -29,7 +29,7 @@ export const layoutsCSS = css `
 
 
     }
-    :host([layout="${unsafeCSS(BODY_FOOT)}"]){
+    :host([layout="${unsafeCSS(BODY_FOOT.name)}"]){
         grid-template-areas:"body"
                             "foot";
         grid-template-rows:8fr 2fr;
@@ -37,14 +37,14 @@ export const layoutsCSS = css `
 
     }
 
-    :host([layout="${unsafeCSS(HEADER_BODY_FOOT)}"]){
+    :host([layout="${unsafeCSS(HEADER_BODY_FOOT.name)}"]){
         grid-template-areas:"header"
                             "body"
                             "foot";
         grid-template-rows:2fr 8fr 2fr;
         grid-template-columns:1fr
     }
-    :host([layout="${unsafeCSS(ALL_BODY)}"]){
+    :host([layout="${unsafeCSS(ALL_BODY.name)}"]){
         grid-template-areas:"body";
         grid-template-rows:1fr;
         grid-template-columns:1fr

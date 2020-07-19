@@ -6,9 +6,18 @@ import {
 const initialState = {
     name: null,
     layouts: {
-        small: "",
-        medium: "",
-        large: ""
+        small: {
+            name: "",
+            areas: []
+        },
+        medium: {
+            name: "",
+            areas: []
+        },
+        large: {
+            name: "",
+            areas: []
+        }
     },
     prevScreen: null,
     timeStamp: null
