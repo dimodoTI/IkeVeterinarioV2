@@ -4,7 +4,8 @@ import {
     SHOW_ERROR,
     HIDE_ERROR,
     SET_MEDIA,
-    SET_LAYOUT
+    SET_MEDIA_ORIENTATION,
+
 } from "./actions";
 
 const initialState = {
@@ -17,6 +18,7 @@ const initialState = {
     },
     media: {
         size: "large",
+        orientation: "landscape",
         timeStamp: null
     }
 };
@@ -43,6 +45,10 @@ export const reducer = (state = initialState, action) => {
             break;
         case SET_MEDIA:
             newState.media.size = action.size
+            newState.media.timeStamp = (new Date()).getTime()
+            break;
+        case SET_MEDIA_ORIENTATION:
+            newState.media.orientation = action.orientation
             newState.media.timeStamp = (new Date()).getTime()
             break;
 

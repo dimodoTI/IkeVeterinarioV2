@@ -9,6 +9,7 @@ export const HIDE_ERROR = "[ui] hide error";
 //define el tamaño,forma orientacion de la UI
 export const CAPTURE_MEDIA = "[ui] capture media"
 export const SET_MEDIA = "[ui] set media"
+export const SET_MEDIA_ORIENTATION = "[ui] set media orientation"
 
 //define el layout de la UI
 export const SET_LAYOUT = "[ui] set layout"
@@ -35,4 +36,9 @@ export const captureMedia = () => ({
 export const setMedia = (size) => ({
   type: SET_MEDIA,
   size: size
+});
+
+export const setMediaOrientation = (orientation) => ({
+  type: SET_MEDIA_ORIENTATION,
+  orientation: orientation
 });
