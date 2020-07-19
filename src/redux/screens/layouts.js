@@ -1,0 +1,5 @@
+export const ALL_BODY = "TODO_BODY"
+export const HEADER_BODY_FOOT = "HEADER_BODY_FOOT"
+export const BODY_FOOT = "BODY_FOOT"
+export const HEADER_BODY = "HEADER_BODY"
+export const SLIDER_HEADER_BODY = "SLIDER_HEADER_BODY"
