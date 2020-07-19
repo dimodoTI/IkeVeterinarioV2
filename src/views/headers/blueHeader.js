@@ -12,6 +12,11 @@ import {
 import {
     showScreen
 } from "../../redux/screens/actions";
+import {
+    goNext,
+    goPrev,
+    goTo
+} from "../../redux/routing/actions"
 
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
@@ -21,8 +26,8 @@ export class blueHeader extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement)
         super();
         this.hidden = false
         this.area = "header"
-        this.current = 0
-        this.screens = ["splash", "agenda", "cardA", "cardB", "cardC", "cardD"]
+        //this.current = 0
+        //this.screens = ["splash", "agenda", "cardA", "cardB", "cardC", "cardD"]
     }
 
     static get styles() {
@@ -57,15 +62,17 @@ export class blueHeader extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement)
     }
 
     adelante() {
-        this.current += 1
+        /* this.current += 1
         if (this.current == this.screens.length) this.current = 0
-        store.dispatch(showScreen(this.screens[this.current], ""))
+        store.dispatch(showScreen(this.screens[this.current], "")) */
+        store.dispatch(goNext())
 
     }
     atras() {
-        this.current -= 1
+        /* this.current -= 1
         if (this.current < 0) this.current = this.screens.length - 1
-        store.dispatch(showScreen(this.screens[this.current], ""))
+        store.dispatch(showScreen(this.screens[this.current], "")) */
+        store.dispatch(goPrev())
 
     }
 

@@ -19,7 +19,6 @@ const initialState = {
             areas: []
         }
     },
-    prevScreen: null,
     timeStamp: null
 
 
@@ -35,7 +34,6 @@ export const reducer = (state = initialState, action) => {
             newState.timeStamp = (new Date()).getTime()
             newState.layouts = action.layouts
             newState.name = action.name
-            newState.prevScreen = action.prevScreen
     }
     return newState;
 };

@@ -44,12 +44,11 @@ const screenLayuts = {
 
 }
 
-export const showScreen = (name, prevScreen) => {
+export const showScreen = (name) => {
     const layouts = screenLayuts[name]
     return {
         type: SHOW_SCREEN,
         name: name,
-        prevScreen: prevScreen,
         layouts: layouts
     }
 };

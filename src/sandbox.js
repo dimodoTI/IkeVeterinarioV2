@@ -18,95 +18,130 @@ import {
 
 
 store.dispatch(captureMedia())
-
+/* 
 
 const largeScreenRoute = [
-    "1-opcion 1",
-    "2-opcion 2",
-    "3-opcion 3",
-    [
-        ["4/1/1-opcion 411", "4/1/2-opcion 412"],
-        ["4/2/1-opcion 421", "4/2/2-opcion 422"],
-        "4/3/1-opcion 431"
-    ],
-    "5-opcion 5",
-    ["6/1-opcion 61", "6/2-opcion 62"]
+    "1      -opcion 1",
+    "2      -opcion 2",
+    "3      -opcion 3",
+    "3/1    -opcion 31",
+    "3/1/1  -opcion 311",
+    "3/1/2  -opcion 312",
+    "3/1/2/1-opcion 3121",
+    "3/1/3  -opcion 313",
+    "3/2    -opcion 32",
+    "3/2/1  -opcion 321",
+    "3/2/2  -opcion 322",
+    "3/3    -opcion 33",
+    "3/3/1  -opcion 331",
+    "4      -opcion 4",
+    "5      -opcion 5",
+    "5/1    -opcion 51",
+    "6      -opcion 6",
+    "6/1    -opcion 61"
 ]
 
-const flatScreenRoute = largeScreenRoute.flat(Infinity)
 
-console.log(flatScreenRoute)
 let pointer = 0
 
-const sameGroup = (codeA, codeB) => {
+const isBrother = (codeA, codeB) => {
     const elementsCodeA = codeA.split("/")
     const elementsCodeB = codeB.split("/")
     elementsCodeA.pop()
     elementsCodeB.pop()
     return elementsCodeA.join() == elementsCodeB.join()
 }
-
-const sameSibling = (codeA, codeB) => {
-    const elementsCodeA = codeA.split("/")
-    const elementsCodeB = codeB.split("/")
-    return elementsCodeA.length == elementsCodeB.length
-}
-
-const highLevel = (codeA, codeB) => {
-    const elementsCodeA = codeA.split("/")
-    const elementsCodeB = codeB.split("/")
-    return elementsCodeA.length > elementsCodeB.length
+const isParent = (currentCode, prevCode) => {
+    const tail = currentCode.trim().replace(prevCode.trim(), "").split("/")
+    return tail.length == 2 && tail[0] == ""
 }
 
 const next = (pointer) => {
-    if (pointer < flatScreenRoute.length - 1) {
-        let currentCode = flatScreenRoute[pointer].split("-")[0]
+    let originalPointer = pointer
+    let currentCode = largeScreenRoute[pointer].split("-")[0]
+    while (pointer < largeScreenRoute.length - 1) {
         pointer += 1
-        let nextCode = flatScreenRoute[pointer].split("-")[0]
-        if (!sameGroup(currentCode, nextCode)) {
-            pointer -= 1
+        let nextCode = largeScreenRoute[pointer].split("-")[0]
+        if (isBrother(currentCode, nextCode)) {
+            return pointer
+        }
+    }
+    return originalPointer
+}
+const prev = (pointer) => {
+    let currentCode = largeScreenRoute[pointer].split("-")[0]
+    while (pointer > 0) {
+        pointer -= 1
+        let prevCode = largeScreenRoute[pointer].split("-")[0]
+        if (isBrother(currentCode, prevCode) || isParent(currentCode, prevCode)) {
+            return pointer
         }
     }
     return pointer
 }
-const prev = (pointer) => {
-    if (pointer > 0) {
-        let currentCode = flatScreenRoute[pointer].split("-")[0]
-        pointer -= 1
-        let prevCode = flatScreenRoute[pointer].split("-")[0]
-        if (sameGroup(prevCode, currentCode)) {
-            return pointer
-        } else {
-            while (sameSibling(prevCode, currentCode) || highLevel(prevCode, currentCode)) {
-                currentCode = prevCode
-                pointer -= 1
-                prevCode = flatScreenRoute[pointer].split("-")[0]
-            }
-            return pointer
-        }
-    }
-}
+
 const goTo = (option) => {
-    return flatScreenRoute.findIndex(item => {
+    return largeScreenRoute.findIndex(item => {
         return item.split("-")[1] == option
     })
 }
 
+console.log("test Next")
+pointer = goTo("opcion 1")
+console.log(largeScreenRoute[pointer])
+pointer = next(pointer)
+console.log(largeScreenRoute[pointer])
+pointer = next(pointer)
+pointer = goTo("opcion 31")
+console.log(largeScreenRoute[pointer])
+pointer = next(pointer)
+console.log(largeScreenRoute[pointer])
+pointer = next(pointer)
+console.log(largeScreenRoute[pointer])
+pointer = next(pointer)
+console.log(largeScreenRoute[pointer])
+pointer = prev(pointer)
+console.log(largeScreenRoute[pointer])
+pointer = prev(pointer)
+console.log(largeScreenRoute[pointer])
+pointer = prev(pointer)
+console.log(largeScreenRoute[pointer])
+pointer = prev(pointer)
+console.log(largeScreenRoute[pointer])
+pointer = prev(pointer)
+console.log(largeScreenRoute[pointer])
+pointer = prev(pointer)
+console.log(largeScreenRoute[pointer])
+
+
+
+console.log("test Prev")
+
+pointer = goTo("opcion 1")
 
 pointer = next(pointer)
-console.log(flatScreenRoute[pointer])
+console.log(largeScreenRoute[pointer])
 
 pointer = next(pointer)
-console.log(flatScreenRoute[pointer])
-
-pointer = goTo("opcion 61")
-console.log(flatScreenRoute[pointer])
+console.log(largeScreenRoute[pointer])
 
 pointer = next(pointer)
-console.log(flatScreenRoute[pointer])
+console.log(largeScreenRoute[pointer])
+
+pointer = goTo("opcion 3121")
+console.log(largeScreenRoute[pointer])
+
+pointer = prev(pointer)
+console.log(largeScreenRoute[pointer])
+
+pointer = prev(pointer)
+console.log(largeScreenRoute[pointer])
+
+pointer = prev(pointer)
+console.log(largeScreenRoute[pointer])
 
 pointer = next(pointer)
-console.log(flatScreenRoute[pointer])
+console.log(largeScreenRoute[pointer])
 
 pointer = next(pointer)
-console.log(flatScreenRoute[pointer])
+console.log(largeScreenRoute[pointer]) */
