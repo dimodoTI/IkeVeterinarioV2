@@ -10,14 +10,14 @@ import {
     SLIDER_HEADER_BODY
 } from "../../redux/screens/layouts"
 
-export const layoutsCSS = css `
+export const layoutsCSS = css`
 
     :host([layout="${unsafeCSS(SLIDER_HEADER_BODY.name)}"]){
-        grid-template-areas:"header  header  header"
-                            "foot    body    body";
-        grid-template-rows:2fr 8fr;
-        grid-template-columns:2fr 4fr 4fr;
-        grid-gap:.3rem
+        grid-template-areas:"foot  header"
+                            "foot    body";
+        grid-template-rows:1.8fr 8.2fr;
+        grid-template-columns:1.5fr 8.5fr;
+        grid-gap:.1rem
     }
 
     :host([layout="${unsafeCSS(HEADER_BODY.name)}"]){
@@ -25,14 +25,12 @@ export const layoutsCSS = css `
                             "body";
         grid-template-rows:2fr 8fr;
         grid-template-columns:1fr;
-        grid-gap:.3rem;
-
-
+        grid-gap:0rem;
     }
     :host([layout="${unsafeCSS(BODY_FOOT.name)}"]){
         grid-template-areas:"body"
                             "foot";
-        grid-template-rows:8fr 2fr;
+        grid-template-rows:9fr 1fr;
         grid-gap:.3rem;
 
     }
@@ -41,7 +39,7 @@ export const layoutsCSS = css `
         grid-template-areas:"header"
                             "body"
                             "foot";
-        grid-template-rows:2fr 8fr 2fr;
+        grid-template-rows:1.8fr 7.2fr 1fr;
         grid-template-columns:1fr
     }
     :host([layout="${unsafeCSS(ALL_BODY.name)}"]){
@@ -52,14 +50,18 @@ export const layoutsCSS = css `
 
 
     .header{
-        grid-area:header
+        grid-area:header;
+        background-color: var(--color-blanco);
+        padding: 0 1rem 0 1rem;        
     }
     .body{
-        grid-area:body
-        
+        grid-area:body;
+        background-color: var(--color-celeste);
+        padding: 1rem;        
     }
     .foot{
-        grid-area:foot
+        grid-area:foot;
+        background-color: var(--color-blanco);
     }
 
 `

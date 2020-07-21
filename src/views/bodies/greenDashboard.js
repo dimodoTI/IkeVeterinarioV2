@@ -21,7 +21,7 @@ export class greenDashboard extends connect(store, MEDIA_CHANGE, SCREEN)(LitElem
     }
 
     static get styles() {
-        return css `
+        return css`
         :host{
             display: grid;      
             padding:.3rem;
@@ -130,12 +130,11 @@ export class greenDashboard extends connect(store, MEDIA_CHANGE, SCREEN)(LitElem
         :host(:not([current="cardC"]):not([current="cardD"])[media-size="medium"]) .cardD{
             display:none
         }
-        
 
         `
     }
     render() {
-        return html `
+        return html`
         <div class="cardA">A</div>
         <div class="cardB">B</div>
         <div class="cardC">C</div>
@@ -150,7 +149,8 @@ export class greenDashboard extends connect(store, MEDIA_CHANGE, SCREEN)(LitElem
             this.mediaSize = state.ui.media.size
             this.hidden = true
             const haveBodyArea = state.screen.layouts[this.mediaSize].areas.find(a => a == this.area)
-            if (haveBodyArea && "cardA-cardB-cardC-cardD".indexOf(state.screen.name) != -1) {
+            const SeMuestraEnUnasDeEstasPantallas = "-cardA-cardB-cardC-cardD-".indexOf("-" + state.screen.name + "-")
+            if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas != -1) {
                 this.hidden = false
                 this.current = state.screen.name
             }

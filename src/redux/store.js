@@ -21,6 +21,18 @@ import {
 import {
   middleware as route
 } from "./routing/middleware";
+import {
+  middleware as autorizacion
+} from "./autorizacion/middleware";
+import {
+  middleware as puestos
+} from "./puestos/middleware";
+import {
+  middleware as reservas
+} from "./reservas/middleware";
+import {
+  middleware as atenciones
+} from "./atenciones/middleware";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -28,7 +40,11 @@ let mdw = [
   api,
   rest,
   ...ui,
-  ...route
+  ...route,
+  ...autorizacion,
+  ...puestos,
+  ...reservas,
+  ...atenciones
 
 ]
 

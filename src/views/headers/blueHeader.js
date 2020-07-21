@@ -31,7 +31,7 @@ export class blueHeader extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement)
     }
 
     static get styles() {
-        return css `
+        return css`
         :host{
             display: grid;      
             align-self:stretch;
@@ -48,7 +48,7 @@ export class blueHeader extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement)
         `
     }
     render() {
-        return html `
+        return html`
                 <input type="button" @click="${this.atras}" style="height:2rem" value="Atras">
                 <input type="button" @click="${this.adelante}" style="height:2rem" value="Adelante">
                 ${store.getState().screen.name}
@@ -56,9 +56,7 @@ export class blueHeader extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement)
     }
 
     firstUpdated(changedProperties) {
-
-        store.dispatch(showScreen("splash", ""))
-
+        //store.dispatch(showScreen("splash", ""))
     }
 
     adelante() {
@@ -72,6 +70,7 @@ export class blueHeader extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement)
         /* this.current -= 1
         if (this.current < 0) this.current = this.screens.length - 1
         store.dispatch(showScreen(this.screens[this.current], "")) */
+        //store.dispatch(goTo("Nombre de la pantalla")) 
         store.dispatch(goPrev())
 
     }

@@ -1,10 +1,10 @@
-import {} from "../css/main.css"
-import {} from "../css/media.css"
-import {} from "../css/quicksand.css"
-import {} from "../css/fontSizes.css"
-import {} from "../css/colors.css"
-import {} from "../css/shadows.css"
-import {} from "../css/imagenes.css"
+import { } from "../css/main.css"
+import { } from "../css/media.css"
+import { } from "../css/quicksand.css"
+import { } from "../css/fontSizes.css"
+import { } from "../css/colors.css"
+import { } from "../css/shadows.css"
+import { } from "../css/imagenes.css"
 import {
     store
 } from "../src/redux/store"
@@ -14,11 +14,15 @@ import {
 import {
     captureMedia
 } from "./redux/ui/actions";
-
+import {
+    showScreen
+} from "./redux/screens/actions";
 
 
 store.dispatch(captureMedia())
-/* 
+store.dispatch(showScreen("splash", ""))
+
+/*
 
 const largeScreenRoute = [
     "1      -opcion 1",

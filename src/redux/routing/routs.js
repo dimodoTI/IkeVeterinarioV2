@@ -20,10 +20,19 @@
 ] */
 
 export const largeRoute = [
-    "1-splash",
-    "2-agenda",
-    "3-cardA",
-    "4-cardB",
-    "5-cardC",
-    "6-cardD"
+    "1   -splash",
+    "2   -inicioSesion",
+    "2/1 -misConsultas",
+    "2/2 -recuperaClave",
+    "3   -recuperaClaveMsg",
+    "4   -crearClave",
+    "5   -crearClaveMsg",
+    "6   -agendas",
+    "7   -videos",
+    "8   -diagnosticos",
+    "9   -diagnosticosDetalle",
+    "10  -atencionesMascotas",
+    "11  -listaReservas",
+    "12  -igualDiagnosticosDetalle"
+
 ]
