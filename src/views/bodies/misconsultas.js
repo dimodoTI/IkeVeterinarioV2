@@ -25,7 +25,9 @@ import {
 import {
     proxima
 } from "../css/proxima"
-
+import {
+    get as getReservasDelDia
+} from "../../redux/reservasDelDia/actions"
 import {
     goTo
 } from "../../redux/routing/actions"
@@ -198,7 +200,8 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
 
 
     irAgenda(e) {
-        store.dispatch(goTo("agendas"))
+        //store.dispatch(goTo("agendas"))
+        store.dispatch(getReservasDelDia({}, {}))
     }
     irAtenciones() {
         store.dispatch(goTo("atencionesMascotas"))

@@ -33,6 +33,9 @@ import {
 import {
   middleware as atenciones
 } from "./atenciones/middleware";
+import {
+  middleware as reservasDelDia
+} from "./reservasDelDia/middleware";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -44,7 +47,8 @@ let mdw = [
   ...autorizacion,
   ...puestos,
   ...reservas,
-  ...atenciones
+  ...atenciones,
+  ...reservasDelDia
 
 ]
 

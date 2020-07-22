@@ -387,7 +387,7 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         if (this.videoOAtencion) {
             let myJson = this.jsonAtencion(e.currentTarget.item)
             store.dispatch(agendaAtencionSeleccionada(myJson))
-            store.dispatch(goTo("diagnosticosdetalle"))
+            store.dispatch(goTo("diagnosticosDetalle"))
         }
         if (this.soloAtencion || this.videoYAtencion) {
             let arr = e.currentTarget.item;
@@ -417,11 +417,10 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         this.update()
     }
     clickRefresh() {
-        let miToken = store.getState().cliente.datos.token
         let d = new Date()
         let filtroFecha = d.getUTCFullYear() + "-" + (d.getUTCMonth() + 1) + "-" + d.getUTCDate()
         //        store.dispatch(getReservasAgenda(miToken, "FechaAtencion ge " + filtroFecha))
-        store.dispatch(getReservasAgenda(miToken, "FechaAtencion ge 2020-01-07"))
+        store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion ge 2020-01-07"))
     }
     static get properties() {
         return {

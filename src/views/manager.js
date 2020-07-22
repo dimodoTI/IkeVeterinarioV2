@@ -128,10 +128,13 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
     }
 
     stateChanged(state, name) {
-        //        this.style.height = window.innerHeight + "px"
+
         if ((name == MEDIA_CHANGE || name == SCREEN)) {
             this.mediaSize = state.ui.media.size
             this.layout = getLayout(state).name
+            if (!window.MSStream && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
+                this.style.height = window.innerHeight + "px"
+            }
         }
         this.update();
     }

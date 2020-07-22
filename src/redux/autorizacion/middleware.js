@@ -33,6 +33,7 @@ import {
     setRecuperando,
     setRenovado
 } from "../cliente/actions";
+import { goTo } from "../routing/actions";
 
 export const login = ({
     dispatch
@@ -97,15 +98,21 @@ export const updateProfile = ({
 
 
 export const processLogin = ({
-    dispatch
+    dispatch, getState
 }) => next => action => {
     next(action);
     if (action.type === LOGIN_SUCCESS) {
         if (action.payload.receive.message) {
             dispatch(setLogueado(false))
+            //if (getState().screen.name == "inicioSesion") {
+            //dispatch(goTo("misConsultas"))
+            //}
         } else {
             dispatch(setLogueado(true))
             dispatch(setDatos(action.payload.receive))
+            if (getState().screen.name == "inicioSesion") {
+                dispatch(goTo("misConsultas"))
+            }
         }
     }
 };
