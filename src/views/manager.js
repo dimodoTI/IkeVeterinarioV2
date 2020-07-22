@@ -71,6 +71,9 @@ import {
 import {
     dimodoSpinner
 } from "../views/componentes/spinner"
+import {
+    pantallaWarning
+} from "../views/bodies/warning"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
@@ -122,6 +125,7 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
             <pantalla-listareserva class="body" ></pantalla-listareserva>
 
 
+            <pantalla-warning ></pantalla-warning>
             <dimodo-spinner type="spinner2"></dimodo-spinner>
 
         `

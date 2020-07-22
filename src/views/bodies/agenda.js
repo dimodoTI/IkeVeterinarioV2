@@ -251,7 +251,7 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
                 <div id="TituloDeLaLista" class="tituloLista">
                 </div>
                 <div class="grillaLista">
-                    ${this.reservas.filter(item => { return item.Tramo.PuestoId == this.puestoSeleccionado }).map((item) => {
+                    ${!this.reservas ? "" : this.reservas.filter(item => { return item.Tramo.PuestoId == this.puestoSeleccionado }).map((item) => {
             return html` 
                     <div class="row" .item=${item} @click=${this.editar}>
                         <div class="fecha">
@@ -317,6 +317,9 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             const SeMuestraEnUnasDeEstasPantallas = "-agendas-atencionesMascotas-".indexOf("-" + state.screen.name + "-") != -1
             if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
                 this.hidden = false
+                this.reservas = state.reservas.entitiesAgenda
+                this.puestos = state.puestos.entities
+                if (this.puestoSeleccionado == -1) { this.puestoSeleccionado = this.puestos[0].Id }
                 this.shadowRoot.querySelector("#TituloDeLaLista").innerHTML = idiomas[this.idioma][store.getState().screen.name].tituloLista
                 this.videoOAtencion = false
                 this.videoYAtencion = false
@@ -329,30 +332,8 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
                         this.soloAtencion = true
                         break
                 }
-                store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion ge 2020-01-07"))
-                store.dispatch(getPuesto({}))
             }
             this.update();
-        }
-        if (name == PUESTO_TIMESTAMP) {
-            if (state.puestos.entities) {
-                this.puestos = state.puestos.entities
-                if (this.puestoSeleccionado == -1) { this.puestoSeleccionado = this.puestos[0].Id }
-                if (state.reservas.entitiesAgenda) {
-                    this.reservas = state.reservas.entitiesAgenda
-                    this.update()
-                }
-            }
-        }
-        if (name == RESERVASAGENDA_TIMESTAMP) {
-            if (state.reservas.entitiesAgenda) {
-                this.reservas = state.reservas.entitiesAgenda
-                if (state.puestos.entities) {
-                    this.puestos = state.puestos.entities
-                    if (this.puestoSeleccionado == -1) { this.puestoSeleccionado = this.puestos[0].Id }
-                    this.update()
-                }
-            }
         }
 
     }

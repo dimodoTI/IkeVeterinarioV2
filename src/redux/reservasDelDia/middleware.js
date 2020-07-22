@@ -3,12 +3,13 @@ import {
     GET_SUCCESS,
     GET_ERROR
 } from "../reservasDelDia/actions";
+import { showSpinner, hideSpinner } from "../api/actions"
 import {
     GET_SUCCESS as GET_SUCCESS_PUESTOS,
     GET_ERROR as GET_ERROR_PUESTOS
 } from "../puestos/actions"
 import {
-    GET_SUCCESS as GET_SUCCESS_RESERVAS,
+    GET_AGENDA_SUCCESS as GET_SUCCESS_RESERVAS,
     GET_ERROR as GET_ERROR_RESERVAS
 } from "../reservas/actions"
 
@@ -17,6 +18,7 @@ import {
     ikeReservasQuery
 } from "../fetchs"
 import { goTo } from "../routing/actions";
+import { showWarning } from "../ui/actions";
 
 export const get = ({
     dispatch, getState
@@ -25,7 +27,12 @@ export const get = ({
     if (action.type === GET) {
         const token = getState().cliente.datos.token
         action.optionsPuestos.token = token
-        action.optionsReservas.token = token
+        const optionsReservas = {}
+        optionsReservas.token = token
+        optionsReservas.expand = "Mascota($select = Nombre), Tramo, Atencion"
+        optionsReservas.orderby = "FechaAtencion,HoraAtencion"
+        optionsReservas.filter = action.filterReservas
+        dispatch(showSpinner(ikePuestosQuery))
         Promise.all([
             ikePuestosQuery.get(action.optionsPuestos).then((data) => {
                 dispatch({
@@ -40,10 +47,10 @@ export const get = ({
                     type: GET_ERROR_PUESTOS,
                     payload: err
                 })
-                return err
+                throw err
             }),
 
-            ikeReservasQuery.get(action.optionsReservas).then((data) => {
+            ikeReservasQuery.get(optionsReservas).then((data) => {
                 dispatch({
                     type: GET_SUCCESS_RESERVAS,
                     payload: {
@@ -56,14 +63,16 @@ export const get = ({
                     type: GET_ERROR_RESERVAS,
                     payload: err
                 })
-                return err
+                throw err
             })
 
-        ]).then(() => {
+        ]).then((value) => {
             dispatch(goTo("agendas"))
+            dispatch(hideSpinner(ikePuestosQuery))
         }).catch(() => {
             console.log("Error!!!")
-            //store.dispatch(getRazas({}))
+            dispatch(hideSpinner(ikePuestosQuery))
+            dispatch(showWarning(getState().screen.name, 0))
         })
     }
 };

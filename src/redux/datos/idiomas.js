@@ -19,7 +19,9 @@ export const idiomas = {
             errorClave: {
                 err1: "Tu contraseña debe tener 4 caraceres",
                 err2: "wer"
-            }
+            },
+            warningTitulo: ["Error en login."],
+            warningCuerpo: ["Mail o password incorrecta"]
         },
 
         recuperaClave: {
@@ -73,7 +75,9 @@ export const idiomas = {
             ingresar: "Ingresar",
             footerTitulo1: "¿Necesitás ayuda?",
             footerTitulo2: "Estamos para lo que necesites.",
-            footerLeyenda: "Solicitar asistencia"
+            footerLeyenda: "Solicitar asistencia",
+            warningTitulo: ["Error de conexion."],
+            warningCuerpo: ["Intente nuevamente"]
         },
         pie: {
             inicio: "Inicio",
@@ -91,7 +95,9 @@ export const idiomas = {
             titulo: "Agenda de ",
             subTitulo: "Consultá tus próximas consultas de la semana.",
             tituloLista: "Tus próximas consultas",
-            lblFiltro: "Seleccione su puesto:"
+            lblFiltro: "Seleccione su puesto:",
+            warningTitulo: ["Error de conexion."],
+            warningCuerpo: ["Intente nuevamente"]
         },
         videos: {
             conectando: "Conectando ...",

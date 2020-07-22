@@ -165,7 +165,7 @@ export class pantallaInicioSesion extends connect(store, MEDIA_CHANGE, SCREEN, L
                 const clave = this.shadowRoot.querySelector("#txtClave").value
                 const email = this.shadowRoot.querySelector("#txtMail").value
                 store.dispatch(login(email, clave))
-                store.dispatch(goTo("misConsultas"))
+                //store.dispatch(goTo("misConsultas"))
                 //store.dispatch(modoPantalla("principal", "inicioSesion"));
             }
         }

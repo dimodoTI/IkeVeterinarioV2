@@ -34,6 +34,7 @@ import {
     setRenovado
 } from "../cliente/actions";
 import { goTo } from "../routing/actions";
+import { showWarning } from "../ui/actions";
 
 export const login = ({
     dispatch
@@ -111,7 +112,11 @@ export const processLogin = ({
             dispatch(setLogueado(true))
             dispatch(setDatos(action.payload.receive))
             if (getState().screen.name == "inicioSesion") {
-                dispatch(goTo("misConsultas"))
+                if (getState().cliente.datos.perfil == "Veterinario" || getState().cliente.datos.perfil == "Admin") {
+                    dispatch(goTo("misConsultas"))
+                } else {
+                    dispatch(showWarning(getState().screen.name, 0))
+                }
             }
         }
     }
