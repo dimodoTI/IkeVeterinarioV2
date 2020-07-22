@@ -22,6 +22,9 @@ import {
 import {
   reducer as atencionesReducer
 } from "./atenciones/reducer"
+import {
+  reducer as apiReducer
+} from "./api/reducer"
 
 export const rootReducer = (state = {}, action) => {
   return {
@@ -33,5 +36,6 @@ export const rootReducer = (state = {}, action) => {
     puestos: puestosReducer(state.puestos, action),
     reservas: reservasReducer(state.reservas, action),
     atenciones: atencionesReducer(state.atenciones, action),
+    api: apiReducer(state.api, action),
   }
 }

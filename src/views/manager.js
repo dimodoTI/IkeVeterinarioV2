@@ -68,7 +68,9 @@ import {
 import {
     pantallaListaReserva
 } from "./bodies/listaReserva"
-
+import {
+    dimodoSpinner
+} from "../views/componentes/spinner"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
@@ -118,7 +120,10 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
             <diagnostico-componente class="body" ></diagnostico-componente>
             <diagnostico-detalle-componente class="body" ></diagnostico-detalle-componente>
             <pantalla-listareserva class="body" ></pantalla-listareserva>
-                             
+
+
+            <dimodo-spinner type="spinner2"></dimodo-spinner>
+
         `
     }
 
