@@ -71,9 +71,19 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
                 height: 1.5rem;
                 width: 1.5rem;
             }
-            :host([current="recuperaClave"]) #divImg, :host([current="crearClave"]) #divImg, :host([current="videos"]) #divImg, :host([current="diagnosticosDetalle"]) #divImg,  :host([current="atencionesMascotas"]) #divImg, :host([current="listaReservas"]) #divImg, :host([current="igualDiagnosticosDetalle"]) #divImg {
+            :host([current="crearClave"]) #divImg, :host([current="atencionesMascotas"]) #divImg, :host([current="recuperaClave"]) #divImg, :host([current="igualDiagnosticosDetalle"]) #divImg {
                 display:grid;
             }
+            :host([media-size="small"][current="listaReservas"]) #divImg, :host([media-size="small"][current="videos"]) #divImg{
+                display:grid;
+            }
+            :host([media-size="small"][current="diagnosticosDetalle"]) #divImg, :host([media-size="small"][current="his_DiagnosticosDetalle"]) #divImg{
+                display:grid;
+            }
+            :host([media-size="small"][current="his_ListaReservas"]) #divImg{
+                display:grid;
+            }
+
             #lblTitulo{               
                 background-color: transparent;
                 display: flex;
@@ -119,7 +129,7 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
             this.mediaSize = state.ui.media.size
             this.hidden = true
             const haveBodyArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-inicioSesion-recuperaClave-crearClave-misConsultas-agendas-videos-diagnosticos-diagnosticosDetalle-atencionesMascotas-listaReservas-igualDiagnosticosDetalle-".indexOf("-" + state.screen.name + "-") != -1
+            const SeMuestraEnUnasDeEstasPantallas = "-inicioSesion-recuperaClave-crearClave-misConsultas-agendas-videos-diagnosticos-diagnosticosDetalle-atencionesMascotas-listaReservas-igualDiagnosticosDetalle-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-".indexOf("-" + state.screen.name + "-") != -1
             if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
                 this.hidden = false
                 this.titulo = idiomas[this.idioma][this.current].titulo
@@ -137,14 +147,21 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
             case "diagnosticosDetalle":
                 store.dispatch(goTo("agendas"))
                 break
-            case "igualDiagnosticosDetalle":
-                store.dispatch(goTo("listaReservas"))
+            case "his_DiagnosticosDetalle":
+                store.dispatch(goTo("his_ListaReservas"))
                 break
             case "atencionesMascotas":
                 store.dispatch(goTo("misConsultas"))
                 break
             case "listaReservas":
-                store.dispatch(goTo("atencionesMascotas"))
+                if (this.mediaSize == "small") {
+                    store.dispatch(goTo("atencionesMascotas"))
+                } else {
+                    store.dispatch(goTo("agendas"))
+                }
+                break
+            case "his_ListaReservas":
+                store.dispatch(goTo("his_Agendas"))
                 break
             default:
                 store.dispatch(goTo("inicioSesion"))

@@ -16,13 +16,13 @@ import {
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
-const RESERVASATENCIONDEUNAMASCOTA_TIMESTAMP = "reservas.timeStampAtencionDeUnaMascota"
+const RESERVASATENCIONESDEUNAMASCOTA_TIMESTAMP = "reservas.timeStampAtencionDeUnaMascota"
 
-export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, RESERVASATENCIONDEUNAMASCOTA_TIMESTAMP)(LitElement) {
+export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, RESERVASATENCIONESDEUNAMASCOTA_TIMESTAMP)(LitElement) {
     constructor() {
         super();
-        this.hidden = true
-        this.area = "body"
+        this.hidden = false
+        this.area = "listaReservas"
         this.idioma = "ES"
         this.item = []
         this.atencionCompleta = {}
@@ -57,16 +57,15 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
             font-weight: var(--font-bajada-weight);
         } 
         #tituloLista{
-            padding-left:0.84rem;
+            height:100%;
             color:var(--color-azul-oscuro);
-            font-size:var(--font-header-h2-size);
-            font-weight:var(--font-header-h2-weight);
+            font-size:var(--font-header-h1-menos-size);
+            font-weight:var(--font-header-h1-menos-weight);
             background-color:var(--color-celeste-muy-claro);
             text-justify:left;
             display:flex;
-            padding-bottom:.84rem;     
-            align-items: flex-end;    
-      
+            align-items: center;    
+            padding-left:.5rem;
         }
         #grilla{
             display:grid;
@@ -74,6 +73,7 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
             grid-gap:.5rem;
             overflow-x:none;
             overflow-y:auto;
+            padding-top:.5rem;
         }
         #grilla::-webkit-scrollbar {
             display: none;
@@ -125,26 +125,24 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
             InicioAtencion: arr.Atencion ? arr.Atencion.InicioAtencion : null,
             FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null
         }
+        //graba solo en el STATE
         store.dispatch(agendaAtencionSeleccionada(this.atencionCompleta))
-        store.dispatch(goTo("igualDiagnosticosDetalle"))
+        if (store.getState().screen.name.indexOf("his_") == -1) {
+            store.dispatch(goTo("diagnosticosDetalle"))
+        } else {
+            store.dispatch(goTo("his_DiagnosticosDetalle"))
+        }
     }
 
     stateChanged(state, name) {
         if ((name == SCREEN || name == MEDIA_CHANGE)) {
-            this.mediaSize = state.ui.media.size
-            this.hidden = true
-            const haveBodyArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-listaReservas-".indexOf("-" + state.screen.name + "-") != -1
-            if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
-                this.hidden = false
-            }
             this.update();
         }
-        if (name == RESERVASATENCIONDEUNAMASCOTA_TIMESTAMP) {
+        if (name == RESERVASATENCIONESDEUNAMASCOTA_TIMESTAMP) {
             if (state.reservas.entitiesAtencionDeUnaMascota) {
                 this.item = state.reservas.entitiesAtencionDeUnaMascota;
-                this.update();
             }
+            this.update();
         }
     }
     firstUpdated() {

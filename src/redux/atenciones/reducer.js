@@ -54,7 +54,10 @@ export const reducer = (state = initialState, action) => {
         case GET_ERROR:
             newState.errorTimeStamp = (new Date()).getTime();
             break;
-        case UPDATE_ERROR || REMOVE_ERROR || PATCH_ERROR || ADD_ERROR:
+        case UPDATE_ERROR:
+        case REMOVE_ERROR:
+        case PATCH_ERROR:
+        case ADD_ERROR:
             newState.commandErrorTimeStamp = (new Date()).getTime();
             break;
 

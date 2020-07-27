@@ -9,6 +9,9 @@ import {
 } from "../../../assets/icons/icons";
 import { idiomas } from "../../redux/datos/idiomas"
 import {
+    get as getReservasDelDia
+} from "../../redux/reservasDelDia/actions"
+import {
     goTo
 } from "../../redux/routing/actions"
 import {
@@ -206,7 +209,7 @@ export class pieComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEleme
             this.mediaSize = state.ui.media.size
             this.hidden = true
             const haveFootArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-misConsultas-agendas-atencionesMascotas-".indexOf("-" + state.screen.name + "-") != -1
+            const SeMuestraEnUnasDeEstasPantallas = "-misConsultas-agendas-atencionesMascotas-listaReservas-diagnosticos-diagnosticosDetalle-videos-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-".indexOf("-" + state.screen.name + "-") != -1
             if (haveFootArea && SeMuestraEnUnasDeEstasPantallas) {
                 this.hidden = false
             }
@@ -218,10 +221,11 @@ export class pieComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEleme
         store.dispatch(goTo("misConsultas"))
     }
     clickBoton2() {
-        store.dispatch(goTo("agendas"))
+        store.dispatch(getReservasDelDia("FechaAtencion ge 2020-01-07", {}, "agendas"))
     }
     clickBoton3() {
-        store.dispatch(goTo("atencionesMascotas"))
+        store.dispatch(getReservasDelDia("FechaAtencion ge 2020-01-07", {}, "his_Agendas"))
+        //store.dispatch(goTo("atencionesMascotas"))
     }
 
     static get properties() {

@@ -36,7 +36,7 @@ export class splashScreen extends connect(store, MEDIA_CHANGE, SCREEN)(LitElemen
             left: 0rem;  
             height:100%;
             width: 100%;
-            background-color:var(--color-celeste);
+            background-color:var(--color-celeste) !important;
         }
         :host([hidden]){
             display:none ;

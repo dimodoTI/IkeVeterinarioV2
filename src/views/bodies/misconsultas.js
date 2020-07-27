@@ -63,10 +63,7 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
             display: none; 
         }
         :host(:not([media-size="small"])){
-            grid-template-rows:1fr;
-        }
-        :host(:not([media-size="small"])) #gridContenedor{
-            align-content:flex-start;
+            grid-template-rows:20% 80%;   
         }
         :host::-webkit-scrollbar {
             display: none;
@@ -75,6 +72,7 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
             height:3vh;
             font-size:var(--font-bajada-size);
             font-weight:var(--font-bajada-weight);
+            align-self: center;
         }
         .cuerpo{
             position: relative;
@@ -157,14 +155,15 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
            
                 <div class="cuerpo">
                     <div class="cajas">
-                        <div class="caja"  @click="${this.irAtenciones}">
-                            <div>${HISTORIAL}</div>
-                            <div class="cajaTexto">Ver historial de consultas</div>
-                        </div>
-                        <div class="caja" style="margin-right:.84rem" @click="${this.irAgenda}">
+                        <div class="caja" @click="${this.irAgenda}">
                             <div>${AGENDA}</div>
                             <div class="cajaTexto">Ver próximas consultas</div>
                         </div>
+                        <div class="caja"  style="margin-right:.84rem"  @click="${this.irAtenciones}">
+                            <div>${HISTORIAL}</div>
+                            <div class="cajaTexto">Ver historial de consultas</div>
+                        </div>
+
                     </div>
                     <div class="ayuda">
                         <div>
@@ -198,13 +197,13 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
         }
     }
 
-
     irAgenda(e) {
         //store.dispatch(goTo("agendas"))
-        store.dispatch(getReservasDelDia("FechaAtencion ge 2020-01-07", {}))
+        store.dispatch(getReservasDelDia("FechaAtencion ge 2020-01-07", {}, "agendas"))
     }
     irAtenciones() {
-        store.dispatch(goTo("atencionesMascotas"))
+        store.dispatch(getReservasDelDia("FechaAtencion ge 2020-01-07", {}, "his_Agendas"))
+        //store.dispatch(goTo("atencionesMascotas"))
     }
 
     static get properties() {

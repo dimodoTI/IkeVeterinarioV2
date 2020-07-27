@@ -19,13 +19,14 @@ import { ARCHIVO, TRASH } from "../../../assets/icons/icons";
 import { cardArchivo } from "../css/cardArchivo"
 
 import { add as addAtenciones } from "../../redux/atenciones/actions";
-import { agendaAtencionSeleccionada } from "../../redux/reservas/actions";
+import { agendaAtencionSeleccionada, getAgenda as getReservasAgenda } from "../../redux/reservas/actions";
 import {
     goTo
 } from "../../redux/routing/actions"
 import {
     isInLayout
 } from "../../redux/screens/screenLayouts";
+import { showWarning } from "../../redux/ui/actions";
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
@@ -37,7 +38,7 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
     constructor() {
         super();
         this.idioma = "ES"
-        this.area = "body"
+        this.area = "diagnosticos"
         this.hidden = false;
         this.atencionCompleta = {}
         this.reservaEnCurso = {}
@@ -142,37 +143,44 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
             </div>
         `
     }
+    firstUpdated(changedProperties) {
+    }
     stateChanged(state, name) {
         if ((name == SCREEN || name == MEDIA_CHANGE)) {
             this.mediaSize = state.ui.media.size
-            this.hidden = true
-            const haveBodyArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-diagnosticos-".indexOf("-" + state.screen.name + "-") != -1
-            if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
-                this.hidden = false
+            if (state.screen.name == "diagnosticos") {
+
+                //this.shadowRoot.querySelector("#txtDiagnostico").value = ""
             }
             this.update();
         }
         if (name == RESERVAS_NUEVAATENCIONDESDEVIDEO) {
-            this.reservaEnCurso = store.getState().reservas.entitiesAgendaNuevaAtencionDesdeVideo
+            this.reservaEnCurso = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
         }
-        if (name == ATENCIONES_ADDTIMESTAMP) {
-            if (this.shadowRoot.querySelector("#txtDiagnostico")) this.shadowRoot.querySelector("#txtDiagnostico").value = ""
+        if (name == ATENCIONES_ADDTIMESTAMP && state.screen.name == "diagnosticos") {
             store.dispatch(agendaAtencionSeleccionada(this.atencionCompleta))
-            store.dispatch(goTo("diagnosticosDetalle"))
-            // if (this.mediaSize == "small") {
-            // } else {
-            //     store.dispatch(goTo("agendas"))
-            // }
+            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion ge 2020-01-07"))
+            if (this.mediaSize == "small") {
+                store.dispatch(goTo("diagnosticosDetalle"))
+            } else {
+                store.dispatch(goTo("agendas"))
+            }
+        }
+        if (name == ATENCIONES_ERROROTROSTIMESTAMP && state.screen.name == "diagnosticos") {
+            store.dispatch(showWarning(store.getState().screen.name, 0))
         }
     }
     clickCancelar() {
         store.dispatch(goTo("agendas"))
     }
     clickAceptar() {
-        let res = this.reservaEnCurso
+        store.dispatch(goTo("diagnosticos"))
         let d = new Date()
         let h = (d.getHours() * 100) + d.getMinutes()
+        // if (state.reservas.entitiesAgendaNuevaAtencionDesdeVideo) {
+        //     this.reservaEnCurso = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
+        // }
+        let res = this.reservaEnCurso
         this.atencionCompleta = {
             ReservaId: res.ReservaId,
             FechaReserva: res.FechaReserva,
@@ -200,7 +208,6 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
         }
         res.Diagnostico = addAte.Diagnostico
         store.dispatch(addAtenciones(addAte, store.getState().cliente.datos.token))
-        this.shadowRoot.querySelector("#txtDiagnostico").value = ""
     }
     static get properties() {
         return {

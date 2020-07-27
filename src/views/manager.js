@@ -53,9 +53,7 @@ import {
 import {
     pieComponente
 } from "./foots/pie"
-import {
-    pantallaAgenda
-} from "./bodies/agenda"
+
 import {
     pantallaVideo
 } from "./bodies/video"
@@ -74,13 +72,21 @@ import {
 import {
     pantallaWarning
 } from "../views/bodies/warning"
+import {
+    videoRTC
+} from "../views/bodies/videoRTC"
+import {
+    atencionesCompuesta
+} from "../views/bodies/atencionesCompuestas"
+import {
+    historicoCompuesta
+} from "../views/bodies/historico"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
 export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
     constructor() {
         super();
-
     }
 
 
@@ -109,7 +115,6 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
             <green-dashboard class="body"></green-dashboard>
             <red-foot class="foot"></red-foot>
             <splash-screen class="body"></splash-screen>
-            <splash-screen class="body"></splash-screen>
             <pantalla-iniciosesion class="body"></pantalla-iniciosesion>
             <header-componente class="header"></header-componente>
             <pantalla-recuperaclave class="body"></pantalla-recuperaclave>
@@ -118,13 +123,10 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
             <pantalla-crearclavemsg class="body"></pantalla-crearclavemsg>
             <pantalla-misconsulta class="body"></pantalla-misconsulta>
             <pie-componente class="foot"></pie-componente>
-            <pantalla-agenda class="body"></pantalla-agenda>
-            <pantalla-video class="body" ></pantalla-video>
-            <diagnostico-componente class="body" ></diagnostico-componente>
-            <diagnostico-detalle-componente class="body" ></diagnostico-detalle-componente>
-            <pantalla-listareserva class="body" ></pantalla-listareserva>
 
 
+            <historico-compuestas class="body" ></historico-compuestas>
+            <atenciones-compuestas class="body" ></atenciones-compuestas>
             <pantalla-warning ></pantalla-warning>
             <dimodo-spinner type="spinner2"></dimodo-spinner>
 

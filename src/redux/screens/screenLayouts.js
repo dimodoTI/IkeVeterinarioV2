@@ -6,7 +6,6 @@ import {
     SLIDER_HEADER_BODY
 } from "./layouts"
 
-
 export const screenLayuts = {
     splash: {
         small: ALL_BODY,
@@ -50,18 +49,18 @@ export const screenLayuts = {
     },
     videos: {
         small: HEADER_BODY,
-        medium: HEADER_BODY,
-        large: HEADER_BODY
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
     },
     diagnosticos: {
         small: HEADER_BODY,
-        medium: HEADER_BODY,
-        large: HEADER_BODY
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
     },
     diagnosticosDetalle: {
         small: HEADER_BODY,
-        medium: HEADER_BODY,
-        large: HEADER_BODY
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
     },
     atencionesMascotas: {
         small: HEADER_BODY_FOOT,
@@ -69,15 +68,27 @@ export const screenLayuts = {
         large: SLIDER_HEADER_BODY
     },
     listaReservas: {
-        small: HEADER_BODY,
-        medium: HEADER_BODY,
-        large: HEADER_BODY
+        small: HEADER_BODY_FOOT,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
     },
-    igualDiagnosticosDetalle: {
-        small: HEADER_BODY,
-        medium: HEADER_BODY,
-        large: HEADER_BODY
+    his_DiagnosticosDetalle: {
+        small: HEADER_BODY_FOOT,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
     },
+    his_Agendas: {
+        small: HEADER_BODY_FOOT,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
+    },
+    his_ListaReservas: {
+        small: HEADER_BODY_FOOT,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
+    },
+
+
     cardA: {
         small: HEADER_BODY,
         medium: SLIDER_HEADER_BODY,

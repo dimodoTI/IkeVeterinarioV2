@@ -156,9 +156,9 @@ export class pantallaVideo extends connect(store, MEDIA_CHANGE, SCREEN)(LitEleme
             this.mediaSize = state.ui.media.size
             this.hidden = true
             const haveBodyArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-videos-".indexOf("-" + state.screen.name + "-") != -1
+            const SeMuestraEnUnasDeEstasPantallas = "-videosANTERIOR-".indexOf("-" + state.screen.name + "-") != -1
             if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
-                this.hidden = false
+                this.hidden = true
                 if (this.shadowRoot.querySelector("#todo")) {
                     this.shadowRoot.querySelector("#todo").removeAttribute("hablando");
                     this.shadowRoot.querySelector("#todo").setAttribute("llamando", "");

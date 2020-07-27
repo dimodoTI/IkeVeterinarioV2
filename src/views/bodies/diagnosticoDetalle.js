@@ -10,6 +10,9 @@ import {
     connect
 } from "@brunomon/helpers";
 import {
+    ATRAS
+} from "../../../assets/icons/icons";
+import {
     idiomas
 } from "../../redux/datos/idiomas"
 import {
@@ -37,7 +40,7 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
         super();
         this.idioma = "ES"
         this.area = "body"
-        this.hidden = false;
+        this.hidden = true;
         this.reservas = null
         this.atencionEnCurso = []
         this.archivo = [{
@@ -88,6 +91,15 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
             height:5vh;
             font-size: var(--font-bajada-size);
             font-weight: var(--font-bajada-weight);  
+            grid-template-columns: 100%;
+            align-items: center;
+            grid-gap: .5rem;
+        }
+        :host(:not([media-size="small"])) #divTituloAtencion{
+            grid-template-columns: 10% 90%;
+        }
+        :host([media-size="small"]) #divTituloAtencion{
+            display: none;
         }
         #divAtencion{
             display:grid;
@@ -143,7 +155,12 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
         return html`
 
             <div id="divTituloAtencion">
-                ${idiomas[this.idioma].diagnosticosDetalle.tituloAtencion}
+                <div id="divTituloAtencionImg" @click=${this.atras}>
+                    ${ATRAS}
+                </div>
+                <div id="divTituloAtencionTxt">
+                    ${idiomas[this.idioma].diagnosticosDetalle.tituloAtencion}
+                </div>
             </div>
             <div id="divAtencion">
                 <label id="lblVeterinario">${idiomas[this.idioma].diagnosticosDetalle.veterinario + " " + this.verVeterinario()}</label>
@@ -190,20 +207,17 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
     stateChanged(state, name) {
         if ((name == SCREEN || name == MEDIA_CHANGE)) {
             this.mediaSize = state.ui.media.size
-            this.hidden = true
-            const haveBodyArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-diagnosticosDetalle-igualDiagnosticosDetalle-".indexOf("-" + state.screen.name + "-") != -1
-            if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
-                this.hidden = false
+            if (state.reservas.entitiesAgendaAtencionSeleccionada) {
+                this.atencionEnCurso = state.reservas.entitiesAgendaAtencionSeleccionada;
             }
             this.update();
         }
-        if (name == RESERVAS_AGENDAATENCIONSELECCIONADA) {
-            if (state.reservas.entitiesAgendaAtencionSeleccionada) {
-                this.atencionEnCurso = state.reservas.entitiesAgendaAtencionSeleccionada;
-                this.update()
-            }
-        }
+        // if (name == RESERVAS_AGENDAATENCIONSELECCIONADA) {
+        //     if (state.reservas.entitiesAgendaAtencionSeleccionada) {
+        //         this.atencionEnCurso = state.reservas.entitiesAgendaAtencionSeleccionada;
+        //         this.update()
+        //     }
+        // }
     }
     comenzo() {
         var ret = ""
@@ -236,6 +250,13 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
             ret = this.atencionEnCurso.VeterinarioId
         }
         return ret
+    }
+    atras() {
+        if (store.getState().screen.name.indexOf("his_") == -1) {
+            store.dispatch(goTo("listaReservas"))
+        } else {
+            store.dispatch(goTo("his_Agendas"))
+        }
     }
     static get properties() {
         return {

@@ -33,18 +33,20 @@ import {
 import {
     isInLayout
 } from "../../redux/screens/screenLayouts";
+import { showWarning } from "../../redux/ui/actions";
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
-const PUESTO_TIMESTAMP = "puesto.timeStamp"
+const PUESTO_TIMESTAMP = "puestos.timeStamp"
 const RESERVASAGENDA_TIMESTAMP = "reservas.timeStampAgenda"
-const RESERVAS_ERRORGETTIMESTAMP = "reservas.errorTimeStamp"
-const RESERVAS_ERROROTROSTIMESTAMP = "reservas.commandErrorTimeStamp"
+const RESERVASATENCIONSELECCIONADA_TIMESTAMP = "reservas.agendaAtencionSeleccionada"
+const RESERVASATENCIONESDEUNAMASCOTA_TIMESTAMP = "reservas.timeStampAtencionDeUnaMascota"
+const RESERVAS_ERRORGET_TIMESTAMP = "reservas.errorTimeStamp"
+const RESERVAS_ERROROTROS_TIMESTAMP = "reservas.commandErrorTimeStamp"
 
-export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_TIMESTAMP, RESERVASAGENDA_TIMESTAMP, RESERVAS_ERRORGETTIMESTAMP, RESERVAS_ERROROTROSTIMESTAMP)(LitElement) {
+export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_TIMESTAMP, RESERVASAGENDA_TIMESTAMP, RESERVASATENCIONSELECCIONADA_TIMESTAMP, RESERVASATENCIONESDEUNAMASCOTA_TIMESTAMP, RESERVAS_ERRORGET_TIMESTAMP, RESERVAS_ERROROTROS_TIMESTAMP)(LitElement) {
     constructor() {
         super();
-        this.hidden = true
         this.area = "body"
         this.idioma = "ES"
         this.puestoSeleccionado = -1
@@ -53,6 +55,7 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         this.videoOAtencion = false
         this.videoYAtencion = false
         this.soloAtencion = false
+        this.clickVideoOAtencion = "atencion"
     }
 
     static get styles() {
@@ -66,9 +69,6 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             overflow-x: hidden;
             overflow-y: auto;         
         }
-        :host([hidden]){
-            display: none; 
-        } 
         :host::-webkit-scrollbar {
             display: none;
         }
@@ -213,10 +213,17 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             cursor:pointer;
             z-index:10;
         }
+        :host(:not([media-size="small"])) #divImgVideo{
+            justify-self:flex-end;
+        }
+        :host(:not([media-size="small"])) #divImgAtencion{
+            justify-self:flex-end;
+        }
         #divImgVideo svg{
             height:1.5rem;
             width: 1.5rem;
         }
+
         .NO{
             display:none;
         }
@@ -229,6 +236,8 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             height:1.5rem;
             width: 1.5rem;
         }
+
+
         `
     }
 
@@ -312,36 +321,71 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
     stateChanged(state, name) {
         if ((name == SCREEN || name == MEDIA_CHANGE)) {
             this.mediaSize = state.ui.media.size
-            this.hidden = true
-            const haveBodyArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-agendas-atencionesMascotas-".indexOf("-" + state.screen.name + "-") != -1
-            if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
-                this.hidden = false
-                this.reservas = state.reservas.entitiesAgenda
-                this.puestos = state.puestos.entities
-                if (this.puestoSeleccionado == -1) { this.puestoSeleccionado = this.puestos[0].Id }
+            if (state.screen.name == "agendas" || state.screen.name == "his_Agendas") {
                 this.shadowRoot.querySelector("#TituloDeLaLista").innerHTML = idiomas[this.idioma][store.getState().screen.name].tituloLista
                 this.videoOAtencion = false
                 this.videoYAtencion = false
                 this.soloAtencion = false
                 switch (state.screen.name) {
                     case "agendas":
-                        this.videoOAtencion = true
+                        if (this.mediaSize == "small") {
+                            this.videoOAtencion = true
+                        } else {
+                            this.videoYAtencion = true
+                        }
                         break
-                    case "atencionesMascotas":
+                    case "his_Agendas":
                         this.soloAtencion = true
                         break
                 }
+                this.update();
             }
-            this.update();
         }
-
+        /////////// carga de datos
+        if (name == RESERVASAGENDA_TIMESTAMP) {
+            this.reservas = state.reservas.entitiesAgenda ? state.reservas.entitiesAgenda : []
+            this.update()
+        }
+        if (name == PUESTO_TIMESTAMP) {
+            this.puestos = state.puestos.entities ? state.puestos.entities : []
+            if (this.puestoSeleccionado == -1) { this.puestoSeleccionado = state.puestos.entities[0].Id }
+            this.update()
+        }
+        ////////// acciones 
+        if (name == RESERVASATENCIONESDEUNAMASCOTA_TIMESTAMP && (state.screen.name == "agendas" || state.screen.name == "his_Agendas" || state.screen.name == "diagnosticosDetalle")) {
+            if (this.videoYAtencion) {
+                if (this.clickVideoOAtencion == "atencion") {
+                    store.dispatch(goTo("listaReservas"))
+                } else {
+                    store.dispatch(goTo("videos"))
+                }
+            }
+            if (this.videoOAtencion) {
+                if (this.clickVideoOAtencion == "atencion") {
+                    store.dispatch(goTo("diagnosticosDetalle"))
+                } else {
+                    store.dispatch(goTo("videos"))
+                }
+            }
+            if (this.soloAtencion) {
+                store.dispatch(goTo("his_ListaReservas"))
+            }
+        }
+        if (name == RESERVASATENCIONSELECCIONADA_TIMESTAMP && state.screen.name == "agendas") {
+            store.dispatch(goTo("diagnosticosDetalle"))
+        }
+        if (name == RESERVAS_ERRORGET_TIMESTAMP && (state.screen.name == "agendas" || state.screen.name == "his_Agendas")) {
+            store.dispatch(showWarning(store.getState().screen.name, 0))
+        }
     }
     clickVideo(e) {
+        this.clickVideoOAtencion = "video"
+        store.dispatch(goTo("agendas"))
+
         let arr = e.currentTarget.item;
         var d = new Date()
         if (store.getState().reservas.entitiesAgendaNuevaAtencionDesdeVideo) {
-            if (store.getState().reservas.entitiesAgendaNuevaAtencionDesdeVideoReservaId == arr.Id) {
+            if (store.getState().reservas.entitiesAgendaNuevaAtencionDesdeVideo.ReservaId == arr.Id) {
                 d = store.getState().reservas.entitiesAgendaNuevaAtencionDesdeVideo.InicioAtencion
             }
         }
@@ -357,25 +401,32 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             InicioAtencion: d
         }
         store.dispatch(agendaNuevaAtencionDesdeVideo(myJson))
-        store.dispatch(goTo("videos"))
+        if (this.videoOAtencion) {
+            store.dispatch(goTo("videos"))
+        }
         if (this.videoYAtencion) {
             let arr = e.currentTarget.item;
             let filtroPorMascota = "MascotaId eq " + arr.MascotaId
             store.dispatch(getReservasAndAtencionesDeUnaMascota(store.getState().cliente.datos.token, filtroPorMascota))
+            //store.dispatch(goTo("videos"))
         }
     }
     clickAtencion(e) {
+        this.clickVideoOAtencion = "atencion"
+        if (store.getState().screen.name.indexOf("his_") == -1) {
+            store.dispatch(goTo("agendas"))
+        } else {
+            store.dispatch(goTo("his_Agendas"))
+        }
         if (this.videoOAtencion) {
             let myJson = this.jsonAtencion(e.currentTarget.item)
             store.dispatch(agendaAtencionSeleccionada(myJson))
-            store.dispatch(goTo("diagnosticosDetalle"))
         }
-        if (this.soloAtencion || this.videoYAtencion) {
-            let arr = e.currentTarget.item;
-            let filtroPorMascota = "MascotaId eq " + arr.MascotaId
-            store.dispatch(getReservasAndAtencionesDeUnaMascota(store.getState().cliente.datos.token, filtroPorMascota))
-            store.dispatch(goTo("listaReservas"))
-        }
+
+        let arr = e.currentTarget.item;
+        let filtroPorMascota = "MascotaId eq " + arr.MascotaId
+        store.dispatch(getReservasAndAtencionesDeUnaMascota(store.getState().cliente.datos.token, filtroPorMascota))
+
     }
     jsonAtencion(arr) {
         let myJson = {
@@ -402,6 +453,7 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         let filtroFecha = d.getUTCFullYear() + "-" + (d.getUTCMonth() + 1) + "-" + d.getUTCDate()
         //        store.dispatch(getReservasAgenda(miToken, "FechaAtencion ge " + filtroFecha))
         store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion ge 2020-01-07"))
+        this.update()
     }
     static get properties() {
         return {
@@ -409,11 +461,13 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
                 type: Boolean,
                 reflect: true,
                 attribute: 'video-o-atencion'
-            }, videoYAtencion: {
+            },
+            videoYAtencion: {
                 type: Boolean,
                 reflect: true,
                 attribute: 'video-y-atencion'
-            }, soloAtencion: {
+            },
+            soloAtencion: {
                 type: Boolean,
                 reflect: true,
                 attribute: 'solo-atencion'
@@ -433,6 +487,10 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             },
             area: {
                 type: String
+            },
+            clickVideoOAtencion: {
+                type: String,
+                reflect: true
             }
         }
     }

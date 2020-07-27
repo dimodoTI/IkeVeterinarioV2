@@ -99,6 +99,13 @@ export const idiomas = {
             warningTitulo: ["Error de conexion."],
             warningCuerpo: ["Intente nuevamente"]
         },
+        his_Agendas: {
+            titulo: "Historial de atenciones",
+            subTitulo: "Selecciona la reserva.",
+            tituloLista: "Reservas del día",
+            warningTitulo: ["Error de conexion."],
+            warningCuerpo: ["Intente nuevamente"]
+        },
         videos: {
             conectando: "Conectando ...",
             titulo: "Consulta Online",
@@ -111,7 +118,9 @@ export const idiomas = {
             diagnostico_ph: "Tomar jarabe para la tos CanTos 200ml. 1 tapita cada 8hs durante 7 días. Si el cuadro se prolonga volver a consultar.",
             btnAdjuntar: "Adjuntar archivo",
             btnAceptar: "Grabar",
-            btnCancelar: "Cancelar"
+            btnCancelar: "Cancelar",
+            warningTitulo: ["Error de conexion."],
+            warningCuerpo: ["Intente nuevamente"]
         },
         diagnosticosDetalle: {
             titulo: "Detalle de consulta",
@@ -128,20 +137,26 @@ export const idiomas = {
             hora: "Hora: ",
             veterinario: "Veterinario: ",
         },
-        igualDiagnosticosDetalle: {
+        his_DiagnosticosDetalle: {
             titulo: "Detalle de consulta",
             subTitulo: "Acá vas a encontrar el expediente correspondiente a una consulta.",
         },
         atencionesMascotas: {
             titulo: "Historial de atenciones",
             subTitulo: "Selecciona la reserva.",
-            tituloLista: "Consultas del día"
+            tituloLista: "Consultas del día",
+            warningTitulo: ["Error de conexion."],
+            warningCuerpo: ["Intente nuevamente"]
         },
         listaReservas: {
             titulo: "Historial de atenciones",
             subTitulo: "De la mascota.",
             tituloLista: "Listado de reservas",
             verDetalle: "Ver detalle"
+        },
+        his_ListaReservas: {
+            titulo: "Historial de atenciones",
+            subTitulo: "De la mascota."
         }
 
     }

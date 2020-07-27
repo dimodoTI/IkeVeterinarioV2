@@ -67,10 +67,10 @@ export const get = ({
             })
 
         ]).then((value) => {
-            dispatch(goTo("agendas"))
             dispatch(hideSpinner(ikePuestosQuery))
+            dispatch(goTo(action.paginaSiguiente))
         }).catch(() => {
-            console.log("Error!!!")
+            //console.log("Error!!!")
             dispatch(hideSpinner(ikePuestosQuery))
             dispatch(showWarning(getState().screen.name, 0))
         })
