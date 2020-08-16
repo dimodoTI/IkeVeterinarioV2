@@ -29,7 +29,7 @@ export const get = ({
         action.optionsPuestos.token = token
         const optionsReservas = {}
         optionsReservas.token = token
-        optionsReservas.expand = "Mascota($select = Nombre), Tramo, Atencion"
+        optionsReservas.expand = "Mascota($select = Nombre), Tramo, Atencion($expand=Veterinario)"
         optionsReservas.orderby = "FechaAtencion,HoraAtencion"
         optionsReservas.filter = action.filterReservas
         dispatch(showSpinner(ikePuestosQuery))

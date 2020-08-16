@@ -112,6 +112,12 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
     }
     clickAtencion(e) {
         let arr = e.currentTarget.item;
+        var vetNombre = ""
+        if (arr.Atencion) {
+            if (arr.Atencion.Veterinario) {
+                vetNombre = arr.Atencion.Veterinario.Apellido + " " + arr.Atencion.Veterinario.Nombre
+            }
+        }
         this.atencionCompleta = {
             ReservaId: arr.Id,
             FechaReserva: arr.FechaAtencion,
@@ -121,6 +127,7 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
             Motivo: arr.Motivo,
             AtencionId: arr.Atencion ? arr.Atencion.id : 0,
             VeterinarioId: arr.Atencion ? arr.Atencion.VeterinarioId : 0,
+            Veterinario: vetNombre,
             Diagnostico: arr.Atencion ? arr.Atencion.Diagnostico : 0,
             InicioAtencion: arr.Atencion ? arr.Atencion.InicioAtencion : null,
             FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null
@@ -141,6 +148,14 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
         if (name == RESERVASATENCIONESDEUNAMASCOTA_TIMESTAMP) {
             if (state.reservas.entitiesAtencionDeUnaMascota) {
                 this.item = state.reservas.entitiesAtencionDeUnaMascota;
+                if (this.shadowRoot.querySelector("#tituloLista")) {
+                    if (this.item.length > 0) {
+                        this.shadowRoot.querySelector("#tituloLista").innerHTML = idiomas[this.idioma].listaReservas.tituloLista + " (" + this.item[0].Mascota.Nombre + ")"
+                    }
+                }
+
+
+
             }
             this.update();
         }

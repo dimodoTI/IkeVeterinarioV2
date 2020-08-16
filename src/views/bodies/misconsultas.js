@@ -199,10 +199,10 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
 
     irAgenda(e) {
         //store.dispatch(goTo("agendas"))
-        store.dispatch(getReservasDelDia("FechaAtencion ge 2020-01-07", {}, "agendas"))
+        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "agendas"))
     }
     irAtenciones() {
-        store.dispatch(getReservasDelDia("FechaAtencion ge 2020-01-07", {}, "his_Agendas"))
+        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "his_Agendas"))
         //store.dispatch(goTo("atencionesMascotas"))
     }
 

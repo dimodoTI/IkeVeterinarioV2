@@ -93,7 +93,7 @@ export class atencionesCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Li
             grid-area:agendas;
         }
         .listaReservas{
-            grid-area:listaReservas;          
+            grid-area:listaReservas; 
         }
         .videos{
             grid-area:videos;

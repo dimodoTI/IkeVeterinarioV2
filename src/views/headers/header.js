@@ -10,7 +10,7 @@ import {
     connect
 } from "@brunomon/helpers";
 import {
-    ATRAS
+    ATRAS, CAMPANACONMARCA, CAMPANASINMARCA
 } from "../../../assets/icons/icons";
 import {
     idiomas
@@ -21,10 +21,17 @@ import {
 import {
     goNext, goPrev, goTo
 } from "../../redux/routing/actions"
+import {
+    sinContestar
+} from "../../redux/chat/actions"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
-export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
+const CAMPANA_SEMUESTRA = "chat.campana.timeStamp";
+const CHAT_SINCONTESTARTIMESTAMP = "chat.sinContestarTimeStamp"
+const CHAT_SINCONTESTAR_ERROR = "chat.sinContestarErrorTimeStamp"
+const HEADER_TAPA = "ui.media.headerMuestraTapa"
+export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUESTRA, CHAT_SINCONTESTARTIMESTAMP, CHAT_SINCONTESTAR_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
 
     constructor() {
         super();
@@ -35,17 +42,15 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
         this.pagina = store.getState().screen.name
         this.titulo = ""
         this.subTitulo = ""
+        this.campanaSeMuestra = false
     }
 
 
     static get styles() {
         return css`
         
-            :host(){
+            :host{
                 position: relative;
-                display:grid;
-                height: 100%;
-                width: 100%;
                 display:grid;
                 grid-template-rows: 50% 50%;
                 background-color: transparent;
@@ -53,11 +58,12 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
             :host([hidden]){
                 display:none ;
             }
-            #divTitulo{                    
+            #divTitulo{        
+                position:relative;            
                 height: 50%;
                 display:flex;
                 flex-flow: row;
-                align-items: flex-end;
+                align-self: end;
             }
             :host(:not([media-size="small"])) #divTitulo {
                 justify-content: center;
@@ -65,7 +71,7 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
             #divImg{
                 display:none;
                 padding-right: .4rem;
-                align-self: flex-end;
+                align-self: end;
             }
             #divImg svg{
                 height: 1.5rem;
@@ -80,10 +86,26 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
             :host([media-size="small"][current="diagnosticosDetalle"]) #divImg, :host([media-size="small"][current="his_DiagnosticosDetalle"]) #divImg{
                 display:grid;
             }
-            :host([media-size="small"][current="his_ListaReservas"]) #divImg{
+            :host([media-size="small"][current="his_ListaReservas"]) #divImg, :host([media-size="small"][current="notificacionReserva"]) #divImg{
                 display:grid;
             }
-
+            #divCampana{
+                position: absolute;
+                display: grid;
+                bottom: 0rem;
+                right: 0rem;
+                width:6vh;
+                height:6vh;
+            }
+            :host([current="inicioSesion"]) #divCampana, :host([current="crearClave"]) #divCampana,:host([current="recuperaClave"]) #divCampana,:host([current="notificacionReserva"]) #divCampana{
+                display:none;
+            }
+            #sinMarca{
+                display:grid;
+            }
+            #conMarca{
+                display:none;
+            }
             #lblTitulo{               
                 background-color: transparent;
                 display: flex;
@@ -92,7 +114,6 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
                 text-align: left;
                 font-size: var(--font-header-h1-size);
                 font-weight: var(--font-header-h1-weight);
-
             }
             #lblLeyenda{           
                 display: flex;
@@ -103,6 +124,20 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
             }
             :host(:not([media-size="small"])) #lblLeyenda {
                 justify-content: center;
+            }
+            #divTapa{
+                position:absolute;
+                display: none;
+                top:0;
+                left:0;
+                bottom: 0;
+                right: 0;        
+                z-index:20;            
+                background-color: var(--color-gris);
+                opacity:.4;
+            }
+            :host([header-muestra-tapa]) #divTapa{
+                display: grid;           
             }
         `
     }
@@ -116,20 +151,25 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
                 <div id="divTxt">
                     <label id="lblTitulo">${this.titulo}</label>
                 </div>
+                <div id="divCampana" @click=${this.chat}>
+                ${store.getState().chat.campana.seMuestra ? CAMPANACONMARCA : CAMPANASINMARCA}
+                </div>
             </div>
             <div>
                 <label id="lblLeyenda">${this.subTitulo}</label>
             </div>
+            <div id="divTapa"></div>
             `
     }
 
     stateChanged(state, name) {
-        if ((name == SCREEN || name == MEDIA_CHANGE)) {
+        if ((name == SCREEN || name == MEDIA_CHANGE || name == HEADER_TAPA)) {
+            this.headerMuestraTapa = state.ui.media.headerMuestraTapa
             this.current = state.screen.name
             this.mediaSize = state.ui.media.size
             this.hidden = true
             const haveBodyArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-inicioSesion-recuperaClave-crearClave-misConsultas-agendas-videos-diagnosticos-diagnosticosDetalle-atencionesMascotas-listaReservas-igualDiagnosticosDetalle-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-".indexOf("-" + state.screen.name + "-") != -1
+            const SeMuestraEnUnasDeEstasPantallas = "-inicioSesion-recuperaClave-crearClave-misConsultas-agendas-videos-diagnosticos-diagnosticosDetalle-atencionesMascotas-listaReservas-igualDiagnosticosDetalle-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-notificacionReserva-chatApp-".indexOf("-" + state.screen.name + "-") != -1
             if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
                 this.hidden = false
                 this.titulo = idiomas[this.idioma][this.current].titulo
@@ -137,8 +177,17 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
             }
             this.update();
         }
-    }
 
+        if (name == CHAT_SINCONTESTARTIMESTAMP) {
+            //store.dispatch(goTo("notificacionReserva"))
+        }
+        if (name == CAMPANA_SEMUESTRA) {
+            this.update()
+        }
+    }
+    chat() {
+        store.dispatch(sinContestar())
+    }
     atras() {
         switch (this.current) {
             case "videos":
@@ -163,6 +212,9 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
             case "his_ListaReservas":
                 store.dispatch(goTo("his_Agendas"))
                 break
+            case "notificacionReserva":
+                store.dispatch(goTo("misConsultas"))
+                break
             default:
                 store.dispatch(goTo("inicioSesion"))
                 break
@@ -177,18 +229,27 @@ export class headerComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEl
             },
             layout: {
                 type: String,
-                reflect: true,
+                reflect: true
             },
             hidden: {
                 type: Boolean,
-                reflect: true,
+                reflect: true
             },
             area: {
                 type: String
             },
             current: {
                 type: String,
+                reflect: true
+            },
+            campanaSeMuestra: {
+                type: Boolean,
+                reflect: true
+            },
+            headerMuestraTapa: {
+                type: Boolean,
                 reflect: true,
+                attribute: 'header-muestra-tapa'
             }
         }
     }

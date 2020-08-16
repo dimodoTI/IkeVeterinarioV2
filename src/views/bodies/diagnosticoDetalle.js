@@ -246,8 +246,8 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
     }
     verVeterinario() {
         var ret = ""
-        if (!this.atencionEnCurso.VeterinarioId == 0) {
-            ret = this.atencionEnCurso.VeterinarioId
+        if (this.atencionEnCurso.Veterinario) {
+            ret = this.atencionEnCurso.Veterinario
         }
         return ret
     }

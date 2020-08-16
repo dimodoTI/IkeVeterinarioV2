@@ -81,6 +81,13 @@ import {
 import {
     historicoCompuesta
 } from "../views/bodies/historico"
+import {
+    pantallaNotificacionReserva
+} from "../views/bodies/notificacionReserva"
+import {
+    chatApp
+} from "../views/bodies/chatApp"
+
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
@@ -122,8 +129,9 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
             <pantalla-crearclave class="body"></pantalla-crearclave>
             <pantalla-crearclavemsg class="body"></pantalla-crearclavemsg>
             <pantalla-misconsulta class="body"></pantalla-misconsulta>
+            <pantalla-notificacionreserva class="body"></pantalla-notificacionreserva>
             <pie-componente class="foot"></pie-componente>
-
+            <chat-app class="body"></chat-app>
 
             <historico-compuestas class="body" ></historico-compuestas>
             <atenciones-compuestas class="body" ></atenciones-compuestas>

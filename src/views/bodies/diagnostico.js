@@ -120,7 +120,7 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
                 ${idiomas[this.idioma].diagnosticos.tituloDetalle}
             </div>
             <div id="divDiagnostico">
-                <textarea id="txtDiagnostico" rows="8" ></textarea>
+                <textarea id="txtDiagnostico" rows="8"  @input=${this.activar}></textarea>
             </div>
             <div id="divRecetas">
                 ${this.archivo.map(dato => html`
@@ -137,11 +137,24 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
                 <button id="btnAdjuntar" class="btn" btn3 >${idiomas[this.idioma].diagnosticos.btnAdjuntar}</button>
             </div> -->
             <div id="divBtn">
-                <button id="btnAceptar" class="btn" btn1 @click=${this.clickAceptar}>${idiomas[this.idioma].diagnosticos.btnAceptar}</button>
+                <button id="btnAceptar" class="btn" apagado btn1 @click=${this.clickAceptar}>${idiomas[this.idioma].diagnosticos.btnAceptar}</button>
                 <button id="btnAdjuntar" class="btn" btn1 >${idiomas[this.idioma].diagnosticos.btnAdjuntar}</button>
                 <button id="btnCancelar" class="btn" btn3  @click=${this.clickCancelar}>${idiomas[this.idioma].diagnosticos.btnCancelar}</button>
             </div>
         `
+    }
+    activar() {
+        this.activo = true
+        const txtDiag = this.shadowRoot.querySelector("#txtDiagnostico")
+        if (txtDiag.value.length < 1) {
+            this.activo = false
+        }
+        if (this.activo) {
+            this.shadowRoot.querySelector("#btnAceptar").removeAttribute("apagado")
+        } else {
+            this.shadowRoot.querySelector("#btnAceptar").setAttribute("apagado", "")
+        }
+        this.update()
     }
     firstUpdated(changedProperties) {
     }
@@ -150,7 +163,6 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
             this.mediaSize = state.ui.media.size
             if (state.screen.name == "diagnosticos") {
 
-                //this.shadowRoot.querySelector("#txtDiagnostico").value = ""
             }
             this.update();
         }
@@ -159,7 +171,8 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
         }
         if (name == ATENCIONES_ADDTIMESTAMP && state.screen.name == "diagnosticos") {
             store.dispatch(agendaAtencionSeleccionada(this.atencionCompleta))
-            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion ge 2020-01-07"))
+            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion eq 2020-07-29"))
+            this.shadowRoot.querySelector("#txtDiagnostico").value = ""
             if (this.mediaSize == "small") {
                 store.dispatch(goTo("diagnosticosDetalle"))
             } else {
@@ -190,6 +203,7 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
             Motivo: res.Motivo,
             AtencionId: 0,
             VeterinarioId: res.VeterinarioId,
+            Veterinario: res.Veterinario,
             Diagnostico: this.shadowRoot.querySelector("#txtDiagnostico").value,
             InicioAtencion: res.InicioAtencion,
             FinAtencion: d

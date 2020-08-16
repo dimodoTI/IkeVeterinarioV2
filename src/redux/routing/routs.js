@@ -33,7 +33,9 @@ export const largeRoute = [
     "4/1    -recuperaClave",
     "4/2    -recuperaClaveMsg",
     "5/1    -crearClave",
-    "5/2    -crearClaveMsg"
+    "5/2    -crearClaveMsg",
+    "5      -notificacionReserva",
+    "6/1    -chatApp"
 
 
 ]

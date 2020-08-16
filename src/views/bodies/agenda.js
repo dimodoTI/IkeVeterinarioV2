@@ -262,13 +262,13 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
                 <div class="grillaLista">
                     ${!this.reservas ? "" : this.reservas.filter(item => { return item.Tramo.PuestoId == this.puestoSeleccionado }).map((item) => {
             return html` 
-                    <div class="row" .item=${item} @click=${this.editar}>
+                    <div class="row" .item=${item} >
                         <div class="fecha">
                             <div class="dow">${this.queMes(item.FechaAtencion)}</div>
                             <div class="nroDia">${this.nroDia(item.FechaAtencion)}</div>
                             <div class="dow">${this.dow(item.FechaAtencion)}</div>
                         </div>
-                        <div class="agenda">
+                        <div class="agenda" @click=${this.editar}>
                             <div id="divVideo">
                                 <div style="align-self:center;">${this.queHora(item.HoraAtencion) + " hs"}</div>
                                 <div id = "divBotonesVideoOAtencion" >
@@ -316,6 +316,7 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         return idiomas[this.idioma].mesCorto[mes]
     }
     editar(e) {
+        //e.currentTarget.style.backgroundColor = "#ffffff";
         return true
     }
     stateChanged(state, name) {
@@ -396,8 +397,8 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             MascotaId: arr.MascotaId,
             MascotaNombre: arr.Mascota.Nombre,
             Motivo: arr.Motivo,
-            VeterinarioId: arr.Atencion ? store.getState().cliente.datos.id : 0,
-            Veterinario: arr.Atencion ? store.getState().cliente.datos.nombre + " " + store.getState().cliente.datos.apellido : "",
+            VeterinarioId: store.getState().cliente.datos.id,
+            Veterinario: store.getState().cliente.datos.apellido + " " + store.getState().cliente.datos.nombre,
             InicioAtencion: d
         }
         store.dispatch(agendaNuevaAtencionDesdeVideo(myJson))
@@ -418,7 +419,7 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         } else {
             store.dispatch(goTo("his_Agendas"))
         }
-        if (this.videoOAtencion) {
+        if (this.videoOAtencion || this.videoYAtencion) {
             let myJson = this.jsonAtencion(e.currentTarget.item)
             store.dispatch(agendaAtencionSeleccionada(myJson))
         }
@@ -429,6 +430,12 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
 
     }
     jsonAtencion(arr) {
+        var vetNombre = ""
+        if (arr.Atencion) {
+            if (arr.Atencion.Veterinario) {
+                vetNombre = arr.Atencion.Veterinario.Apellido + " " + arr.Atencion.Veterinario.Nombre
+            }
+        }
         let myJson = {
             ReservaId: arr.Id,
             FechaReserva: arr.FechaAtencion,
@@ -438,6 +445,7 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             Motivo: arr.Motivo,
             AtencionId: arr.Id,
             VeterinarioId: arr.Atencion ? arr.Atencion.VeterinarioId : 0,
+            Veterinario: vetNombre,
             Diagnostico: arr.Atencion ? arr.Atencion.Diagnostico : "",
             InicioAtencion: arr.Atencion ? arr.Atencion.InicioAtencion : null,
             FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null
@@ -452,7 +460,12 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         let d = new Date()
         let filtroFecha = d.getUTCFullYear() + "-" + (d.getUTCMonth() + 1) + "-" + d.getUTCDate()
         //        store.dispatch(getReservasAgenda(miToken, "FechaAtencion ge " + filtroFecha))
-        store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion ge 2020-01-07"))
+        if (store.getState().screen.name.indexOf("his_") == -1) {
+            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion eq 2020-07-29"))
+        } else {
+            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion eq 2020-07-29"))
+        }
+        // las consultas las hago en mis consultas, aca, en pie y diagnostico
         this.update()
     }
     static get properties() {

@@ -7,7 +7,9 @@ import {
     HIDE_WARNING,
     SET_MEDIA,
     SET_MEDIA_ORIENTATION,
-
+    PAGINA_ANTERIOR,
+    HEADER_MUESTRA_TAPA,
+    FOOTHER_MUESTRA_TAPA
 } from "./actions";
 
 const initialState = {
@@ -27,8 +29,12 @@ const initialState = {
     media: {
         size: "large",
         orientation: "landscape",
-        timeStamp: null
+        timeStamp: null,
+        paginaAnterior: "",
+        headerMuestraTapa: false,
+        footherMuestraTapa: false
     }
+
 };
 
 export const reducer = (state = initialState, action) => {
@@ -71,7 +77,15 @@ export const reducer = (state = initialState, action) => {
             newState.media.orientation = action.orientation
             newState.media.timeStamp = (new Date()).getTime()
             break;
-
+        case PAGINA_ANTERIOR:
+            newState.media.paginaAnterior = action.pagina
+            break;
+        case HEADER_MUESTRA_TAPA:
+            newState.media.headerMuestraTapa = action.mostrar
+            break;
+        case FOOTHER_MUESTRA_TAPA:
+            newState.media.footherMuestraTapa = action.mostrar
+            break;
     }
     return newState;
 };

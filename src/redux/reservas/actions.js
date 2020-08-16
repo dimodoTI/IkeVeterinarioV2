@@ -34,12 +34,12 @@ export const get = (options) => ({
 
 export const getAgenda = (token, filter) => ({
     type: GET_AGENDA,
-    options: { token: token, filter: filter, expand: "Mascota($select = Nombre), Tramo, Atencion", orderby: "FechaAtencion,HoraAtencion" }
+    options: { token: token, filter: filter, expand: "Mascota($select = Nombre), Tramo, Atencion($expand=Veterinario)", orderby: "FechaAtencion,HoraAtencion" }
 });
 
 export const getAtencionDeUnaMascota = (token, filter) => ({
     type: GET_ATENCIONDEUNAMASCOTA,
-    options: { token: token, filter: filter, expand: "Mascota($select = Nombre, Foto), Atencion", orderby: "FechaAtencion desc,HoraAtencion desc" }
+    options: { token: token, filter: filter, expand: "Mascota($select = Nombre, Foto), Atencion($expand=Veterinario)", orderby: "FechaAtencion desc,HoraAtencion desc" }
 });
 
 export const add = (body, token) => ({

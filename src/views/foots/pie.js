@@ -20,12 +20,14 @@ import {
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
-export class pieComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
+const FOOTHER_TAPA = "ui.media.footherMuestraTapa"
+export class pieComponente extends connect(store, FOOTHER_TAPA, MEDIA_CHANGE, SCREEN)(LitElement) {
     constructor() {
         super();
         this.hidden = true
         this.area = "foot"
         this.idioma = "ES"
+        //       this.footherMuestraTapa = false
     }
 
     static get styles() {
@@ -168,7 +170,20 @@ export class pieComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEleme
         :host([media-size="medium"]) #btn-ayudaPie{
             font-size: var(--font-error-size);
         }
-
+        #divTapa{
+            position:absolute;
+            display: none;
+            top:0;
+            left:0;
+            bottom: 0;
+            right: 0;    
+            z-index:20;            
+            background-color: var(--color-gris);
+            opacity:.4;
+        }
+        :host([foother-muestra-tapa]) #divTapa{
+            display: grid;           
+        }
         `
     }
 
@@ -202,14 +217,17 @@ export class pieComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEleme
                 <div><label class="lblayudaPie">${idiomas[this.idioma].pie.lblAyuda01}</label></div>
                 <button btn3 id="btn-ayudaPie" @click=${this.clickAyudaPie}>${idiomas[this.idioma].pie.btnAyuda}</button>
             </div>
+            <div id="divTapa"></div>
+
         `
     }
     stateChanged(state, name) {
-        if ((name == SCREEN || name == MEDIA_CHANGE)) {
+        if ((name == SCREEN || name == MEDIA_CHANGE || name == FOOTHER_TAPA)) {
+            this.footherMuestraTapa = state.ui.media.footherMuestraTapa
             this.mediaSize = state.ui.media.size
             this.hidden = true
             const haveFootArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-misConsultas-agendas-atencionesMascotas-listaReservas-diagnosticos-diagnosticosDetalle-videos-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-".indexOf("-" + state.screen.name + "-") != -1
+            const SeMuestraEnUnasDeEstasPantallas = "-misConsultas-agendas-atencionesMascotas-listaReservas-diagnosticos-diagnosticosDetalle-videos-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-notificacionReserva-chatApp-".indexOf("-" + state.screen.name + "-") != -1
             if (haveFootArea && SeMuestraEnUnasDeEstasPantallas) {
                 this.hidden = false
             }
@@ -221,10 +239,10 @@ export class pieComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEleme
         store.dispatch(goTo("misConsultas"))
     }
     clickBoton2() {
-        store.dispatch(getReservasDelDia("FechaAtencion ge 2020-01-07", {}, "agendas"))
+        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "agendas"))
     }
     clickBoton3() {
-        store.dispatch(getReservasDelDia("FechaAtencion ge 2020-01-07", {}, "his_Agendas"))
+        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "his_Agendas"))
         //store.dispatch(goTo("atencionesMascotas"))
     }
 
@@ -241,14 +259,19 @@ export class pieComponente extends connect(store, MEDIA_CHANGE, SCREEN)(LitEleme
             },
             layout: {
                 type: String,
-                reflect: true,
+                reflect: true
             },
             hidden: {
                 type: Boolean,
-                reflect: true,
+                reflect: true
             },
             area: {
                 type: String
+            },
+            footherMuestraTapa: {
+                type: Boolean,
+                reflect: true,
+                attribute: 'foother-muestra-tapa'
             }
         }
     }

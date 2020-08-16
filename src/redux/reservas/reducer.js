@@ -16,7 +16,6 @@ import {
     AGENDA_ATENCIONSELECCIONADA
 } from "../reservas/actions";
 
-
 const initialState = {
     entities: null,
     entitiesAgenda: null,

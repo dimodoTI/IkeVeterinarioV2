@@ -15,7 +15,7 @@ import {
     LOGON_ERROR,
     UPDATE_PROFILE_ERROR
 } from "./actions";
-
+import { showCampana, setCampana } from "../chat/actions"
 import {
     ikeLoginFetch,
     ikeRecuperoFetch,
@@ -97,7 +97,8 @@ export const updateProfile = ({
     }
 };
 
-
+const NEW_CONNECTION = "new-connection"
+let connection = null
 export const processLogin = ({
     dispatch, getState
 }) => next => action => {
@@ -111,6 +112,27 @@ export const processLogin = ({
         } else {
             dispatch(setLogueado(true))
             dispatch(setDatos(action.payload.receive))
+            dispatch(setCampana())
+
+
+            connection = new WebSocket('wss://ws.chat.dimodo.ga:9080');
+            connection.onopen = () => {
+                connection.send(JSON.stringify({
+                    type: NEW_CONNECTION,
+                    id: action.payload.receive.id,
+                    rol: "vet",
+                    name: action.payload.receive.nombre
+                }));
+            };
+            connection.onmessage = (msg) => {
+                let data = JSON.parse(msg.data);
+                dispatch(showCampana())
+            };
+
+            connection.onerror = (err) => {
+                console.log("Got error", err);
+            };
+
             if (getState().screen.name == "inicioSesion") {
                 if (getState().cliente.datos.perfil == "Veterinario" || getState().cliente.datos.perfil == "Admin") {
                     dispatch(goTo("misConsultas"))

@@ -157,8 +157,24 @@ export const idiomas = {
         his_ListaReservas: {
             titulo: "Historial de atenciones",
             subTitulo: "De la mascota."
-        }
-
+        },
+        notificacionReserva: {
+            titulo: "Chat reservas",
+            subTitulo: "De las mascotas.",
+            tituloLista: "Listado de chat",
+            verDetalle: "Ver detalle",
+            responder: "Responder",
+            btnGrabar: "Grabar",
+            btnCancelar: "Cancelar"
+        },
+        chatApp: {
+            titulo: "Chat detalle",
+            subTitulo: "De la reserva."
+        },
+        chatAlta: {
+            titulo: "Chat reservas",
+            subTitulo: "De las mascotas."
+        },
     }
 
 }

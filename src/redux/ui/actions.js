@@ -18,6 +18,9 @@ export const SET_MEDIA_ORIENTATION = "[ui] set media orientation"
 //define el layout de la UI
 export const SET_LAYOUT = "[ui] set layout"
 
+export const PAGINA_ANTERIOR = "[ui] pagina anterior"
+export const HEADER_MUESTRA_TAPA = "[ui] header muestra tapa"
+export const FOOTHER_MUESTRA_TAPA = "[ui] foother muestra tapa"
 
 export const showSpinner = () => ({
   type: SHOW_SPINNER
@@ -55,4 +58,19 @@ export const setMedia = (size) => ({
 export const setMediaOrientation = (orientation) => ({
   type: SET_MEDIA_ORIENTATION,
   orientation: orientation
+});
+
+export const paginaAnterior = (pagina) => ({
+  type: PAGINA_ANTERIOR,
+  pagina: pagina
+});
+
+export const headerMuestraTapa = (mostrar) => ({
+  type: HEADER_MUESTRA_TAPA,
+  mostrar: mostrar
+});
+
+export const footherMuestraTapa = (mostrar) => ({
+  type: FOOTHER_MUESTRA_TAPA,
+  mostrar: mostrar
 });
