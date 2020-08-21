@@ -61,44 +61,24 @@ export const getNotificacionChatPendientes = ({
         optionsNotif.expand = "Cabecera"
         optionsNotif.filter = "ClienteId eq " + action.clienteId
         optionsNotif.orderby = "Cabecera/Fecha"
+        var dataChat = null
+        var dataNotif = null
         dispatch(showSpinner(ikeChatQuery))
         Promise.all([
             ikeChatQuery.get(optionsChat).then((data) => {
-                dispatch({
-                    type: SIN_CONTESTAR_SUCCESS,
-                    payload: {
-                        send: null,
-                        receive: data
-                    }
-                })
+                dataChat = data
             }).catch((err) => {
-                dispatch({
-                    type: SIN_CONTESTAR_ERROR,
-                    payload: err
-                })
                 throw err
             }),
-
             ikeNotificacionDetalleQuery.get(optionsNotif).then((data) => {
-                dispatch({
-                    type: GET_NOTIFICACION_PENDIENTES_SUCCESS,
-                    payload: {
-                        send: null,
-                        receive: data
-                    }
-                })
+                dataNotif = data
             }).catch((err) => {
-                dispatch({
-                    type: GET_NOTIFICACION_PENDIENTES_ERROR,
-                    payload: err
-                })
                 throw err
             })
-
         ]).then((value) => {
             var notificaciones = []
-            if (getState().chat.entitySinContestar.length > 0) {
-                getState().chat.entitySinContestar.forEach(function (p) {
+            if (dataChat.length > 0) {
+                dataChat.forEach(function (p) {
                     let arr = {
                         fecha: p.Fecha, tipo: p.Tipo,
                         item: {
@@ -109,8 +89,8 @@ export const getNotificacionChatPendientes = ({
                     notificaciones.push(arr)
                 })
             }
-            if (getState().notificacion.entityNotificacionPendiente.length > 0) {
-                getState().notificacion.entityNotificacionPendiente.forEach(function (p) {
+            if (dataNotif.length > 0) {
+                dataNotif.forEach(function (p) {
                     let arr = {
                         fecha: p.Cabecera.Fecha, tipo: 2,
                         item: {
