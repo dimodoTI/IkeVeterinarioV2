@@ -5,6 +5,7 @@ import { idiomas } from "../../redux/datos/idiomas"
 import { button } from "../css/button"
 import { cardMascotaHorizontal } from "../css/cardMascotaHorizontal"
 import { CHAT } from "../../../assets/icons/icons"
+import { chatReserva } from "../../redux/chat/actions";
 
 import { agendaAtencionSeleccionada } from "../../redux/reservas/actions";
 import {
@@ -78,10 +79,8 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
         #grilla::-webkit-scrollbar {
             display: none;
         }
-        #cmhDivEtiqueta{
-            width: 90%;
-            justify-self:center;
-        }
+
+
     `
     }
     render() {
@@ -90,7 +89,7 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
                         ${idiomas[this.idioma].listaReservas.tituloLista}
                     </div>
                     <div id="grilla">
-                   ${this.item.map(dato => html`
+                        ${this.item.map(dato => html`
                         <div id="cmhDivEtiqueta">
                             <div id="cmhDivImagen" style="background-image:url(${dato.Mascota.Foto});grid-row-start:1;grid-row-end:4;"></div>
                             <div id="cmhDivNombre">${dato.Mascota.Nombre}</div>
@@ -99,16 +98,19 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
                             <div id="cmhDivVerDetalle">
                                 <button btn2  @click=${this.clickAtencion} .item=${dato} style="width:4rem;padding:0;text-align:left;font-size: var(--font-label-size);font-weight: var(--font-label-weight);">${idiomas[this.idioma].listaReservas.verDetalle}</button>                    
                             </div>
-                            <div id="cmhDivChat">${CHAT}</div>              
+                            <div id="cmhDivChat" @click=${this.clickChat} .item=${dato} hiddechat=${dato.Chats.length == 0 ? true : false}>${CHAT}</div>              
                         </div>
                     `)}
-                    </div>
+    </div>
 
-        `
+`
     }
     verFecha(f) {
         let d = new Date(f);
         return d.getUTCDate() + "-" + (d.getUTCMonth() + 1) + "-" + d.getUTCFullYear()
+    }
+    clickChat(e) {
+        store.dispatch(chatReserva(e.currentTarget.item.Id))
     }
     clickAtencion(e) {
         let arr = e.currentTarget.item;
@@ -134,10 +136,11 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
         }
         //graba solo en el STATE
         store.dispatch(agendaAtencionSeleccionada(this.atencionCompleta))
-        if (store.getState().screen.name.indexOf("his_") == -1) {
-            store.dispatch(goTo("diagnosticosDetalle"))
-        } else {
+        if (store.getState().screen.name.indexOf("his_") == 0) {
             store.dispatch(goTo("his_DiagnosticosDetalle"))
+        }
+        if (store.getState().screen.name.indexOf("ate_") == 0) {
+            store.dispatch(goTo("ate_diagnosticosDetalle"))
         }
     }
 

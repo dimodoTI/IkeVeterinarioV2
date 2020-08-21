@@ -117,7 +117,7 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
     render() {
         return html`
             <div id="divTitulo">
-                ${idiomas[this.idioma].diagnosticos.tituloDetalle}
+                ${idiomas[this.idioma].ate_diagnosticos.tituloDetalle}
             </div>
             <div id="divDiagnostico">
                 <textarea id="txtDiagnostico" rows="8"  @input=${this.activar}></textarea>
@@ -134,12 +134,12 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
                 `)} 
             </div>
             <!-- <div id="divAdjuntar">
-                <button id="btnAdjuntar" class="btn" btn3 >${idiomas[this.idioma].diagnosticos.btnAdjuntar}</button>
+                <button id="btnAdjuntar" class="btn" btn3 >${idiomas[this.idioma].ate_diagnosticos.btnAdjuntar}</button>
             </div> -->
             <div id="divBtn">
-                <button id="btnAceptar" class="btn" apagado btn1 @click=${this.clickAceptar}>${idiomas[this.idioma].diagnosticos.btnAceptar}</button>
-                <button id="btnAdjuntar" class="btn" btn1 >${idiomas[this.idioma].diagnosticos.btnAdjuntar}</button>
-                <button id="btnCancelar" class="btn" btn3  @click=${this.clickCancelar}>${idiomas[this.idioma].diagnosticos.btnCancelar}</button>
+                <button id="btnAceptar" class="btn" apagado btn1 @click=${this.clickAceptar}>${idiomas[this.idioma].ate_diagnosticos.btnAceptar}</button>
+                <button id="btnAdjuntar" class="btn" btn1 >${idiomas[this.idioma].ate_diagnosticos.btnAdjuntar}</button>
+                <button id="btnCancelar" class="btn" btn3  @click=${this.clickCancelar}>${idiomas[this.idioma].ate_diagnosticos.btnCancelar}</button>
             </div>
         `
     }
@@ -161,7 +161,7 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
     stateChanged(state, name) {
         if ((name == SCREEN || name == MEDIA_CHANGE)) {
             this.mediaSize = state.ui.media.size
-            if (state.screen.name == "diagnosticos") {
+            if (state.screen.name == "ate_diagnosticos") {
 
             }
             this.update();
@@ -169,59 +169,64 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
         if (name == RESERVAS_NUEVAATENCIONDESDEVIDEO) {
             this.reservaEnCurso = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
         }
-        if (name == ATENCIONES_ADDTIMESTAMP && state.screen.name == "diagnosticos") {
+        if (name == ATENCIONES_ADDTIMESTAMP && state.screen.name == "ate_diagnosticos") {
             store.dispatch(agendaAtencionSeleccionada(this.atencionCompleta))
             store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion eq 2020-07-29"))
             this.shadowRoot.querySelector("#txtDiagnostico").value = ""
             if (this.mediaSize == "small") {
-                store.dispatch(goTo("diagnosticosDetalle"))
+                store.dispatch(goTo("ate_diagnosticosDetalle"))
             } else {
-                store.dispatch(goTo("agendas"))
+                store.dispatch(goTo("ate_agendas"))
             }
         }
-        if (name == ATENCIONES_ERROROTROSTIMESTAMP && state.screen.name == "diagnosticos") {
+        if (name == ATENCIONES_ERROROTROSTIMESTAMP && state.screen.name == "ate_diagnosticos") {
             store.dispatch(showWarning(store.getState().screen.name, 0))
         }
     }
     clickCancelar() {
-        store.dispatch(goTo("agendas"))
+        store.dispatch(goTo("ate_agendas"))
     }
     clickAceptar() {
-        store.dispatch(goTo("diagnosticos"))
-        let d = new Date()
-        let h = (d.getHours() * 100) + d.getMinutes()
-        // if (state.reservas.entitiesAgendaNuevaAtencionDesdeVideo) {
-        //     this.reservaEnCurso = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
-        // }
-        let res = this.reservaEnCurso
-        this.atencionCompleta = {
-            ReservaId: res.ReservaId,
-            FechaReserva: res.FechaReserva,
-            HoraReserva: res.HoraReserva,
-            MascotaId: res.MascotaId,
-            MascotaNombre: res.MascotaNombre,
-            Motivo: res.Motivo,
-            AtencionId: 0,
-            VeterinarioId: res.VeterinarioId,
-            Veterinario: res.Veterinario,
-            Diagnostico: this.shadowRoot.querySelector("#txtDiagnostico").value,
-            InicioAtencion: res.InicioAtencion,
-            FinAtencion: d
+        let Diagnostico = this.shadowRoot.querySelector("#txtDiagnostico").value
+        if (Diagnostico == "") {
+            store.dispatch(showWarning("ate_diagnosticos", 0))
+        } else {
+            store.dispatch(goTo("ate_diagnosticos"))
+            let d = new Date()
+            let h = (d.getHours() * 100) + d.getMinutes()
+            // if (state.reservas.entitiesAgendaNuevaAtencionDesdeVideo) {
+            //     this.reservaEnCurso = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
+            // }
+            let res = this.reservaEnCurso
+            this.atencionCompleta = {
+                ReservaId: res.ReservaId,
+                FechaReserva: res.FechaReserva,
+                HoraReserva: res.HoraReserva,
+                MascotaId: res.MascotaId,
+                MascotaNombre: res.MascotaNombre,
+                Motivo: res.Motivo,
+                AtencionId: 0,
+                VeterinarioId: res.VeterinarioId,
+                Veterinario: res.Veterinario,
+                Diagnostico: this.shadowRoot.querySelector("#txtDiagnostico").value,
+                InicioAtencion: res.InicioAtencion,
+                FinAtencion: d
+            }
+            let addAte = {
+                ReservaId: res.ReservaId,
+                VeterinarioId: store.getState().cliente.datos.id,
+                InicioAtencion: res.InicioAtencion,
+                FinAtencion: d,
+                Diagnostico: this.shadowRoot.querySelector("#txtDiagnostico").value,
+                Observaciones: "",
+                Estado: 0,
+                Calificacion: 0,
+                ComentarioCalificacion: "",
+                Activo: true
+            }
+            res.Diagnostico = addAte.Diagnostico
+            store.dispatch(addAtenciones(addAte, store.getState().cliente.datos.token))
         }
-        let addAte = {
-            ReservaId: res.ReservaId,
-            VeterinarioId: store.getState().cliente.datos.id,
-            InicioAtencion: res.InicioAtencion,
-            FinAtencion: d,
-            Diagnostico: this.shadowRoot.querySelector("#txtDiagnostico").value,
-            Observaciones: "",
-            Estado: 0,
-            Calificacion: 0,
-            ComentarioCalificacion: "",
-            Activo: true
-        }
-        res.Diagnostico = addAte.Diagnostico
-        store.dispatch(addAtenciones(addAte, store.getState().cliente.datos.token))
     }
     static get properties() {
         return {

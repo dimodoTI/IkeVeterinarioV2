@@ -42,22 +42,27 @@ export const screenLayuts = {
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
     },
-    agendas: {
+    ate_agendas: {
         small: HEADER_BODY_FOOT,
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
     },
-    videos: {
+    ate_videos: {
         small: HEADER_BODY,
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
     },
-    diagnosticos: {
+    ate_diagnosticos: {
         small: HEADER_BODY,
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
     },
-    diagnosticosDetalle: {
+    ate_diagnosticosDetalle: {
+        small: HEADER_BODY,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
+    },
+    ate_Chat: {
         small: HEADER_BODY,
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
@@ -67,7 +72,7 @@ export const screenLayuts = {
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
     },
-    listaReservas: {
+    ate_listaReservas: {
         small: HEADER_BODY_FOOT,
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
@@ -87,17 +92,26 @@ export const screenLayuts = {
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
     },
+    his_Chat: {
+        small: HEADER_BODY_FOOT,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
+    },
     notificacionReserva: {
         small: HEADER_BODY_FOOT,
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
     },
-    chatApp: {
+    sol_Chat: {
         small: HEADER_BODY_FOOT,
         medium: SLIDER_HEADER_BODY,
         large: SLIDER_HEADER_BODY
     },
-
+    sol_diagnosticodetalle: {
+        small: HEADER_BODY_FOOT,
+        medium: SLIDER_HEADER_BODY,
+        large: SLIDER_HEADER_BODY
+    },
 
     cardA: {
         small: HEADER_BODY,

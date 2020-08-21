@@ -8,8 +8,9 @@ import { CHAT } from "../../../assets/icons/icons"
 
 import { get as getChat, SIN_CONTESTAR_SUCCESS, chatReserva, grabarRespuesta as chatGrabarRespuesta } from "../../redux/chat/actions";
 import {
-    paginaAnterior, footherMuestraTapa, headerMuestraTapa
+    paginaAnterior, footherMuestraTapa, headerMuestraTapa, showWarning
 } from "../../redux/ui/actions"
+import { getAgenda, agendaAtencionSeleccionada } from "../../redux/reservas/actions"
 import {
     goTo
 } from "../../redux/routing/actions"
@@ -17,11 +18,14 @@ import {
     isInLayout
 } from "../../redux/screens/screenLayouts";
 
+const RESERVA_GET_AGENDA_SUCCESS = "reservas.timeStampAgenda"
+const RESERVA_GET_AGENDA_ERROR = "reservas.errorTimeStamp"
 const CHAT_GRABAR_RESPUESTA = "chat.grabarRespuestaTimeStamp"
+const CHAT_GRABAR_RESPUESTA_ERROR = "chat.grabarRespuestaErrorTimeStamp"
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
 
-export class pantallaNotificacionReserva extends connect(store, CHAT_GRABAR_RESPUESTA, MEDIA_CHANGE, SCREEN)(LitElement) {
+export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGENDA_SUCCESS, RESERVA_GET_AGENDA_ERROR, CHAT_GRABAR_RESPUESTA, CHAT_GRABAR_RESPUESTA_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -99,7 +103,7 @@ export class pantallaNotificacionReserva extends connect(store, CHAT_GRABAR_RESP
              box-shadow: var(--shadow-elevation-4-box);
         }
         #textoRespuesta{
-            background-color:var(--color-blanco);
+            background-color:var(--color-gris-claro);
             color:var(--color-negro);
             padding:.5rem;
             font-size:var(--font-label-size);
@@ -130,29 +134,37 @@ export class pantallaNotificacionReserva extends connect(store, CHAT_GRABAR_RESP
     render() {
         return html`
             <div id="grilla">
-                ${this.item.map(dato => html`
+                ${this.item.map(dato => dato.Tipo == 0 ? html`
                     <div id="cchatDivEtiqueta" >
-                        <div id="cchatFechaNombre">
-                            <div id="cchatDivNombre">
-                                ${dato.Reserva.Mascota.Nombre}
+                        <div id="cchatBarra" fondo=${dato.Tipo == 0 ? 'gris' : 'celeste'}>
+                        </div>
+                        <div id= "cchatContenido">
+                            <div id="cchatFechaNombre">
+                                <div id="cchatDivNombre">
+                                    ${dato.Reserva.Mascota.Nombre}
+                                </div>
+                                <div id="cchatDivFecha">
+                                    ${dato.Fecha.substring(8, 10) + "/" + dato.Fecha.substring(5, 7) + "/" + dato.Fecha.substring(0, 4)}
+                                </div>
                             </div>
-                            <div id="cchatDivFecha">
-                                ${dato.Fecha.substring(8, 10) + "/" + dato.Fecha.substring(5, 7) + "/" + dato.Fecha.substring(0, 4)}
+                            <div id="cchatDivDiagnostico">
+                                ${dato.Reserva.Motivo.substring(0, 80)}
+                            </div>                        
+                            <div id="cchatDivTexto">
+                                ${dato.Texto.substring(0, 80)}
+                            </div>
+                            <div id="cchatDivVerDetalle">
+                                <label id="cchatLblVerDetalle" @click=${this.verDetalle} .item=${dato}>${idiomas[this.idioma].notificacionReserva.verChat}</label>                 
+                                <label id="cchatLblAtencion" @click=${this.verAtencion} .item=${dato}>${idiomas[this.idioma].notificacionReserva.verAtencion}</label>                 
+                                <label id="cchatLblResponder" @click=${this.responder} .item=${dato}>${idiomas[this.idioma].notificacionReserva.responder}</label>                 
                             </div>
                         </div>
-                        <div id="cchatDivDiagnostico">
-                            ${dato.Reserva.Motivo.substring(0, 80)}
-                        </div>                        
-                        <div id="cchatDivTexto">
-                            ${dato.Texto.substring(0, 80)}
-                        </div>
-                        <div id="cchatDivVerDetalle">
-                            <label id="cchatLblVerDetalle" @click=${this.verDetalle} .item=${dato}>${idiomas[this.idioma].notificacionReserva.verDetalle}</label>                 
-                            <label id="cchatLblResponder" @click=${this.responder} .item=${dato}>${idiomas[this.idioma].notificacionReserva.responder}</label>                 
-                        </div>
-                        </div>
+
                     </div>
-                `)}
+                `: html`
+                
+                `
+        )}
             </div>
             <div id="divRespuesta">    
                 <label id="textoRespuesta"></label>
@@ -182,11 +194,41 @@ export class pantallaNotificacionReserva extends connect(store, CHAT_GRABAR_RESP
             store.dispatch(footherMuestraTapa(false))
             store.dispatch(headerMuestraTapa(false))
         }
+        if (name == CHAT_GRABAR_RESPUESTA_ERROR) {
+            store.dispatch(showWarning())
+        }
+        if (name == RESERVA_GET_AGENDA_SUCCESS && this.current == "notificacionReserva") {
+            if (state.reservas.entitiesAgenda.length == 1) {
+                let arr = state.reservas.entitiesAgenda[0]
+                let atencionCompleta = {
+                    ReservaId: arr.Id,
+                    FechaReserva: arr.FechaAtencion,
+                    HoraReserva: ("0" + arr.HoraAtencion.toString()).substr(-4, 2) + ":" + arr.HoraAtencion.toString().substr(-2),
+                    MascotaId: arr.MascotaId,
+                    MascotaNombre: arr.Mascota.Nombre,
+                    Motivo: arr.Motivo,
+                    AtencionId: arr.Atencion ? arr.Atencion.Id : 0,
+                    VeterinarioId: arr.Atencion ? arr.Atencion.VeterinarioId : 0,
+                    Veterinario: arr.Atencion ? arr.Atencion.Veterinario.Apellido + ", " + arr.Atencion.Veterinario.Nombre : "",
+                    Diagnostico: arr.Atencion ? arr.Atencion.Diagnostico : 0,
+                    InicioAtencion: arr.Atencion ? arr.Atencion.InicioAtencion : null,
+                    FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null
+                }
+                store.dispatch(agendaAtencionSeleccionada(atencionCompleta))
+                store.dispatch(goTo("sol_diagnosticodetalle"))
+            }
+        }
+        if (name == RESERVA_GET_AGENDA_ERROR && this.current == "notificacionReserva") {
+            store.dispatch(showWarning())
+        }
     }
     cancelar() {
         store.dispatch(footherMuestraTapa(false))
         store.dispatch(headerMuestraTapa(false))
         this.shadowRoot.querySelector("#divRespuesta").style.display = "none"
+    }
+    verAtencion(e) {
+        store.dispatch(getAgenda(store.getState().cliente.datos.token, " Id eq " + e.currentTarget.item.ReservaId))
     }
     verDetalle(e) {
         store.dispatch(chatReserva(e.currentTarget.item.ReservaId))
@@ -215,9 +257,13 @@ export class pantallaNotificacionReserva extends connect(store, CHAT_GRABAR_RESP
         this.update()
     }
     grabar() {
-        if (this.chatGrabar) {
-            this.chatGrabar.Chat.Texto = this.shadowRoot.querySelector("#nuevaRespuesta").value
-            store.dispatch(chatGrabarRespuesta(this.chatGrabar, store.getState().cliente.datos.token))
+        if (this.shadowRoot.querySelector("#nuevaRespuesta").value == "") {
+            store.dispatch(showWarning("notificacionReserva", 0))
+        } else {
+            if (this.chatGrabar) {
+                this.chatGrabar.Chat.Texto = this.shadowRoot.querySelector("#nuevaRespuesta").value
+                store.dispatch(chatGrabarRespuesta(this.chatGrabar, store.getState().cliente.datos.token))
+            }
         }
     }
     firstUpdated() { }

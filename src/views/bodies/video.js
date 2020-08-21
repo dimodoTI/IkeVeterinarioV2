@@ -175,9 +175,9 @@ export class pantallaVideo extends connect(store, MEDIA_CHANGE, SCREEN)(LitEleme
     colgar() {
         this.hidden = true;
         if (this.shadowRoot.querySelector("#todo").hasAttribute("llamando")) {
-            store.dispatch(goTo("agendas"))
+            store.dispatch(goTo("ate_agendas"))
         } else {
-            store.dispatch(goTo("diagnosticos"))
+            store.dispatch(goTo("ate_diagnosticos"))
         }
     }
     videoMostrar(e) {

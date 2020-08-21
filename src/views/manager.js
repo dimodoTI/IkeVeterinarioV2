@@ -87,7 +87,12 @@ import {
 import {
     chatApp
 } from "../views/bodies/chatApp"
-
+import {
+    chatSolo
+} from "../views/bodies/chatSolo"
+import {
+    diagnosticoDetalleSolo
+} from "../views/bodies/diagnosticoDetalleSolo"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
@@ -130,9 +135,10 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
             <pantalla-crearclavemsg class="body"></pantalla-crearclavemsg>
             <pantalla-misconsulta class="body"></pantalla-misconsulta>
             <pantalla-notificacionreserva class="body"></pantalla-notificacionreserva>
+            <diagnostico-detallesolo class="body"></diagnostico-detallesolo>
             <pie-componente class="foot"></pie-componente>
-            <chat-app class="body"></chat-app>
 
+            <chat-solo class="body" ></chat-solo>
             <historico-compuestas class="body" ></historico-compuestas>
             <atenciones-compuestas class="body" ></atenciones-compuestas>
             <pantalla-warning ></pantalla-warning>

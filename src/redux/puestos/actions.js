@@ -5,7 +5,6 @@ export const UPDATE = "[puestos] UPDATE";
 export const REMOVE = "[puestos] REMOVE";
 export const EDIT = "[puestos] EDIT"
 
-
 export const GET_SUCCESS = "[puestos] GET success";
 export const ADD_SUCCESS = "[puestos] ADD success";
 export const PATCH_SUCCESS = "[puestos] PATCH success";

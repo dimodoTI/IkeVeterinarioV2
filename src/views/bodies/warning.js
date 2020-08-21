@@ -17,8 +17,6 @@ export class pantallaWarning extends connect(store, WARNING, MEDIA_CHANGE, SCREE
         super();
         this.hidden = true
         this.idioma = "ES"
-        this.pagina = ""
-        this.nroWarning = -1
     }
 
     static get styles() {
@@ -33,6 +31,7 @@ export class pantallaWarning extends connect(store, WARNING, MEDIA_CHANGE, SCREE
             right:0rem;
             height:100vh;
             width:100vw;
+            z-index:1000;
         }
         :host([hidden]){
             display: none; 
@@ -48,6 +47,7 @@ export class pantallaWarning extends connect(store, WARNING, MEDIA_CHANGE, SCREE
             width:100%;            
             background-color:var(--color-negro) !important;
             opacity:.3;
+            backdrop-filter: blur(2px);
         }
         #datos{
             position:relative;
@@ -81,6 +81,8 @@ export class pantallaWarning extends connect(store, WARNING, MEDIA_CHANGE, SCREE
         #cuerpo{
             position:relative;
             text-align:center;
+            width:80%;
+            justify-self: center;
             align-self: flex-start;
             font-size: var(--font-header-h2-size);
             font-weight: var(--font-header-h2-weight);
@@ -94,7 +96,7 @@ export class pantallaWarning extends connect(store, WARNING, MEDIA_CHANGE, SCREE
                 <div id="x"  @click=${this.clickBoton1}>
                 X
                 </div>               
-                <label id="titulo">
+                <label id="titulo" >
                 </label>
                 <label id="cuerpo">
                 </label>
@@ -107,10 +109,15 @@ export class pantallaWarning extends connect(store, WARNING, MEDIA_CHANGE, SCREE
             if (!this.hidden) {
                 var titulo = this.shadowRoot.querySelector("#titulo")
                 var cuerpo = this.shadowRoot.querySelector("#cuerpo")
-                this.pagina = state.ui.warning.pagina
-                this.nroWarning = state.ui.warning.nroWarning
-                if (titulo) titulo.innerHTML = idiomas[this.idioma][this.pagina].warningTitulo[this.nroWarning]
-                if (cuerpo) cuerpo.innerHTML = idiomas[this.idioma][this.pagina].warningCuerpo[this.nroWarning]
+                let pagina = state.ui.warning.pagina
+                let nroWarning = state.ui.warning.nroWarning
+                if (pagina == "" || nroWarning == -1) {
+                    if (titulo) titulo.innerHTML = idiomas[this.idioma].warning.warningTitulo[0]
+                    if (cuerpo) cuerpo.innerHTML = idiomas[this.idioma].warning.warningCuerpo[0]
+                } else {
+                    if (titulo) titulo.innerHTML = idiomas[this.idioma][pagina].warningTitulo[nroWarning]
+                    if (cuerpo) cuerpo.innerHTML = idiomas[this.idioma][pagina].warningCuerpo[nroWarning]
+                }
             }
             this.update();
         }

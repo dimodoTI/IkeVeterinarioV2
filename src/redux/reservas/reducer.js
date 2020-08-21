@@ -28,7 +28,9 @@ const initialState = {
     commandErrorTimeStamp: null,
     editTimeStamp: null,
     agendaNuevaAtencionDesdeVideo: null,
-    entitiesAgendaNuevaAtencionDesdeVideo: null
+    entitiesAgendaNuevaAtencionDesdeVideo: null,
+    agendaAtencionSeleccionada: null,
+    entitiesAgendaAtencionSeleccionada: null
 };
 
 export const reducer = (state = initialState, action) => {

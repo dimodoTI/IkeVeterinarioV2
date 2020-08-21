@@ -7,7 +7,7 @@ export const cardMascotaHorizontal = css`
     display: grid; 
     position: relative;
     height:15vh;
-    width:100%;
+    width: 90%;
     background-color:var(--color-blanco);
     grid-template-columns: 15vh auto 20%;
     grid-template-rows: 25% 45% 30%;
@@ -16,6 +16,7 @@ export const cardMascotaHorizontal = css`
     align-items: center;
     box-shadow: var(--shadow-elevation-4-box);
     padding: .2vh 0 .2vh 0;
+    justify-self:center;
 }  
 :host(:not([media-size="small"])) #cmhDivEtiqueta{
     height:15vh;   
@@ -59,7 +60,11 @@ export const cardMascotaHorizontal = css`
     height:1.2rem;
     width:100%;
     justify-content:center;
+    display:grid;
 } 
+#cmhDivChat[hiddechat="true"] {
+            display:none;
+}
 #cmhDivChat svg{
     height:1rem;
 } 

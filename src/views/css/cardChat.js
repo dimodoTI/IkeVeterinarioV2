@@ -8,14 +8,24 @@ export const cardChat = css`
             position: relative;
             height:22vh;
             width:100%;
+            border-radius:.4rem ;           
+            box-shadow: var(--shadow-elevation-4-box);
+            grid-template-columns: 4% 96%;
+        }
+        #cchatBarra[fondo="gris"]{
+            background-color:var(--color-gris);
+        }
+        #cchatBarra[fondo="celeste"]{
+            background-color:var(--color-celeste);
+        }
+        #cchatContenido{
+            display: grid; 
+            position: relative;
             background-color:var(--color-blanco);
             grid-template-columns: 100%;
             grid-template-rows: 18% 32% 32% 18%;
             grid-gap:.1vh;
-            border-radius:.4rem ;           
-            box-shadow: var(--shadow-elevation-4-box);
         }
-
         #cchatDivNombre{
             font-size: var(--font-bajada-size);
             font-weight: var(--font-bajada-weight);            
@@ -55,7 +65,7 @@ export const cardChat = css`
             font-size: var(--font-label-size);
             font-weight: bold;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
          }
          #cchatLblVerDetalle{
             text-decoration: underline;
@@ -66,5 +76,13 @@ export const cardChat = css`
             text-decoration: underline;
             cursor:pointer;
             width:fit-content;
+            justify-self: end;
+            padding-right: 2vh;
+         }
+         #cchatLblAtencion{
+            text-decoration: underline;
+            cursor:pointer;
+            width:fit-content;
+            justify-self: center;
          }
 `

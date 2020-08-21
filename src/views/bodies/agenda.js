@@ -237,7 +237,6 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             width: 1.5rem;
         }
 
-
         `
     }
 
@@ -322,13 +321,13 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
     stateChanged(state, name) {
         if ((name == SCREEN || name == MEDIA_CHANGE)) {
             this.mediaSize = state.ui.media.size
-            if (state.screen.name == "agendas" || state.screen.name == "his_Agendas") {
+            if (state.screen.name == "ate_agendas" || state.screen.name == "his_Agendas") {
                 this.shadowRoot.querySelector("#TituloDeLaLista").innerHTML = idiomas[this.idioma][store.getState().screen.name].tituloLista
                 this.videoOAtencion = false
                 this.videoYAtencion = false
                 this.soloAtencion = false
                 switch (state.screen.name) {
-                    case "agendas":
+                    case "ate_agendas":
                         if (this.mediaSize == "small") {
                             this.videoOAtencion = true
                         } else {
@@ -353,35 +352,35 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             this.update()
         }
         ////////// acciones 
-        if (name == RESERVASATENCIONESDEUNAMASCOTA_TIMESTAMP && (state.screen.name == "agendas" || state.screen.name == "his_Agendas" || state.screen.name == "diagnosticosDetalle")) {
+        if (name == RESERVASATENCIONESDEUNAMASCOTA_TIMESTAMP && (state.screen.name == "ate_agendas" || state.screen.name == "his_Agendas" || state.screen.name == "ate_diagnosticosDetalle")) {
             if (this.videoYAtencion) {
                 if (this.clickVideoOAtencion == "atencion") {
-                    store.dispatch(goTo("listaReservas"))
+                    store.dispatch(goTo("ate_listaReservas"))
                 } else {
-                    store.dispatch(goTo("videos"))
+                    store.dispatch(goTo("ate_videos"))
                 }
             }
             if (this.videoOAtencion) {
                 if (this.clickVideoOAtencion == "atencion") {
-                    store.dispatch(goTo("diagnosticosDetalle"))
+                    store.dispatch(goTo("ate_diagnosticosDetalle"))
                 } else {
-                    store.dispatch(goTo("videos"))
+                    store.dispatch(goTo("ate_videos"))
                 }
             }
             if (this.soloAtencion) {
                 store.dispatch(goTo("his_ListaReservas"))
             }
         }
-        if (name == RESERVASATENCIONSELECCIONADA_TIMESTAMP && state.screen.name == "agendas") {
-            store.dispatch(goTo("diagnosticosDetalle"))
+        if (name == RESERVASATENCIONSELECCIONADA_TIMESTAMP && state.screen.name == "ate_agendas") {
+            store.dispatch(goTo("ate_diagnosticosDetalle"))
         }
-        if (name == RESERVAS_ERRORGET_TIMESTAMP && (state.screen.name == "agendas" || state.screen.name == "his_Agendas")) {
+        if (name == RESERVAS_ERRORGET_TIMESTAMP && (state.screen.name == "ate_agendas" || state.screen.name == "his_Agendas")) {
             store.dispatch(showWarning(store.getState().screen.name, 0))
         }
     }
     clickVideo(e) {
         this.clickVideoOAtencion = "video"
-        store.dispatch(goTo("agendas"))
+        store.dispatch(goTo("ate_agendas"))
 
         let arr = e.currentTarget.item;
         var d = new Date()
@@ -403,7 +402,7 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         }
         store.dispatch(agendaNuevaAtencionDesdeVideo(myJson))
         if (this.videoOAtencion) {
-            store.dispatch(goTo("videos"))
+            store.dispatch(goTo("ate_videos"))
         }
         if (this.videoYAtencion) {
             let arr = e.currentTarget.item;
@@ -414,10 +413,11 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
     }
     clickAtencion(e) {
         this.clickVideoOAtencion = "atencion"
-        if (store.getState().screen.name.indexOf("his_") == -1) {
-            store.dispatch(goTo("agendas"))
-        } else {
+        if (store.getState().screen.name.indexOf("his_") == 0) {
             store.dispatch(goTo("his_Agendas"))
+        }
+        if (store.getState().screen.name.indexOf("ate_") == 0) {
+            store.dispatch(goTo("ate_agendas"))
         }
         if (this.videoOAtencion || this.videoYAtencion) {
             let myJson = this.jsonAtencion(e.currentTarget.item)
@@ -460,9 +460,10 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         let d = new Date()
         let filtroFecha = d.getUTCFullYear() + "-" + (d.getUTCMonth() + 1) + "-" + d.getUTCDate()
         //        store.dispatch(getReservasAgenda(miToken, "FechaAtencion ge " + filtroFecha))
-        if (store.getState().screen.name.indexOf("his_") == -1) {
+        if (store.getState().screen.name.indexOf("his_") == 0) {
             store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion eq 2020-07-29"))
-        } else {
+        }
+        if (store.getState().screen.name.indexOf("ate_") == 0) {
             store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion eq 2020-07-29"))
         }
         // las consultas las hago en mis consultas, aca, en pie y diagnostico

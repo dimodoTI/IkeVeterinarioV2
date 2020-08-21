@@ -252,11 +252,17 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
         return ret
     }
     atras() {
-        if (store.getState().screen.name.indexOf("his_") == -1) {
-            store.dispatch(goTo("listaReservas"))
-        } else {
+        if (store.getState().screen.name.indexOf("his_") == 0) {
             store.dispatch(goTo("his_Agendas"))
         }
+        if (store.getState().screen.name.indexOf("ate_") == 0) {
+
+            store.dispatch(goTo("ate_listaReservas"))
+        }
+        if (store.getState().screen.name.indexOf("sol_diagnosticodetalle") == 0) {
+            store.dispatch(goTo("notificacionReserva"))
+        }
+
     }
     static get properties() {
         return {

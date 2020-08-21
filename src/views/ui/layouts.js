@@ -17,7 +17,7 @@ export const layoutsCSS = css`
                             "foot    body";
         grid-template-rows:1.8fr 8.2fr;
         grid-template-columns:1.5fr 8.5fr;
-        grid-gap:.1rem
+        grid-gap:.0rem
     }
 
     :host([layout="${unsafeCSS(HEADER_BODY.name)}"]){

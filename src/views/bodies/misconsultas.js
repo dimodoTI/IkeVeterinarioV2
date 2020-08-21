@@ -139,6 +139,12 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
         :host(:not([media-size="small"])) .ayuda{
             display:none;
         }
+        #txtProxima{
+            text-align:right;
+            text-decoration:underline;
+            padding-right:.8rem;
+            cursor: pointer;
+        }
         `
     }
 
@@ -148,7 +154,7 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
                     <div>
                         ${idiomas[this.idioma].misConsultas.consulta}
                     </div>
-                    <div style="text-align:right;text-decoration:underline;padding-right:.8rem">
+                    <div id="txtProxima" @click="${this.irAgenda}">
                         ${idiomas[this.idioma].misConsultas.ingresar}
                     </div>
                 </div>
@@ -199,7 +205,7 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
 
     irAgenda(e) {
         //store.dispatch(goTo("agendas"))
-        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "agendas"))
+        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "ate_agendas"))
     }
     irAtenciones() {
         store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "his_Agendas"))

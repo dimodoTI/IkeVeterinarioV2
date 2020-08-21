@@ -329,7 +329,7 @@ export class videoRTC extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
             name: this.otherName,
             sala: this.sala
         });
-        store.dispatch(goTo("diagnosticos"))
+        store.dispatch(goTo("ate_diagnosticos"))
         this.handleLeave();
 
     }
@@ -378,7 +378,7 @@ export class videoRTC extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
             this.mediaSize = state.ui.media.size
             this.orientation = state.ui.media.orientation
             this.current = state.screen.name
-            if (this.current == "videos") {
+            if (this.current == "ate_videos") {
                 if (!this.yours) {
                     this.sala = "dimodo"
                     this.connectVeterinario()

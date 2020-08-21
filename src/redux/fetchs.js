@@ -17,6 +17,7 @@ const webApiChat = "https://apis.chat.dimodo.ga/api"
 //const webApiChatOdata = "https://localhost:5001"
 const webApiChatOdata = "https://apis.chat.dimodo.ga"
 
+
 const mascotaOdata = ODataFetchFactory({
   fetch: fetch,
   domain: webApiMascotasOdata
@@ -55,6 +56,7 @@ export const ikeTramo = fetchFactory(webApiMascotas, "Tramos")
 export const ikeReservas = fetchFactory(webApiMascotas, "Reservas")
 export const ikeAtenciones = fetchFactory(webApiMascotas, "Atenciones")
 export const ikeChat = fetchFactory(webApiChat, "Chat")
+export const ikeNotificacionDetalle = fetchFactory(webApiChat, "NotificacionDetalle")
 
 export const ikeOdataMascotas = ODataEntity(mascotaOdata, "MascotasQuery")
 export const ikeMascotasTipo = fetchFactory(webApiMascotas, "MascotasTipo")
@@ -68,3 +70,4 @@ export const ikeOdataTramo = ODataEntity(mascotaOdata, "TramosQuery")
 export const ikeReservasQuery = ODataEntity(mascotaOdata, "ReservasQuery")
 export const ikeAtencionesQuery = ODataEntity(mascotaOdata, "AtencionesQuery")
 export const ikeChatQuery = ODataEntity(chatOdata, "ChatQuery")
+export const ikeNotificacionDetalleQuery = ODataEntity(chatOdata, "NotificacionDetalleQuery")

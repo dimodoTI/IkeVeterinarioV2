@@ -17,6 +17,9 @@ import {
 import {
     isInLayout
 } from "../../redux/screens/screenLayouts";
+import {
+    footherMuestraTapa
+} from "../../redux/ui/actions"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
@@ -178,8 +181,9 @@ export class pieComponente extends connect(store, FOOTHER_TAPA, MEDIA_CHANGE, SC
             bottom: 0;
             right: 0;    
             z-index:20;            
-            background-color: var(--color-gris);
-            opacity:.4;
+            background-color: var(--color-gris-oscuro);
+            opacity:.5;
+            backdrop-filter: blur(2px);
         }
         :host([foother-muestra-tapa]) #divTapa{
             display: grid;           
@@ -227,7 +231,7 @@ export class pieComponente extends connect(store, FOOTHER_TAPA, MEDIA_CHANGE, SC
             this.mediaSize = state.ui.media.size
             this.hidden = true
             const haveFootArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-misConsultas-agendas-atencionesMascotas-listaReservas-diagnosticos-diagnosticosDetalle-videos-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-notificacionReserva-chatApp-".indexOf("-" + state.screen.name + "-") != -1
+            const SeMuestraEnUnasDeEstasPantallas = "-misConsultas-ate_agendas-atencionesMascotas-ate_listaReservas-ate_diagnosticos-ate_diagnosticosDetalle-ate_videos-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-notificacionReserva-sol_Chat-his_Chat-sol_diagnosticodetalle-ate_Chat-".indexOf("-" + state.screen.name + "-") != -1
             if (haveFootArea && SeMuestraEnUnasDeEstasPantallas) {
                 this.hidden = false
             }
@@ -239,7 +243,7 @@ export class pieComponente extends connect(store, FOOTHER_TAPA, MEDIA_CHANGE, SC
         store.dispatch(goTo("misConsultas"))
     }
     clickBoton2() {
-        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "agendas"))
+        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "ate_agendas"))
     }
     clickBoton3() {
         store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "his_Agendas"))

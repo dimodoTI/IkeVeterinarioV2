@@ -21,13 +21,10 @@ import {
 
 import {
     MAS,
-    BASURA,
-    MODIFICAR,
-    ARRIBA,
-    ABAJO
+    ATRAS
 } from "../../../assets/icons/icons"
 import {
-    footherMuestraTapa, headerMuestraTapa
+    footherMuestraTapa, headerMuestraTapa, showWarning
 } from "../../redux/ui/actions"
 import {
     goTo
@@ -39,14 +36,15 @@ import { grabarRespuesta as chatGrabarRespuesta }
     from "../../redux/chat/actions";
 
 const CHAT_GRABAR_RESPUESTA = "chat.grabarRespuestaTimeStamp"
+const CHAT_GRABAR_RESPUESTA_ERROR = "chat.grabarRespuestaErrorTimeStamp"
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
 
-export class chatApp extends connect(store, CHAT_GRABAR_RESPUESTA, MEDIA_CHANGE, SCREEN)(LitElement) {
+export class chatApp extends connect(store, CHAT_GRABAR_RESPUESTA, CHAT_GRABAR_RESPUESTA_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
     constructor() {
         super();
         this.area = "body"
-        this.hidden = true
+        this.hidden = false
         this.idioma = "ES"
 
         this.accion = ""
@@ -75,9 +73,31 @@ export class chatApp extends connect(store, CHAT_GRABAR_RESPUESTA, MEDIA_CHANGE,
             overflow-y: auto;  
         }
         :host([hidden]){
-            display: none; 
+            display: grid; 
         } 
-
+        :host(:not([media-size="small"])[current="his_Chat"]) {
+            grid-template-rows: 1fr 9fr;            
+        }
+        :host(:not([media-size="small"])[current="ate_Chat"]) {
+            grid-template-rows: 1fr 9fr;            
+        }
+        #divTituloChat{
+            display:none;
+            align-content: center;
+            width: 100%;
+            height:5vh;
+            font-size: var(--font-bajada-size);
+            font-weight: var(--font-bajada-weight);  
+            grid-template-columns: 1fr 9fr;
+            align-items: center;
+            grid-gap: .5rem;
+        }
+        :host(:not([media-size="small"])[current="his_Chat"]) #divTituloChat{
+            display: grid;
+        }
+        :host(:not([media-size="small"])[current="ate_Chat"]) #divTituloChat{
+            display: grid;
+        }
         #divRegistros{
             display:grid;
             grid-gap: .2rem;
@@ -214,11 +234,25 @@ export class chatApp extends connect(store, CHAT_GRABAR_RESPUESTA, MEDIA_CHANGE,
             color:red;
             height:7vh;
         }   
+        :host([current="his_Chat"]) #bfrDivMas{
+            display: none;
+        }
+        :host([current="ate_Chat"]) #bfrDivMas{
+            display: none;
+        }
         `
     }
 
     render() {
         return html`
+            <div id="divTituloChat">
+                <div id="divTituloChatImg" @click=${this.atras}>
+                    ${ATRAS}
+                </div>
+                <div id="divTituloChatTxt">
+                    ${idiomas[this.idioma].chatApp.tituloChat}
+                </div>
+            </div>
             <div id=divRegistros>
                 <div id="divChat">
                     ${this.chates.map(dato => html`
@@ -246,12 +280,11 @@ export class chatApp extends connect(store, CHAT_GRABAR_RESPUESTA, MEDIA_CHANGE,
     stateChanged(state, name) {
         if ((name == SCREEN || name == MEDIA_CHANGE)) {
             this.mediaSize = state.ui.media.size
-            this.hidden = true
-            const haveBodyArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-chatApp-".indexOf("-" + state.screen.name + "-") != -1
-            if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
-                this.hidden = false
-                this.current = state.screen.name
+            this.hidden = false
+            this.current = state.screen.name
+            const haveBodyArea = state.screen.layouts[this.mediaSize].areas.find(a => a == this.area)
+            const SeMuestraEnUnasDeEstasPantallas = "-sol_Chat-his_Chat-ate_Chat-".indexOf("-" + state.screen.name + "-")
+            if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas != -1) {
                 this.chates = state.chat.entityChatReserva
             }
             this.update();
@@ -260,6 +293,9 @@ export class chatApp extends connect(store, CHAT_GRABAR_RESPUESTA, MEDIA_CHANGE,
             this.shadowRoot.querySelector("#divRespuesta").style.display = "none"
             store.dispatch(footherMuestraTapa(false))
             store.dispatch(headerMuestraTapa(false))
+        }
+        if (name == CHAT_GRABAR_RESPUESTA_ERROR) {
+            store.dispatch(showWarning())
         }
     }
 
@@ -311,15 +347,28 @@ export class chatApp extends connect(store, CHAT_GRABAR_RESPUESTA, MEDIA_CHANGE,
         this.update()
     }
     grabar() {
-        if (this.chatGrabar) {
-            this.chatGrabar.Chat.Texto = this.shadowRoot.querySelector("#nuevaRespuesta").value
-            store.dispatch(chatGrabarRespuesta(this.chatGrabar, store.getState().cliente.datos.token))
+        if (this.shadowRoot.querySelector("#nuevaRespuesta").value == "") {
+            store.dispatch(showWarning("sol_Chat", 0))
+        } else {
+            if (this.chatGrabar) {
+                this.chatGrabar.Chat.Texto = this.shadowRoot.querySelector("#nuevaRespuesta").value
+                store.dispatch(chatGrabarRespuesta(this.chatGrabar, store.getState().cliente.datos.token))
+            }
         }
     }
     cancelar() {
         store.dispatch(footherMuestraTapa(false))
         store.dispatch(headerMuestraTapa(false))
         this.shadowRoot.querySelector("#divRespuesta").style.display = "none"
+    }
+    atras() {
+        if (store.getState().screen.name.indexOf("his_") == 0) {
+            store.dispatch(goTo("his_Agendas"))
+        }
+        if (store.getState().screen.name.indexOf("ate_") == 0) {
+            store.dispatch(goTo("ate_listaReservas"))
+        }
+
     }
     static get properties() {
         return {
@@ -336,7 +385,8 @@ export class chatApp extends connect(store, CHAT_GRABAR_RESPUESTA, MEDIA_CHANGE,
                 type: String
             },
             current: {
-                type: String
+                type: String,
+                reflect: true
             }
         }
     }

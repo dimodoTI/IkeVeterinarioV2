@@ -24,6 +24,12 @@ import {
 import {
     sinContestar
 } from "../../redux/chat/actions"
+import {
+    getNotificacionChatPendientes
+} from "../../redux/notificacion/actions"
+import {
+    headerMuestraTapa
+} from "../../redux/ui/actions"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
@@ -80,13 +86,19 @@ export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUES
             :host([current="crearClave"]) #divImg, :host([current="atencionesMascotas"]) #divImg, :host([current="recuperaClave"]) #divImg, :host([current="igualDiagnosticosDetalle"]) #divImg {
                 display:grid;
             }
-            :host([media-size="small"][current="listaReservas"]) #divImg, :host([media-size="small"][current="videos"]) #divImg{
+            :host([media-size="small"][current="ate_listaReservas"]) #divImg, :host([media-size="small"][current="ate_videos"]) #divImg{
                 display:grid;
             }
-            :host([media-size="small"][current="diagnosticosDetalle"]) #divImg, :host([media-size="small"][current="his_DiagnosticosDetalle"]) #divImg{
+            :host([media-size="small"][current="ate_diagnosticosDetalle"]) #divImg, :host([media-size="small"][current="his_DiagnosticosDetalle"]) #divImg{
                 display:grid;
             }
             :host([media-size="small"][current="his_ListaReservas"]) #divImg, :host([media-size="small"][current="notificacionReserva"]) #divImg{
+                display:grid;
+            }
+            :host([media-size="small"][current="his_Chat"]) #divImg{
+                display:grid;
+            }
+            :host([media-size="small"][current="sol_diagnosticodetalle"]) #divImg{
                 display:grid;
             }
             #divCampana{
@@ -98,6 +110,12 @@ export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUES
                 height:6vh;
             }
             :host([current="inicioSesion"]) #divCampana, :host([current="crearClave"]) #divCampana,:host([current="recuperaClave"]) #divCampana,:host([current="notificacionReserva"]) #divCampana{
+                display:none;
+            }
+            :host([current="his_Chat"]) #divCampana{
+                display:none;
+            }
+            :host([current="ate_listaReservas"]) #divCampana, :host([current="ate_Chat"]) #divCampana, :host([current="ate_diagnosticos"]) #divCampana, :host([current="ate_diagnosticosDetalle"]) #divCampana, :host([current="ate_videos"]) #divCampana{
                 display:none;
             }
             #sinMarca{
@@ -133,8 +151,9 @@ export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUES
                 bottom: 0;
                 right: 0;        
                 z-index:20;            
-                background-color: var(--color-gris);
-                opacity:.4;
+                background-color: var(--color-gris-oscuro);
+                opacity:.5;
+                backdrop-filter: blur(2px);
             }
             :host([header-muestra-tapa]) #divTapa{
                 display: grid;           
@@ -169,13 +188,18 @@ export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUES
             this.mediaSize = state.ui.media.size
             this.hidden = true
             const haveBodyArea = isInLayout(state, this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-inicioSesion-recuperaClave-crearClave-misConsultas-agendas-videos-diagnosticos-diagnosticosDetalle-atencionesMascotas-listaReservas-igualDiagnosticosDetalle-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-notificacionReserva-chatApp-".indexOf("-" + state.screen.name + "-") != -1
+            const SeMuestraEnUnasDeEstasPantallas = "-inicioSesion-recuperaClave-crearClave-misConsultas-ate_agendas-ate_videos-ate_diagnosticos-ate_diagnosticosDetalle-atencionesMascotas-ate_listaReservas-igualDiagnosticosDetalle-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-notificacionReserva-sol_Chat-his_Chat-sol_diagnosticodetalle-ate_Chat-".indexOf("-" + state.screen.name + "-") != -1
             if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
                 this.hidden = false
                 this.titulo = idiomas[this.idioma][this.current].titulo
                 this.subTitulo = idiomas[this.idioma][this.current].subTitulo
+                if (this.current == "misConsultas") {
+                    this.titulo = this.titulo + ", " + state.cliente.datos.nombre
+                }
+
             }
             this.update();
+
         }
 
         if (name == CHAT_SINCONTESTARTIMESTAMP) {
@@ -186,15 +210,16 @@ export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUES
         }
     }
     chat() {
-        store.dispatch(sinContestar())
+        //        store.dispatch(sinContestar())
+        store.dispatch(getNotificacionChatPendientes(2))
     }
     atras() {
         switch (this.current) {
-            case "videos":
-                store.dispatch(goTo("agendas"))
+            case "ate_videos":
+                store.dispatch(goTo("ate_agendas"))
                 break
-            case "diagnosticosDetalle":
-                store.dispatch(goTo("agendas"))
+            case "ate_diagnosticosDetalle":
+                store.dispatch(goTo("ate_agendas"))
                 break
             case "his_DiagnosticosDetalle":
                 store.dispatch(goTo("his_ListaReservas"))
@@ -202,18 +227,24 @@ export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUES
             case "atencionesMascotas":
                 store.dispatch(goTo("misConsultas"))
                 break
-            case "listaReservas":
+            case "ate_listaReservas":
                 if (this.mediaSize == "small") {
                     store.dispatch(goTo("atencionesMascotas"))
                 } else {
-                    store.dispatch(goTo("agendas"))
+                    store.dispatch(goTo("ate_agendas"))
                 }
                 break
             case "his_ListaReservas":
                 store.dispatch(goTo("his_Agendas"))
                 break
+            case "his_Chat":
+                store.dispatch(goTo("his_ListaReservas"))
+                break
             case "notificacionReserva":
                 store.dispatch(goTo("misConsultas"))
+                break
+            case "sol_diagnosticodetalle":
+                store.dispatch(goTo("notificacionReserva"))
                 break
             default:
                 store.dispatch(goTo("inicioSesion"))

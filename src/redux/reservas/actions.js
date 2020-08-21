@@ -25,8 +25,6 @@ export const UPDATE_ERROR = "[reservas] UPDATE error";
 export const REMOVE_ERROR = "[reservas] REMOVE error";
 
 
-
-
 export const get = (options) => ({
     type: GET,
     options: options
@@ -39,7 +37,7 @@ export const getAgenda = (token, filter) => ({
 
 export const getAtencionDeUnaMascota = (token, filter) => ({
     type: GET_ATENCIONDEUNAMASCOTA,
-    options: { token: token, filter: filter, expand: "Mascota($select = Nombre, Foto), Atencion($expand=Veterinario)", orderby: "FechaAtencion desc,HoraAtencion desc" }
+    options: { token: token, filter: filter, expand: "Mascota($select = Nombre), Atencion($expand=Veterinario), Chats($select=Id;$top=1)", orderby: "FechaAtencion desc,HoraAtencion desc" }
 });
 
 export const add = (body, token) => ({

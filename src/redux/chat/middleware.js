@@ -116,7 +116,15 @@ export const processGet = ({
 
     }
     if (action.type === CHAT_RESERVA_SUCCESS) {
-        dispatch(goTo("chatApp"))
+        if (store.getState().screen.name == "notificacionReserva") {
+            dispatch(goTo("sol_Chat"))
+        }
+        if (store.getState().screen.name.indexOf("his_") == 0) {
+            dispatch(goTo("his_Chat"))
+        }
+        if (store.getState().screen.name.indexOf("ate_") == 0) {
+            dispatch(goTo("ate_Chat"))
+        }
     }
 };
 
@@ -139,7 +147,7 @@ export const processError = ({
     dispatch
 }) => next => action => {
     next(action);
-    if (action.type === GET_ERROR || action.type === ADD_ERROR || action.type === UPDATE_ERROR || action.type === REMOVE_ERROR || action.type === PATCH_ERROR || action.type === SIN_CONTESTAR_ERROR || action.type === SET_CAMPANA_ERROR) {
+    if (action.type === GET_ERROR || action.type === ADD_ERROR || action.type === UPDATE_ERROR || action.type === REMOVE_ERROR || action.type === PATCH_ERROR || action.type === SIN_CONTESTAR_ERROR || action.type === SET_CAMPANA_ERROR || action.type === GRABAR_RESPUESTA_ERROR) {
 
     }
 };

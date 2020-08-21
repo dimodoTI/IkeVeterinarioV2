@@ -37,7 +37,7 @@ export const hideError = () => ({
   type: HIDE_ERROR
 });
 
-export const showWarning = (pagina, nroWarning) => ({
+export const showWarning = (pagina = "", nroWarning = -1) => ({
   type: SHOW_WARNING,
   pagina: pagina,
   nroWarning: nroWarning

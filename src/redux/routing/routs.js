@@ -22,20 +22,23 @@ export const largeRoute = [
     "1      -splash",
     "2      -inicioSesion",
     "3/1    -misConsultas",
-    "3/2/1  -agendas",
-    "3/2/2  -listaReservas",
-    "3/2/3  -videos",
-    "3/2/4  -diagnosticos",
-    "3/2/5  -diagnosticosDetalle",
+    "3/2/1  -ate_agendas",
+    "3/2/2  -ate_listaReservas",
+    "3/2/3  -ate_videos",
+    "3/2/4  -ate_diagnosticos",
+    "3/2/5  -ate_diagnosticosDetalle",
+    "3/2/6  -ate_Chat",
     "3/3/1  -his_Agendas",
     "3/3/2  -his_ListaReservas",
     "3/3/3  -his_DiagnosticosDetalle",
+    "3/3/4  -his_Chat",
     "4/1    -recuperaClave",
     "4/2    -recuperaClaveMsg",
     "5/1    -crearClave",
     "5/2    -crearClaveMsg",
     "5      -notificacionReserva",
-    "6/1    -chatApp"
+    "6/1    -sol_Chat",
+    "6/2    -sol_diagnosticodetalle"
 
 
 ]

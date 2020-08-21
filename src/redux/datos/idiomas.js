@@ -92,10 +92,12 @@ export const idiomas = {
             btnAyuda: "Solicitar asistencia"
         },
         agendas: {
-            titulo: "Agenda de ",
+            lblFiltro: "Seleccione su puesto:"
+        },
+        ate_agendas: {
+            titulo: "Agenda",
             subTitulo: "Consultá tus próximas consultas de la semana.",
             tituloLista: "Tus próximas consultas",
-            lblFiltro: "Seleccione su puesto:",
             warningTitulo: ["Error de conexion."],
             warningCuerpo: ["Intente nuevamente"]
         },
@@ -103,28 +105,27 @@ export const idiomas = {
             titulo: "Historial de atenciones",
             subTitulo: "Selecciona la reserva.",
             tituloLista: "Reservas del día",
+            lblFiltro: "Seleccione su puesto:",
             warningTitulo: ["Error de conexion."],
             warningCuerpo: ["Intente nuevamente"]
         },
-        videos: {
+        ate_videos: {
             conectando: "Conectando ...",
             titulo: "Consulta Online",
-            subTitulo: "Accedé a consulta con un veterinario."
+            subTitulo: "Accedé a la atención."
         },
-        diagnosticos: {
-            titulo: "Enviá tu diagnóstico",
-            subTitulo: "Escribí debajo las indicaciones y recomendaciones para tu paciente.",
+        ate_diagnosticos: {
+            titulo: "Consulta Online",
+            subTitulo: "Accedé a la atención.",
             tituloDetalle: "Indicá el diagnóstico y pasos a seguir:",
             diagnostico_ph: "Tomar jarabe para la tos CanTos 200ml. 1 tapita cada 8hs durante 7 días. Si el cuadro se prolonga volver a consultar.",
             btnAdjuntar: "Adjuntar archivo",
             btnAceptar: "Grabar",
             btnCancelar: "Cancelar",
-            warningTitulo: ["Error de conexion."],
-            warningCuerpo: ["Intente nuevamente"]
+            warningTitulo: ["Campo diagnostico."],
+            warningCuerpo: ["No puede ser nulo"]
         },
         diagnosticosDetalle: {
-            titulo: "Detalle de consulta",
-            subTitulo: "Acá vas a encontrar el expediente correspondiente a una consulta.",
             tituloAtencion: "Detalle de la atencion",
             lblDiagnostico: "Diagnóstico",
             lblComienzo: "Comenzó: ",
@@ -135,11 +136,19 @@ export const idiomas = {
             motivo: "Motivo: ",
             fecha: "Fecha: ",
             hora: "Hora: ",
-            veterinario: "Veterinario: ",
+            veterinario: "Veterinario: "
+        },
+        ate_diagnosticosDetalle: {
+            titulo: "Consulta Online",
+            subTitulo: "Accedé a la atención."
         },
         his_DiagnosticosDetalle: {
             titulo: "Detalle de consulta",
             subTitulo: "Acá vas a encontrar el expediente correspondiente a una consulta.",
+        },
+        sol_diagnosticodetalle: {
+            titulo: "Detalle de la atención",
+            subTitulo: "Datos correspondiente a la consulta.",
         },
         atencionesMascotas: {
             titulo: "Historial de atenciones",
@@ -149,10 +158,12 @@ export const idiomas = {
             warningCuerpo: ["Intente nuevamente"]
         },
         listaReservas: {
-            titulo: "Historial de atenciones",
-            subTitulo: "De la mascota.",
             tituloLista: "Listado de reservas",
             verDetalle: "Ver detalle"
+        },
+        ate_listaReservas: {
+            titulo: "Consulta Online",
+            subTitulo: "Accedé a la atención."
         },
         his_ListaReservas: {
             titulo: "Historial de atenciones",
@@ -162,12 +173,28 @@ export const idiomas = {
             titulo: "Chat reservas",
             subTitulo: "De las mascotas.",
             tituloLista: "Listado de chat",
-            verDetalle: "Ver detalle",
+            verChat: "Chat",
+            verAtencion: "Atencion",
             responder: "Responder",
             btnGrabar: "Grabar",
-            btnCancelar: "Cancelar"
+            btnCancelar: "Cancelar",
+            warningTitulo: ["Campo respuesta."],
+            warningCuerpo: ["El valor no puede ser nulo."]
+        },
+        ate_Chat: {
+            titulo: "Consulta Online",
+            subTitulo: "Accedé a la atención."
+        },
+        sol_Chat: {
+            titulo: "Chat detalle",
+            subTitulo: "De la reserva.",
+            warningTitulo: ["Campo respuesta."],
+            warningCuerpo: ["El valor no puede ser nulo."]
         },
         chatApp: {
+            tituloChat: ""
+        },
+        his_Chat: {
             titulo: "Chat detalle",
             subTitulo: "De la reserva."
         },
@@ -175,6 +202,10 @@ export const idiomas = {
             titulo: "Chat reservas",
             subTitulo: "De las mascotas."
         },
+        warning: {
+            warningTitulo: ["Error de conexion."],
+            warningCuerpo: ["Intente nuevamente"]
+        }
     }
 
 }

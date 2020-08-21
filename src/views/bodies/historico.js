@@ -58,6 +58,10 @@ export class historicoCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
         :host([media-size="small"][current="his_DiagnosticosDetalle"]){
             grid-template-areas:"diagnosticosDetalle" !important;
         }
+
+        :host([media-size="small"][current="his_Chat"]){
+            grid-template-areas:"chat" !important;
+        }
         /* Defino areas */
 
         .agendas{
@@ -69,6 +73,9 @@ export class historicoCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
         .diagnosticosDetalle{
             grid-area:diagnosticosDetalle;
         }
+        .chat{
+            grid-area:chat;
+        }
         /* Defino visibilidad para small */
         :host([current="his_Agendas"][media-size="small"]) .agendas{
             display:grid !important;
@@ -79,6 +86,10 @@ export class historicoCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
         :host([current="his_ListaReservas"][media-size="small"]) .listaReservas{
             display:grid !important;
         }
+        :host([current="his_Chat"][media-size="small"]) .chat{
+            display:grid !important;
+        }
+
         :host(:not([current="his_ListaReservas"])[media-size="small"]) .listaReservas{
             display:none !important;
         }
@@ -88,6 +99,9 @@ export class historicoCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
         :host(:not([current="his_DiagnosticosDetalle"])[media-size="small"]) .diagnosticosDetalle{
             display:none !important;
         }
+        :host(:not([current="his_Chat"])[media-size="small"]) .chat{
+            display:none !important;
+        }
         `
     }
     render() {
@@ -95,6 +109,7 @@ export class historicoCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
         <pantalla-agenda class="agendas" id="agendasIdHis" solo-atencion></pantalla-agenda>
         <pantalla-listareserva class="listaReservas" id="listaReservasId" ></pantalla-listareserva>
         <diagnostico-detalle-componente class="diagnosticosDetalle" id="diagnosticosDetalleId"></diagnostico-detalle-componente>
+        <chat-app class="chat" id="chatId"></chat-app>
        
         `
     }
@@ -105,7 +120,7 @@ export class historicoCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
             this.hidden = true
             this.current = state.screen.name
             const haveBodyArea = state.screen.layouts[this.mediaSize].areas.find(a => a == this.area)
-            const SeMuestraEnUnasDeEstasPantallas = "-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-".indexOf("-" + state.screen.name + "-")
+            const SeMuestraEnUnasDeEstasPantallas = "-his_Agendas-his_ListaReservas-his_DiagnosticosDetalle-his_Chat-".indexOf("-" + state.screen.name + "-")
             if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas != -1) {
                 this.hidden = false
                 switch (this.current) {
@@ -117,6 +132,7 @@ export class historicoCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
                             this.shadowRoot.getElementById("agendasIdHis").style.display = "grid"
                             this.shadowRoot.getElementById("listaReservasId").style.display = "none"
                             this.shadowRoot.getElementById("diagnosticosDetalleId").style.display = "none"
+                            this.shadowRoot.getElementById("chatId").style.display = "none"
                         }
                         break;
                     case "his_ListaReservas":
@@ -127,6 +143,7 @@ export class historicoCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
                             this.shadowRoot.getElementById("agendasIdHis").style.display = "grid"
                             this.shadowRoot.getElementById("listaReservasId").style.display = "grid"
                             this.shadowRoot.getElementById("diagnosticosDetalleId").style.display = "none"
+                            this.shadowRoot.getElementById("chatId").style.display = "none"
                         }
                         break;
                     case "his_DiagnosticosDetalle":
@@ -137,6 +154,18 @@ export class historicoCompuesta extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
                             this.shadowRoot.getElementById("agendasIdHis").style.display = "grid"
                             this.shadowRoot.getElementById("listaReservasId").style.display = "grid"
                             this.shadowRoot.getElementById("diagnosticosDetalleId").style.display = "grid"
+                            this.shadowRoot.getElementById("chatId").style.display = "none"
+                        }
+                        break;
+                    case "his_Chat":
+                        if (this.mediaSize != "small") {
+                            this.style.gridTemplateAreas = '"agendas listaReservas chat"';
+                            this.style.gridTemplateRows = '1fr'
+                            this.style.gridTemplateColumns = '1fr 1fr 1fr'
+                            this.shadowRoot.getElementById("agendasIdHis").style.display = "grid"
+                            this.shadowRoot.getElementById("listaReservasId").style.display = "grid"
+                            this.shadowRoot.getElementById("chatId").style.display = "grid"
+                            this.shadowRoot.getElementById("diagnosticosDetalleId").style.display = "none"
                         }
                         break;
                 }
