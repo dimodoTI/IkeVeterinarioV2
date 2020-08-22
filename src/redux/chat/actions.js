@@ -49,13 +49,9 @@ export const sinContestar = (onSuccess = SIN_CONTESTAR_SUCCESS, onError = SIN_CO
     onError: onError
 })
 
-export const setCampana = (onSuccess = SET_CAMPANA_SUCCESS, onError = SET_CAMPANA_ERROR) => ({
+export const setCampana = (clienteId, onSuccess = SET_CAMPANA_SUCCESS, onError = SET_CAMPANA_ERROR) => ({
     type: SET_CAMPANA,
-    options: {
-        filter: "Tipo eq 0 and Respondido eq 0",
-        select: "id",
-        top: 1
-    },
+    clienteId: clienteId,
     onSuccess: onSuccess,
     onError: onError
 })

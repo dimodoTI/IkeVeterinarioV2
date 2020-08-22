@@ -28,14 +28,14 @@ import {
     REMOVE_ERROR,
     hiddeCampana,
     showCampana,
-    setCampana,
     sinContestar
 
 } from "./actions";
 
 import {
     ikeChatQuery,
-    ikeChat
+    ikeChat,
+    ikeNotificacionDetalleQuery
 } from "../fetchs"
 
 import {
@@ -52,12 +52,14 @@ import {
     goTo
 } from "../../redux/routing/actions"
 import { store } from "../store";
+import { showWarning } from "../ui/actions";
+import { showSpinner, hideSpinner } from "../api/actions"
 
 export const get = ({
     dispatch
 }) => next => action => {
     next(action);
-    if (action.type === GET || action.type === SIN_CONTESTAR || action.type === SET_CAMPANA || action.type === CHAT_RESERVA) {
+    if (action.type === GET || action.type === SIN_CONTESTAR || action.type === CHAT_RESERVA) {
         dispatch(apiRequest(ikeChatQuery, action.options, action.onSuccess, action.onError))
     }
 
@@ -102,7 +104,6 @@ export const remove = ({
     }
 };
 
-
 export const processGet = ({
     dispatch
 }) => next => action => {
@@ -137,7 +138,7 @@ export const processComand = ({
     }
     if (action.type === GRABAR_RESPUESTA_SUCCESS) {
         dispatch(sinContestar())
-        dispatch(setCampana())
+        dispatch(setCampana(getState().cliente.datos.id))
 
     }
 };
@@ -152,4 +153,52 @@ export const processError = ({
     }
 };
 
-export const middleware = [get, add, update, patch, remove, processGet, processComand, processError];
+export const setCampana = ({
+    dispatch, getState
+}) => next => action => {
+    next(action);
+    if (action.type === SET_CAMPANA) {
+        const optionsChat = {}
+        optionsChat.expand = "Usuario,Reserva($expand=Mascota($select=Nombre))"
+        optionsChat.filter = "Tipo eq 0 and Respondido eq 0"
+        const optionsNotif = {}
+        optionsNotif.expand = "Cabecera"
+        optionsNotif.filter = "ClienteId eq " + action.clienteId
+        var dataChat = null
+        var dataNotif = null
+        dispatch(showSpinner(ikeChatQuery))
+        Promise.all([
+            ikeChatQuery.get(optionsChat).then((data) => {
+                dataChat = data
+            }).catch((err) => {
+                throw err
+            }),
+            ikeNotificacionDetalleQuery.get(optionsNotif).then((data) => {
+                dataNotif = data
+            }).catch((err) => {
+                throw err
+            })
+        ]).then((value) => {
+            if (dataChat.length > 0 || dataNotif.length > 0) {
+                dispatch(showCampana());
+            } else {
+                dispatch(hiddeCampana());
+            }
+            dispatch({
+                type: SET_CAMPANA_SUCCESS,
+                payload: {
+                    send: null,
+                    receive: notificaciones.length == 0 ? null : notificaciones
+                }
+            })
+            dispatch(hideSpinner(ikeChatQuery))
+        }).catch(() => {
+            dispatch({ type: SET_CAMPANA_ERROR })
+            dispatch(hideSpinner(ikeChatQuery))
+            //dispatch(showWarning())
+        })
+    }
+};
+
+
+export const middleware = [get, setCampana, add, update, patch, remove, processGet, processComand, processError];

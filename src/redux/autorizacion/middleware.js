@@ -112,7 +112,7 @@ export const processLogin = ({
         } else {
             dispatch(setLogueado(true))
             dispatch(setDatos(action.payload.receive))
-            dispatch(setCampana())
+            dispatch(setCampana(getState().cliente.datos.id))
 
 
             connection = new WebSocket('wss://ws.chat.dimodo.ga:9080');

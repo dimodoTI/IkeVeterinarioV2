@@ -261,7 +261,7 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
         const divRespuesta = this.shadowRoot.querySelector("#divRespuesta")
         this.shadowRoot.querySelector("#nuevaRespuesta").value = ""
         divRespuesta.style.display = "grid"
-        textoRespuesta.innerHTML = chat.Texto
+        textoRespuesta.innerHTML = chat.item.texto
         this.chatGrabar = {
             Chat: {
                 Fecha: (new Date()),

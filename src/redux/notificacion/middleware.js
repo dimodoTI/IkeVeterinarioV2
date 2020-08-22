@@ -24,8 +24,7 @@ import {
 import {
     ikeNotificacionDetalleQuery,
     ikeNotificacionDetalle,
-    ikeChatQuery,
-    ikeChat
+    ikeChatQuery
 
 } from "../fetchs"
 

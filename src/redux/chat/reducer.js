@@ -41,7 +41,8 @@ const initialState = {
     grabarRespuestaErrorTimeStamp: null,
     campana: {
         seMuestra: false,
-        timeStamp: null
+        timeStamp: null,
+        errorTimeStamp: null
     }
 };
 
@@ -89,10 +90,10 @@ export const reducer = (state = initialState, action) => {
             newState.sinContestarTimeStamp = (new Date()).getTime();
             break;
         case SET_CAMPANA_ERROR:
-            //newState.setCampanaErrorTimeStamp = (new Date()).getTime();
+            newState.campana.errorTimeStamp = (new Date()).getTime();
             break;
         case SET_CAMPANA_SUCCESS:
-            if (action.payload.receive.length > 0) {
+            if (action.payload.receive) {
                 newState.campana.seMuestra = true
             } else {
                 newState.campana.seMuestra = false

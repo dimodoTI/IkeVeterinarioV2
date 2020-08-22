@@ -213,7 +213,7 @@ export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUES
     }
     chat() {
         //        store.dispatch(sinContestar())
-        store.dispatch(getNotificacionChatPendientes(2))
+        store.dispatch(getNotificacionChatPendientes(store.getState().cliente.datos.id))
     }
     atras() {
         switch (this.current) {
