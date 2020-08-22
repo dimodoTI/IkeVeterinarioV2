@@ -159,11 +159,13 @@ export const setCampana = ({
     next(action);
     if (action.type === SET_CAMPANA) {
         const optionsChat = {}
+        optionsChat.top = 1
         optionsChat.expand = "Usuario,Reserva($expand=Mascota($select=Nombre))"
         optionsChat.filter = "Tipo eq 0 and Respondido eq 0"
         const optionsNotif = {}
+        optionsNotif.top = 1
         optionsNotif.expand = "Cabecera"
-        optionsNotif.filter = "ClienteId eq " + action.clienteId
+        optionsNotif.filter = "Leido eq 0 and ClienteId eq " + action.clienteId
         var dataChat = null
         var dataNotif = null
         dispatch(showSpinner(ikeChatQuery))
@@ -179,8 +181,10 @@ export const setCampana = ({
                 throw err
             })
         ]).then((value) => {
+            var estado = false
             if (dataChat.length > 0 || dataNotif.length > 0) {
                 dispatch(showCampana());
+                estado = true
             } else {
                 dispatch(hiddeCampana());
             }
@@ -188,7 +192,7 @@ export const setCampana = ({
                 type: SET_CAMPANA_SUCCESS,
                 payload: {
                     send: null,
-                    receive: notificaciones.length == 0 ? null : notificaciones
+                    receive: estado
                 }
             })
             dispatch(hideSpinner(ikeChatQuery))
