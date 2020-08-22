@@ -4,6 +4,7 @@ import { connect } from "@brunomon/helpers";
 import { idiomas } from "../../redux/datos/idiomas"
 import { button } from "../css/button"
 import { cardChat } from "../css/cardChat"
+import { cardNotif } from "../css/cardNotif"
 import { CHAT } from "../../../assets/icons/icons"
 
 import { get as getChat, SIN_CONTESTAR_SUCCESS, chatReserva, grabarRespuesta as chatGrabarRespuesta } from "../../redux/chat/actions";
@@ -39,6 +40,7 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
         return css`
         ${button}
         ${cardChat}
+        ${cardNotif}
         :host{
             position: relative;
             display: grid;
@@ -134,24 +136,24 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
     render() {
         return html`
             <div id="grilla">
-                ${this.item.map(dato => dato.Tipo == 0 ? html`
+                ${this.item.map(dato => dato.tipo == 0 ? html`
                     <div id="cchatDivEtiqueta" >
-                        <div id="cchatBarra" fondo=${dato.Tipo == 0 ? 'gris' : 'celeste'}>
+                        <div id="cchatBarra" fondo=${dato.tipo == 0 ? 'gris' : 'celeste'}>
                         </div>
                         <div id= "cchatContenido">
                             <div id="cchatFechaNombre">
                                 <div id="cchatDivNombre">
-                                    ${dato.Reserva.Mascota.Nombre}
+                                    ${dato.item.mascota}
                                 </div>
                                 <div id="cchatDivFecha">
-                                    ${dato.Fecha.substring(8, 10) + "/" + dato.Fecha.substring(5, 7) + "/" + dato.Fecha.substring(0, 4)}
+                                    ${dato.fecha.substring(8, 10) + "/" + dato.fecha.substring(5, 7) + "/" + dato.fecha.substring(0, 4)}
                                 </div>
                             </div>
                             <div id="cchatDivDiagnostico">
-                                ${dato.Reserva.Motivo.substring(0, 80)}
+                                ${dato.item.motivo.substring(0, 80)}
                             </div>                        
                             <div id="cchatDivTexto">
-                                ${dato.Texto.substring(0, 80)}
+                                ${dato.item.texto.substring(0, 80)}
                             </div>
                             <div id="cchatDivVerDetalle">
                                 <label id="cchatLblVerDetalle" @click=${this.verDetalle} .item=${dato}>${idiomas[this.idioma].notificacionReserva.verChat}</label>                 
@@ -162,7 +164,25 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
 
                     </div>
                 `: html`
-                
+                    <div id="cnotiDivEtiqueta" >
+                        <div id="cnotiBarra" fondo=${dato.tipo == 0 ? 'gris' : 'celeste'}>
+                        </div>
+                        <div id= "cnotiContenido">
+                            <div id="cnotiDivFecha">
+                                ${dato.fecha.substring(8, 10) + "/" + dato.fecha.substring(5, 7) + "/" + dato.fecha.substring(0, 4)}
+                            </div>
+                            <div id="cnotiDivTitulo">
+                                ${dato.item.titulo.substring(0, 80)}
+                            </div>                        
+                            <div id="cnotiDivTexto">
+                                ${dato.item.texto.substring(0, 80)}
+                            </div>
+                            <div id="cnotiDivVerDetalle">
+                                <label id="cnotiLblLink" @click=${this.verAtencion} .item=${dato}>${dato.item.link}</label>                 
+                            </div>
+                        </div>
+
+                    </div>
                 `
         )}
             </div>
@@ -185,7 +205,7 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
             if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
                 this.hidden = false
                 this.current = state.screen.name
-                this.item = state.chat.entitySinContestar
+                this.item = state.notificacion.entityNotificacionChatPendiente
             }
             this.update();
         }
@@ -244,7 +264,7 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
         textoRespuesta.innerHTML = chat.Texto
         this.chatGrabar = {
             Chat: {
-                Fecha: (new Date()).getFullYear() + "-" + (new Date()).getMonth() + "-" + (new Date()).getDate(),
+                Fecha: (new Date()),
                 ReservaId: chat.ReservaId,
                 UsuarioId: store.getState().cliente.datos.id,
                 Texto: "",

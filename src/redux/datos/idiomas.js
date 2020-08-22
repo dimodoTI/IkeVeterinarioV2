@@ -170,8 +170,8 @@ export const idiomas = {
             subTitulo: "De la mascota."
         },
         notificacionReserva: {
-            titulo: "Chat reservas",
-            subTitulo: "De las mascotas.",
+            titulo: "Mensajes",
+            subTitulo: "Chats y notificaciones.",
             tituloLista: "Listado de chat",
             verChat: "Chat",
             verAtencion: "Atencion",

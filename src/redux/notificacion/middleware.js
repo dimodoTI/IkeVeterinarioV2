@@ -56,11 +56,9 @@ export const getNotificacionChatPendientes = ({
         const optionsChat = {}
         optionsChat.expand = "Usuario,Reserva($expand=Mascota($select=Nombre))"
         optionsChat.filter = "Tipo eq 0 and Respondido eq 0"
-        optionsChat.orderby = "ReservaId"
         const optionsNotif = {}
         optionsNotif.expand = "Cabecera"
         optionsNotif.filter = "ClienteId eq " + action.clienteId
-        optionsNotif.orderby = "Cabecera/Fecha"
         var dataChat = null
         var dataNotif = null
         dispatch(showSpinner(ikeChatQuery))
@@ -102,12 +100,12 @@ export const getNotificacionChatPendientes = ({
                     notificaciones.push(arr)
                 })
             }
-
+            notificaciones.sort(function (a, b) { return a[0] - b[0] });
             dispatch({
                 type: GET_NOTIFICACION_CHAT_PENDIENTES_SUCCESS,
                 payload: {
                     send: null,
-                    receive: notificaciones
+                    receive: notificaciones.length == 0 ? null : notificaciones
                 }
             })
             dispatch(hideSpinner(ikeChatQuery))

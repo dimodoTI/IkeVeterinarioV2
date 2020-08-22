@@ -36,8 +36,10 @@ const SCREEN = "screen.timeStamp";
 const CAMPANA_SEMUESTRA = "chat.campana.timeStamp";
 const CHAT_SINCONTESTARTIMESTAMP = "chat.sinContestarTimeStamp"
 const CHAT_SINCONTESTAR_ERROR = "chat.sinContestarErrorTimeStamp"
+const NOTIF_CHAT_PENDIENTES_TIMESTAMP = "notificacion.entityNotificacionChatPendienteTimeStamp"
+const NOTIF_CHAT_PENDIENTES_ERROR = "notificacion.entityNotificacionChatPendienteError"
 const HEADER_TAPA = "ui.media.headerMuestraTapa"
-export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUESTRA, CHAT_SINCONTESTARTIMESTAMP, CHAT_SINCONTESTAR_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
+export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUESTRA, NOTIF_CHAT_PENDIENTES_TIMESTAMP, NOTIF_CHAT_PENDIENTES_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
 
     constructor() {
         super();
@@ -202,8 +204,8 @@ export class headerComponente extends connect(store, HEADER_TAPA, CAMPANA_SEMUES
 
         }
 
-        if (name == CHAT_SINCONTESTARTIMESTAMP) {
-            //store.dispatch(goTo("notificacionReserva"))
+        if (name == NOTIF_CHAT_PENDIENTES_TIMESTAMP) {
+            store.dispatch(goTo("notificacionReserva"))
         }
         if (name == CAMPANA_SEMUESTRA) {
             this.update()
