@@ -178,6 +178,9 @@ export const idiomas = {
             responder: "Responder",
             btnGrabar: "Grabar",
             btnCancelar: "Cancelar",
+            btnVer: "Ver",
+            btnDelete: "Eliminar",
+            btnVolver: "Volver",
             warningTitulo: ["Campo respuesta."],
             warningCuerpo: ["El valor no puede ser nulo."]
         },

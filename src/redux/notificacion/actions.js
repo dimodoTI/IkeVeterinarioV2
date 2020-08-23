@@ -3,18 +3,21 @@ export const GET_DETALLE_CABECERA = "[notificacion] GET_DETALLE_CABECERA";
 export const GET_NOTIFICACION_PENDIENTES = "[notificacion] GET_NOTIFICACION_PENDIENTES";
 export const GET_NOTIFICACION_CHAT_PENDIENTES = "[notificacion] GET_NOTIFICACION_CHAT_PENDIENTES";
 export const PATCH = "[notificacion] PATCH";
+export const LEIDO = "[notificacion] LEIDO";
 
 export const GET_SUCCESS = "[notificacion] GET success";
 export const GET_DETALLE_CABECERA_SUCCESS = "[notificacion] GET_DETALLE_CABECERA success";
 export const GET_NOTIFICACION_PENDIENTES_SUCCESS = "[notificacion] GET_NOTIFICACION_PENDIENTES success";
 export const GET_NOTIFICACION_CHAT_PENDIENTES_SUCCESS = "[notificacion] GET_NOTIFICACION_CHAT_PENDIENTES success";
 export const PATCH_SUCCESS = "[notificacion] PATCH success";
+export const LEIDO_SUCCESS = "[notificacion] LEIDO success";
 
 export const GET_ERROR = "[notificacion] GET error";
 export const GET_DETALLE_CABECERA_ERROR = "[notificacion] GET_DETALLE_CABECERA error";
 export const GET_NOTIFICACION_PENDIENTES_ERROR = "[notificacion] GET_NOTIFICACION_PENDIENTES error";
 export const GET_NOTIFICACION_CHAT_PENDIENTES_ERROR = "[notificacion] GET_NOTIFICACION_CHAT_PENDIENTES error";
 export const PATCH_ERROR = "[notificacion] PATCH error";
+export const LEIDO_ERROR = "[notificacion] LEIDO error";
 
 export const get = (options, onSuccess = GET_SUCCESS, onError = GET_ERROR) => ({
     type: GET,
@@ -56,6 +59,12 @@ export const getNotificacionChatPendientes = (clienteId, onSuccess = GET_NOTIFIC
 export const patch = (id, body, token) => ({
     type: PATCH,
     id: id,
+    body: body,
+    token: token
+});
+
+export const leido = (body, token) => ({
+    type: LEIDO,
     body: body,
     token: token
 });

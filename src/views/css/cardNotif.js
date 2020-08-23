@@ -45,6 +45,7 @@ export const cardNotif = css`
             font-weight: bold;   
             font-size: var(--font-header-h2-size);
             padding-left: .5rem;
+            color: var(--color-gris);
         }
         #cnotiDivVerDetalle{
             padding-left: .5rem;
@@ -53,13 +54,20 @@ export const cardNotif = css`
             font-size: var(--font-label-size);
             font-weight: bold;
             display: grid;
-            grid-template-columns: 1fr ;
+            grid-template-columns: 1fr 1fr;
         }
+        #cnotiLblVer{
+            text-decoration: underline;
+            cursor:pointer;
+            width:fit-content ;
+            justify-self: end;
+            padding-right: 2vh;
+         }    
         #cnotiLblLink{
             text-decoration: underline;
             cursor:pointer;
             width:fit-content;
-            justify-self: end;
-            padding-right: 2vh;
+            justify-self: start;
+            padding-left: 2vh;
         }
 `

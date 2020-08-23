@@ -3,6 +3,8 @@ import {
     GET_ERROR,
     PATCH_SUCCESS,
     PATCH_ERROR,
+    LEIDO_SUCCESS,
+    LEIDO_ERROR,
     GET_DETALLE_CABECERA_SUCCESS,
     GET_DETALLE_CABECERA_ERROR,
     GET_NOTIFICACION_PENDIENTES_SUCCESS,
@@ -17,8 +19,10 @@ const initialState = {
     entities: null,
     timeStamp: null,
     updateTimeStamp: null,
+    leidoTimeStamp: null,
     errorTimeStamp: null,
     commandErrorTimeStamp: null,
+    leidoErrorTimeStamp: null,
     entityDetalleCabecera: null,
     entityDetalleCabeceraError: null,
     entityDetalleCabeceraTimeStamp: null,
@@ -56,6 +60,9 @@ export const reducer = (state = initialState, action) => {
         case PATCH_SUCCESS:
             newState.updateTimeStamp = (new Date()).getTime();
             break;
+        case LEIDO_SUCCESS:
+            newState.leidoTimeStamp = (new Date()).getTime();
+            break;
         case GET_ERROR:
             newState.errorTimeStamp = (new Date()).getTime();
             break;
@@ -70,6 +77,9 @@ export const reducer = (state = initialState, action) => {
             break;
         case PATCH_ERROR:
             newState.commandErrorTimeStamp = (new Date()).getTime();
+            break;
+        case LEIDO_ERROR:
+            newState.leidoErrorTimeStamp = (new Date()).getTime();
             break;
 
     }

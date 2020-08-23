@@ -12,6 +12,7 @@ import {
     paginaAnterior, footherMuestraTapa, headerMuestraTapa, showWarning
 } from "../../redux/ui/actions"
 import { getAgenda, agendaAtencionSeleccionada } from "../../redux/reservas/actions"
+import { leido as leidoNotificacion, patch as patchNotificacion } from "../../redux/notificacion/actions"
 import {
     goTo
 } from "../../redux/routing/actions"
@@ -23,10 +24,14 @@ const RESERVA_GET_AGENDA_SUCCESS = "reservas.timeStampAgenda"
 const RESERVA_GET_AGENDA_ERROR = "reservas.errorTimeStamp"
 const CHAT_GRABAR_RESPUESTA = "chat.grabarRespuestaTimeStamp"
 const CHAT_GRABAR_RESPUESTA_ERROR = "chat.grabarRespuestaErrorTimeStamp"
+const NOTIF_LEIDO_TIMESTAMP = "notificacion.leidoTimeStamp"
+const NOTIF_LEIDO_ERROR = "notificacion.leidoErrorTimeStamp"
+const NOTIF_PATCH_TIMESTAMP = "notificacion.updateTimeStamp"
+const NOTIF_PATCH_ERROR = "notificacion.commandErrorTimeStamp"
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
 
-export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGENDA_SUCCESS, RESERVA_GET_AGENDA_ERROR, CHAT_GRABAR_RESPUESTA, CHAT_GRABAR_RESPUESTA_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
+export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIMESTAMP, NOTIF_PATCH_ERROR, NOTIF_LEIDO_TIMESTAMP, NOTIF_LEIDO_ERROR, RESERVA_GET_AGENDA_SUCCESS, RESERVA_GET_AGENDA_ERROR, CHAT_GRABAR_RESPUESTA, CHAT_GRABAR_RESPUESTA_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -34,6 +39,7 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
         this.idioma = "ES"
         this.item = []
         this.chatGrabar = null
+        this.notifGrabar = 0
     }
 
     static get styles() {
@@ -130,7 +136,61 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
         #btnCancelar{
             color:red;
             height:7vh;
-        }    
+        }     
+        #divNotificacion{
+             z-index:100;
+             background-color:  var(--color-gris-claro);;
+             position:absolute;
+             display:none;
+             grid-template-columns: .5fr 12fr;
+             top:10vh;
+             height: auto ;
+             left:5vw;
+             right:5vw;
+             border: solid 1px var(--color-gris-oscuro);
+             border-radius: .5rem;
+             box-shadow: var(--shadow-elevation-4-box);
+        }
+        #divNotificacionBarra{
+            background-color:var(--color-celeste);
+            border-radius :.4rem 0 0 .4rem;           
+        }
+        #divNotificacionCuerpo{
+            background-color:  var(--color-gris-claro);;
+            display:grid;
+            grid-auto-flow: row ;
+            grid-gap:2vh;
+            padding:.4rem;
+        }
+        #textoTitulo{
+            font-size:var(--font-bajada-size);
+            font-weight:var(--font-bajada-weight);
+            background-color:var(--color-gris-fondo);
+            color:var(--color-gris-oscuro);
+            padding:.5rem;
+            font-size:var(--font-label-size);
+            font-weight:bolder;
+            border-radius: .5rem .5rem 0 0 ;
+        }
+        #textoCuerpo{
+            padding:.5rem;
+            font-size:var(--font-label-size);
+            font-weight:var(--font-label-weight);
+            border-radius: .5rem;
+        }
+        #divNotifBotones{
+            display:grid;
+            grid-gap:1rem;
+            grid-template-columns:1fr 1fr;
+            justify-items: center;
+        }
+        #btnDelete{
+            height:7vh;
+        }
+        #btnVolver{
+            color:red;
+            height:7vh;
+        } 
     `
     }
     render() {
@@ -172,13 +232,14 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
                                 ${dato.fecha.substring(8, 10) + "/" + dato.fecha.substring(5, 7) + "/" + dato.fecha.substring(0, 4)}
                             </div>
                             <div id="cnotiDivTitulo">
-                                ${dato.item.titulo.substring(0, 80)}
+                                ${dato.item.titulo.substring(0, 74)}
                             </div>                        
                             <div id="cnotiDivTexto">
-                                ${dato.item.texto.substring(0, 80)}
+                                ${dato.item.texto.substring(0, 74)}
                             </div>
                             <div id="cnotiDivVerDetalle">
                                 <label id="cnotiLblLink" @click=${this.verAtencion} .item=${dato}>${dato.item.link}</label>                 
+                                <label id="cnotiLblVer" @click=${this.verNotif} .item=${dato}>${idiomas[this.idioma].notificacionReserva.btnVer}</label>                 
                             </div>
                         </div>
 
@@ -192,6 +253,18 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
                 <div id="divRespuestaBotones">
                     <button id="btnGrabar" btn1 @click="${this.grabar}" >${idiomas[this.idioma].notificacionReserva.btnGrabar}</button>
                     <button  id="btnCancelar" btn3 @click="${this.cancelar}">${idiomas[this.idioma].notificacionReserva.btnCancelar}</button>
+                </div>  
+            </div>
+            <div id="divNotificacion">  
+                <div id="divNotificacionBarra">
+                </div>
+                <div id="divNotificacionCuerpo">
+                    <label id="textoTitulo"></label>
+                    <label id="textoCuerpo"></label>
+                    <div id="divNotifBotones">
+                        <button id="btnDelete" btn1 @click="${this.delete}" >${idiomas[this.idioma].notificacionReserva.btnDelete}</button>
+                        <button  id="btnVolver" btn3 @click="${this.volver}">${idiomas[this.idioma].notificacionReserva.btnVolver}</button>
+                    </div>  
                 </div>  
             </div>
         `
@@ -247,11 +320,16 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
         store.dispatch(headerMuestraTapa(false))
         this.shadowRoot.querySelector("#divRespuesta").style.display = "none"
     }
+    volver() {
+        store.dispatch(footherMuestraTapa(false))
+        store.dispatch(headerMuestraTapa(false))
+        this.shadowRoot.querySelector("#divNotificacion").style.display = "none"
+    }
     verAtencion(e) {
-        store.dispatch(getAgenda(store.getState().cliente.datos.token, " Id eq " + e.currentTarget.item.ReservaId))
+        store.dispatch(getAgenda(store.getState().cliente.datos.token, " Id eq " + e.currentTarget.item.item.reservaId))
     }
     verDetalle(e) {
-        store.dispatch(chatReserva(e.currentTarget.item.ReservaId))
+        store.dispatch(chatReserva(e.currentTarget.item.item.reservaId))
     }
     responder(e) {
         store.dispatch(footherMuestraTapa(true))
@@ -265,17 +343,35 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
         this.chatGrabar = {
             Chat: {
                 Fecha: (new Date()),
-                ReservaId: chat.ReservaId,
+                ReservaId: chat.item.reservaId,
                 UsuarioId: store.getState().cliente.datos.id,
                 Texto: "",
                 Leido: 0,
                 Respondido: 0,
                 Tipo: 1
             },
-            PreguntaId: chat.Id
+            PreguntaId: chat.item.chatId
         }
         this.update()
     }
+    verNotif(e) {
+        store.dispatch(footherMuestraTapa(true))
+        store.dispatch(headerMuestraTapa(true))
+        const notif = e.currentTarget.item
+        const textoTitulo = this.shadowRoot.querySelector("#textoTitulo")
+        const textoCuerpo = this.shadowRoot.querySelector("#textoCuerpo")
+        const divNotificacion = this.shadowRoot.querySelector("#divNotificacion")
+        const btnDelete = this.shadowRoot.querySelector("#btnDelete")
+        btnDelete.setAttribute('detalleid', notif.item.detalleId)
+        this.shadowRoot.querySelector("#textoTitulo").value = ""
+        this.shadowRoot.querySelector("#textoCuerpo").value = ""
+        divNotificacion.style.display = "grid"
+        textoTitulo.innerHTML = notif.item.titulo
+        textoCuerpo.innerHTML = notif.item.texto
+        this.notifGrabar = notif.item.cabeceraId
+        this.update()
+    }
+
     grabar() {
         if (this.shadowRoot.querySelector("#nuevaRespuesta").value == "") {
             store.dispatch(showWarning("notificacionReserva", 0))
@@ -285,6 +381,21 @@ export class pantallaNotificacionReserva extends connect(store, RESERVA_GET_AGEN
                 store.dispatch(chatGrabarRespuesta(this.chatGrabar, store.getState().cliente.datos.token))
             }
         }
+    }
+
+    delete(e) {
+        //let detalleid = { entity: "/Leido(" + e.currentTarget.getAttribute("detalleid") + ")" }
+        //store.dispatch(leidoNotificacion(detalleid, store.getState().cliente.datos.token))
+        let detalleid = "Leido(" + e.currentTarget.getAttribute("detalleid") + ")"
+        var datoUpdate = [{
+            "id": detalleid,
+            "op": "replace",
+            "path": "/Leido",
+            "value": (new Date()).getTime()
+        }];
+        store.dispatch(leidoNotificacion(datoUpdate, store.getState().cliente.datos.token))
+
+
     }
     firstUpdated() { }
 

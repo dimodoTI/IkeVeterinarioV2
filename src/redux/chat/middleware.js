@@ -26,9 +26,10 @@ import {
     REMOVE,
     REMOVE_SUCCESS,
     REMOVE_ERROR,
-    hiddeCampana,
+    hideCampana,
     showCampana,
-    sinContestar
+    sinContestar,
+    setCampana as setCampanaAction
 
 } from "./actions";
 
@@ -54,6 +55,9 @@ import {
 import { store } from "../store";
 import { showWarning } from "../ui/actions";
 import { showSpinner, hideSpinner } from "../api/actions"
+import {
+    getNotificacionChatPendientes
+} from "../../redux/notificacion/actions"
 
 export const get = ({
     dispatch
@@ -130,15 +134,16 @@ export const processGet = ({
 };
 
 export const processComand = ({
-    dispatch
+    dispatch, getState
 }) => next => action => {
     next(action);
     if (action.type === ADD_SUCCESS || action.type === UPDATE_SUCCESS || action.type === REMOVE_SUCCESS || action.type === PATCH_SUCCESS) {
 
     }
     if (action.type === GRABAR_RESPUESTA_SUCCESS) {
-        dispatch(sinContestar())
-        dispatch(setCampana(getState().cliente.datos.id))
+        //dispatch(sinContestar())
+        dispatch(getNotificacionChatPendientes(getState().cliente.datos.id))
+        dispatch(setCampanaAction(getState().cliente.datos.id))
 
     }
 };
@@ -186,7 +191,7 @@ export const setCampana = ({
                 dispatch(showCampana());
                 estado = true
             } else {
-                dispatch(hiddeCampana());
+                dispatch(hideCampana());
             }
             dispatch({
                 type: SET_CAMPANA_SUCCESS,
