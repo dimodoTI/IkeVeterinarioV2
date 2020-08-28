@@ -151,9 +151,20 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
 
         if ((name == MEDIA_CHANGE || name == SCREEN)) {
             this.mediaSize = state.ui.media.size
+            this.orientation = state.ui.media.orientation
             this.layout = getLayout(state).name
             if (!window.MSStream && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
-                this.style.height = window.innerHeight + "px"
+                //                
+                if (('standalone' in window.navigator) && (window.navigator.standalone)) {
+                    this.style.height = document.documentElement.offsetHeight ? document.documentElement.offsetHeight : window.innerHeight + "px"
+                } else {
+                    if (state.ui.media.orientation == "portrait") {
+                        this.style.height = window.innerHeight < window.innerWidth ? window.innerWidth : window.innerHeight + "px"
+                    } else {
+                        this.style.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight + "px"
+                    }
+                }
+
             }
         }
         this.update();
@@ -168,6 +179,10 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
                 attribute: 'media-size'
             },
             layout: {
+                type: String,
+                reflect: true,
+            },
+            orientation: {
                 type: String,
                 reflect: true,
             }

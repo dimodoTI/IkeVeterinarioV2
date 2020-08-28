@@ -17,10 +17,22 @@ import {
 import {
     showScreen
 } from "./redux/screens/actions";
-
+import {
+    getParameterByName
+} from "./libs/helpers";
+import {
+    goTo
+} from "./redux/routing/actions"
 
 store.dispatch(captureMedia())
-store.dispatch(showScreen("splash", ""))
+if (getParameterByName("ticket")) {
+    store.dispatch(goTo("crearClave"))
+} else {
+    store.dispatch(showScreen("splash", ""))
+    //store.dispatch(showScreen("recuperaClaveMsg", ""))
+}
+
+
 
 /*
 

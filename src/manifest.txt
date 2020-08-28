@@ -1,7 +1,7 @@
 {
-  "short_name": "IKE Mascotas",
+  "short_name": "IKE Veterinario",
   "name": "Cuidando la salud de tus masacotas",
-  "description": "Soluciones rapidas para tus mascotas",
+  "description": "",
   "icons": [
     {
       "src": "ic_launcher.png",
@@ -14,9 +14,10 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
-  "background_color": "#ff8800",
+  "start_url": "./index.html",
+  "background_color": "#ffffff",
   "display": "standalone",
-  "scope": "/",
-  "theme_color": "#ff8800"
+  "scope": "./",
+  "theme_color": "#ffffff",
+  "orientation": "portrait"
 }

@@ -87,13 +87,13 @@ export class pantallaInicioSesion extends connect(store, MEDIA_CHANGE, SCREEN, L
         return html`
             <div class="ikeInput">
                 <label id="lblMail">${idiomas[this.idioma].inicioSesion.mail}</label>
-                <input id="txtMail"  @input=${this.activar} type="email"  value="yo@yo.yo" placeholder=${idiomas[this.idioma].inicioSesion.mail_ph}>
+                <input id="txtMail"  @input=${this.activar} type="email"  value="ddilorenzo@gmail.com" placeholder=${idiomas[this.idioma].inicioSesion.mail_ph}>
                 <label id="lblErrorMail" error oculto>${idiomas[this.idioma].inicioSesion.errorMail.err1}</label>
             </div>
 
             <div class="ikeInput">
                 <label id="lblClave">${idiomas[this.idioma].inicioSesion.clave}</label>
-                <input id="txtClave" @input=${this.activar} type="password" value="administrador">
+                <input id="txtClave" @input=${this.activar} type="password" value="12345678">
                 <label id="lblErrorClave" error oculto>${idiomas[this.idioma].inicioSesion.errorClave.err1}</label>
             </div>
 

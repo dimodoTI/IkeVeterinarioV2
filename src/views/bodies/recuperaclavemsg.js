@@ -47,6 +47,7 @@ export class pantallaRecuperaClaveMsg extends connect(store, MEDIA_CHANGE, SCREE
             position: relative;
             align-self: flex-start;
             justify-self: flex-end;
+            cursor: pointer;
         }
         #titulo{
             position:relative;
@@ -89,7 +90,7 @@ export class pantallaRecuperaClaveMsg extends connect(store, MEDIA_CHANGE, SCREE
         }
     }
     clickBoton1() {
-        store.dispatch(goTo("crearClave"))
+        store.dispatch(goTo("inicioSesion"))
     }
     firstUpdated() {
     }

@@ -10,10 +10,18 @@ import {
 import {
     isInLayout
 } from "../../redux/screens/screenLayouts";
+import {
+    renovacion
+} from "../../redux/autorizacion/actions";
+import {
+    getParameterByName
+} from "../../libs/helpers";
+import { showWarning } from "../../redux/ui/actions";
 
+const RENOVACION_OK_ERROR = "cliente.renovadoTimeStamp"
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
-export class pantallaCrearClave extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
+export class pantallaCrearClave extends connect(store, RENOVACION_OK_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -87,6 +95,14 @@ export class pantallaCrearClave extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
             }
             this.update();
         }
+        if (name == RENOVACION_OK_ERROR) {
+            if (state.cliente.renovado) {
+                store.dispatch(goTo("crearClaveMsg"));
+            } else {
+                store.dispatch(showWarning("crearClave", 0))
+                store.dispatch(goTo("inicioSesion"));
+            }
+        }
     }
     activar() {
         this.activo = true
@@ -120,13 +136,21 @@ export class pantallaCrearClave extends connect(store, MEDIA_CHANGE, SCREEN)(Lit
             valido = false
             this.shadowRoot.querySelector("#lblErrorClave2").removeAttribute("oculto");
         }
+        if (valido) {
+            if (clave1.value.length != clave2.value.length) {
+                valido = false
+                this.shadowRoot.querySelector("#lblErrorClave2").removeAttribute("oculto");
+            }
+        }
         this.update()
         return valido
     }
     clickBoton2() {
         if (this.activo) {
             if (this.valido()) {
-                store.dispatch(goTo("crearClaveMsg"));
+                const ticket = getParameterByName("ticket")
+                const clave1 = this.shadowRoot.querySelector("#txtClave1").value
+                store.dispatch(renovacion(ticket, clave1))
             }
         }
     }

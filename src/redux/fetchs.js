@@ -57,7 +57,7 @@ export const ikeReservas = fetchFactory(webApiMascotas, "Reservas")
 export const ikeAtenciones = fetchFactory(webApiMascotas, "Atenciones")
 export const ikeChat = fetchFactory(webApiChat, "Chat")
 export const ikeNotificaciones = fetchFactory(webApiChat, "Notificaciones")
-export const ikeNotificacionDetalle = fetchFactory(webApiChat, "NotificacionDetalle")
+export const ikeNotificacionDetalle = fetchFactory(webApiChat, "Notificaciones/Leido")
 
 export const ikeOdataMascotas = ODataEntity(mascotaOdata, "MascotasQuery")
 export const ikeMascotasTipo = fetchFactory(webApiMascotas, "MascotasTipo")

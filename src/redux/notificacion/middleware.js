@@ -17,11 +17,13 @@ import {
     LEIDO,
     LEIDO_SUCCESS,
     LEIDO_ERROR,
+    getNotificacionChatPendientes as getPendientes
 } from "../notificacion/actions";
 
 import {
     SIN_CONTESTAR_SUCCESS,
-    SIN_CONTESTAR_ERROR
+    SIN_CONTESTAR_ERROR,
+    setCampana
 } from "../chat/actions"
 
 import {
@@ -30,7 +32,6 @@ import {
     ikeChatQuery,
     ikeNotificaciones,
     ikeNotificacionesQuery
-
 } from "../fetchs"
 
 import {
@@ -135,13 +136,7 @@ export const leido = ({
 }) => next => action => {
     next(action);
     if (action.type === LEIDO) {
-        //dispatch(RESTPatch(ikeNotificaciones, action.id, action.body, LEIDO_SUCCESS, LEIDO_ERROR, action.token))
-        //fetchFactory(webApiChat, "Notificaciones")
-        ikeNotificaciones.post(action.body).then(() => {
-            dispatch({ type: LEIDO_SUCCESS })
-        }).catch((err) => {
-            dispatch({ type: LEIDO_ERROR })
-        })
+        dispatch(RESTAdd(ikeNotificacionDetalle, action.body, LEIDO_SUCCESS, LEIDO_ERROR, action.token, action.id))
     }
 };
 
@@ -156,11 +151,15 @@ export const processGet = ({
 };
 
 export const processComand = ({
-    dispatch
+    dispatch, getState
 }) => next => action => {
     next(action);
-    if (action.type === PATCH_SUCCESS || action.type === LEIDO_SUCCESS) {
+    if (action.type === PATCH_SUCCESS) {
 
+    }
+    if (action.type === LEIDO_SUCCESS) {
+        dispatch(getPendientes(getState().cliente.datos.id))
+        dispatch(setCampana(getState().cliente.datos.id))
     }
 };
 

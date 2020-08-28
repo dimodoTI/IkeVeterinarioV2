@@ -106,6 +106,7 @@ export const processLogin = ({
     if (action.type === LOGIN_SUCCESS) {
         if (action.payload.receive.message) {
             dispatch(setLogueado(false))
+            dispatch(showWarning("inicioSesion", 0))
             //if (getState().screen.name == "inicioSesion") {
             //dispatch(goTo("misConsultas"))
             //}
@@ -134,7 +135,7 @@ export const processLogin = ({
             };
 
             if (getState().screen.name == "inicioSesion") {
-                if (getState().cliente.datos.perfil == "Veterinario" || getState().cliente.datos.perfil == "Admin") {
+                if (getState().cliente.datos.perfil.toUpperCase().indexOf("VETERINARIO") != -1 || getState().cliente.datos.perfil == "Admin") {
                     dispatch(goTo("misConsultas"))
                 } else {
                     dispatch(showWarning(getState().screen.name, 0))

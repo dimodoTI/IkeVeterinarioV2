@@ -210,10 +210,10 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
                                 </div>
                             </div>
                             <div id="cchatDivDiagnostico">
-                                ${dato.item.motivo.substring(0, 80)}
+                                ${this.mediaSize == "small" ? dato.item.motivo.substring(0, 80) : dato.item.motivo}
                             </div>                        
                             <div id="cchatDivTexto">
-                                ${dato.item.texto.substring(0, 80)}
+                                ${this.mediaSize == "small" ? dato.item.texto.substring(0, 80) : dato.item.texto}
                             </div>
                             <div id="cchatDivVerDetalle">
                                 <label id="cchatLblVerDetalle" @click=${this.verDetalle} .item=${dato}>${idiomas[this.idioma].notificacionReserva.verChat}</label>                 
@@ -232,13 +232,13 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
                                 ${dato.fecha.substring(8, 10) + "/" + dato.fecha.substring(5, 7) + "/" + dato.fecha.substring(0, 4)}
                             </div>
                             <div id="cnotiDivTitulo">
-                                ${dato.item.titulo.substring(0, 74)}
+                                ${this.mediaSize == "small" ? dato.item.titulo.substring(0, 74) : dato.item.titulo}
                             </div>                        
                             <div id="cnotiDivTexto">
-                                ${dato.item.texto.substring(0, 74)}
+                                ${this.mediaSize == "small" ? dato.item.texto.substring(0, 74) : dato.item.texto}
                             </div>
                             <div id="cnotiDivVerDetalle">
-                                <label id="cnotiLblLink" @click=${this.verAtencion} .item=${dato}>${dato.item.link}</label>                 
+                                <label id="cnotiLblLink" @click=${this.verLink} .item=${dato} style=${dato.item.link.length == 0 ? 'visibility:hidden' : 'visibility:visible'} >${dato.item.link.length == 0 ? "" : idiomas[this.idioma].notificacionReserva.btnNavegar}</label>                 
                                 <label id="cnotiLblVer" @click=${this.verNotif} .item=${dato}>${idiomas[this.idioma].notificacionReserva.btnVer}</label>                 
                             </div>
                         </div>
@@ -278,7 +278,7 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
             if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
                 this.hidden = false
                 this.current = state.screen.name
-                this.item = state.notificacion.entityNotificacionChatPendiente
+                this.item = state.notificacion.entityNotificacionChatPendiente ? state.notificacion.entityNotificacionChatPendiente : []
             }
             this.update();
         }
@@ -314,6 +314,15 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
         if (name == RESERVA_GET_AGENDA_ERROR && this.current == "notificacionReserva") {
             store.dispatch(showWarning())
         }
+        if (name == NOTIF_LEIDO_TIMESTAMP && this.current == "notificacionReserva") {
+            store.dispatch(footherMuestraTapa(false))
+            store.dispatch(headerMuestraTapa(false))
+            this.shadowRoot.querySelector("#divNotificacion").style.display = "none"
+            this.update();
+        }
+        if (name == NOTIF_LEIDO_ERROR && this.current == "notificacionReserva") {
+            store.dispatch(showWarning())
+        }
     }
     cancelar() {
         store.dispatch(footherMuestraTapa(false))
@@ -330,6 +339,9 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
     }
     verDetalle(e) {
         store.dispatch(chatReserva(e.currentTarget.item.item.reservaId))
+    }
+    verLink() {
+        window.open("http://www.ikeargentina.com.ar", '_blank')
     }
     responder(e) {
         store.dispatch(footherMuestraTapa(true))
@@ -386,14 +398,8 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
     delete(e) {
         //let detalleid = { entity: "/Leido(" + e.currentTarget.getAttribute("detalleid") + ")" }
         //store.dispatch(leidoNotificacion(detalleid, store.getState().cliente.datos.token))
-        let detalleid = "Leido(" + e.currentTarget.getAttribute("detalleid") + ")"
-        var datoUpdate = [{
-            "id": detalleid,
-            "op": "replace",
-            "path": "/Leido",
-            "value": (new Date()).getTime()
-        }];
-        store.dispatch(leidoNotificacion(datoUpdate, store.getState().cliente.datos.token))
+        let detalleid = e.currentTarget.getAttribute("detalleid")
+        store.dispatch(leidoNotificacion(detalleid, null, store.getState().cliente.datos.token))
 
 
     }

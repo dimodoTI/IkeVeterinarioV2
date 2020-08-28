@@ -39,12 +39,14 @@ export const idiomas = {
             errorDocumento: {
                 err1: "Documento incorrecto",
                 err2: "wer"
-            }
+            },
+            warningTitulo: ["Error."],
+            warningCuerpo: ["Datos incorrectod"]
         },
 
         recuperaClaveMsg: {
             titulo: "¡Todo listo para recuperar tu contraseña!",
-            subTitulo: "Ingresá a tu casilla de mail y seguí los pasos para recuperar tu contraseña."
+            subTitulo: "Ingresá a tu casilla de mail y seguí los pasos para recuperar tu contraseña. No te olvide de buscar en la bandeja de spam o correo no deseado."
         },
 
         crearClave: {
@@ -60,7 +62,10 @@ export const idiomas = {
             errorClave2: {
                 err1: "Clave2 incorrecto",
                 err2: "wer"
-            }
+            },
+            warningTitulo: ["Enlace vencido."],
+            warningCuerpo: ["Vuelva a solicitar el recupero de clave."]
+
         },
         crearClaveMsg: {
             titulo: "¡Genial!",
@@ -181,6 +186,7 @@ export const idiomas = {
             btnVer: "Ver",
             btnDelete: "Eliminar",
             btnVolver: "Volver",
+            btnNavegar: "Saber más ...",
             warningTitulo: ["Campo respuesta."],
             warningCuerpo: ["El valor no puede ser nulo."]
         },

@@ -24,8 +24,10 @@ export const fetchFactory = (url, entity) => {
 
         },
 
-        post: (body, token) => {
-            return fetch(url, {
+        post: (body, token, id) => {
+            let newUrl = url
+            if (id) newUrl = url + "(" + id + ")"
+            return fetch(newUrl, {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: _getHeaders(token)
@@ -34,19 +36,6 @@ export const fetchFactory = (url, entity) => {
             )
 
         },
-
-        put: (id, body, token) => {
-            let newUrl = url + "/" + id
-            return fetch(newUrl, {
-                method: "PUT",
-                body: JSON.stringify(body),
-                headers: _getHeaders(token)
-            }).then(res =>
-                res.headers.get("content-length") == "0" || res.headers.get("content-length") == null ? {} : res.json()
-            )
-
-        },
-
 
         patch: (id, body, token) => {
             let newUrl = url + "/" + id

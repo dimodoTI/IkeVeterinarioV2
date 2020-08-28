@@ -24,10 +24,17 @@ import {
 import {
     isInLayout
 } from "../../redux/screens/screenLayouts";
+import {
+    recupero
+} from "../../redux/autorizacion/actions";
+import { showWarning } from "../../redux/ui/actions";
+
+const RECUPERO_OK_ERROR = "cliente.recuperandoTimeStamp"
+const COMMAND_ERROR = "autorizacion.commandErrorTimeStamp"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
-export class pantallaRecuperaClave extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
+export class pantallaRecuperaClave extends connect(store, RECUPERO_OK_ERROR, COMMAND_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -76,11 +83,6 @@ export class pantallaRecuperaClave extends connect(store, MEDIA_CHANGE, SCREEN)(
             <label id="lblErrorMail" error oculto>${idiomas[this.idioma].recuperaClave.errorMail.err1}</label>
         </div>
 
-        <div class="ikeInput">
-            <label id="lblDocumento">${idiomas[this.idioma].recuperaClave.documento}</label>
-            <input id="txtDocumento" @input=${this.activar} type="number" placeholder=${idiomas[this.idioma].recuperaClave.documentoPlaceholder}>
-            <label id="lblErrorDocumento" error oculto>${idiomas[this.idioma].recuperaClave.errorDocumento.err1}</label>
-        </div>
         <button id="btn-recuperar" btn1 apagado @click=${this.clickBoton2}>
             ${idiomas[this.idioma].recuperaClave.btn1}
         </button>
@@ -97,14 +99,25 @@ export class pantallaRecuperaClave extends connect(store, MEDIA_CHANGE, SCREEN)(
             }
             this.update();
         }
+        if (name == RECUPERO_OK_ERROR) {
+            if (state.cliente.recuperando) {
+                store.dispatch(goTo("recuperaClaveMsg"))
+            } else {
+                store.dispatch(showWarning("recuperaClave", 0))
+            }
+        }
+        if (name == COMMAND_ERROR) {
+            dispatch(showWarning())
+            return
+        }
     }
     activar() {
         this.activo = true
         const email = this.shadowRoot.querySelector("#txtMail")
-        const documento = this.shadowRoot.querySelector("#txtDocumento")
-        if (documento.value.length < 4) {
-            this.activo = false
-        }
+        //const documento = this.shadowRoot.querySelector("#txtDocumento")
+        //if (documento.value.length < 4) {
+        //this.activo = false
+        //}
         if (email.value.length < 4) {
             this.activo = false
         }
@@ -120,12 +133,12 @@ export class pantallaRecuperaClave extends connect(store, MEDIA_CHANGE, SCREEN)(
             element.setAttribute("oculto", "")
         })
         let valido = true
-        const documento = this.shadowRoot.querySelector("#txtDocumento")
+        //const documento = this.shadowRoot.querySelector("#txtDocumento")
         const email = this.shadowRoot.querySelector("#txtMail")
-        if (documento.value.length < 8) {
-            valido = false
-            this.shadowRoot.querySelector("#lblErrorDocumento").removeAttribute("oculto");
-        }
+        //if (documento.value.length < 8) {
+        //valido = false
+        //this.shadowRoot.querySelector("#lblErrorDocumento").removeAttribute("oculto");
+        //}
         if (email.value.indexOf("@") == -1) {
             valido = false
             this.shadowRoot.querySelector("#lblErrorMail").removeAttribute("oculto");
@@ -137,7 +150,7 @@ export class pantallaRecuperaClave extends connect(store, MEDIA_CHANGE, SCREEN)(
     clickBoton2() {
         if (this.activo) {
             if (this.valido()) {
-                store.dispatch(goTo("recuperaClaveMsg"))
+                store.dispatch(recupero(this.shadowRoot.querySelector("#txtMail").value))
             }
         }
     }

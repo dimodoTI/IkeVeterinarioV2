@@ -6,7 +6,7 @@ export const cardNotif = css`
         #cnotiDivEtiqueta{
             display: grid; 
             position: relative;
-            height:22vh;
+            height:26vh;
             width:100%;
             border-radius:.4rem ;           
             box-shadow: var(--shadow-elevation-4-box);
@@ -25,7 +25,7 @@ export const cardNotif = css`
             position: relative;
             background-color:var(--color-blanco);
             grid-template-columns: 100%;
-            grid-template-rows: 18% 32% 32% 18%;
+            grid-template-rows: 14% 22% 50% 14%;
             grid-gap:.1vh;
         }
         #cnotiDivFecha{

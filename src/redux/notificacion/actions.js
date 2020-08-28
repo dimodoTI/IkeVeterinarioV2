@@ -63,8 +63,9 @@ export const patch = (id, body, token) => ({
     token: token
 });
 
-export const leido = (body, token) => ({
+export const leido = (id, body, token) => ({
     type: LEIDO,
+    id: id,
     body: body,
     token: token
 });
