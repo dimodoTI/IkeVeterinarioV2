@@ -29,9 +29,17 @@ export const get = ({
         action.optionsPuestos.token = token
         const optionsReservas = {}
         optionsReservas.token = token
-        optionsReservas.expand = "Mascota($select = Nombre), Tramo, Atencion($expand=Veterinario)"
+        optionsReservas.expand = "Mascota($select = Nombre), Tramo, Atencion($expand=Veterinario), Adjuntos($select = Id, Perfil, Nombre, Url, Activo;$filter = Activo)"
         optionsReservas.orderby = "FechaAtencion,HoraAtencion"
-        optionsReservas.filter = action.filterReservas
+        if (action.filterReservas) {
+            optionsReservas.filter = action.filterReservas
+        } else {
+            var fec = new Date()
+            fec.setDate(fec.getDate() - 0);
+            fec = (new Date(fec.getTime() - (fec.getTimezoneOffset() * 60000))).toJSON()
+            optionsReservas.filter = "FechaAtencion eq " + fec.substr(0, 10)
+            //Aca y en actions reservas
+        }
         dispatch(showSpinner(ikePuestosQuery))
         Promise.all([
             ikePuestosQuery.get(action.optionsPuestos).then((data) => {

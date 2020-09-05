@@ -30,14 +30,23 @@ export const get = (options) => ({
     options: options
 });
 
-export const getAgenda = (token, filter) => ({
-    type: GET_AGENDA,
-    options: { token: token, filter: filter, expand: "Mascota($select = Nombre), Tramo, Atencion($expand=Veterinario)", orderby: "FechaAtencion,HoraAtencion" }
-});
+export const getAgenda = (token, filter) => {
+    if (!filter) {
+        var fec = new Date()
+        fec.setDate(fec.getDate() - 0);
+        fec = (new Date(fec.getTime() - (fec.getTimezoneOffset() * 60000))).toJSON()
+        filter = "FechaAtencion eq " + fec.substr(0, 10)
+        //Aca y en middleware reservasDelDia
+    }
+    return {
+        type: GET_AGENDA,
+        options: { token: token, filter: filter, expand: "Mascota($select = Nombre), Tramo, Atencion($expand=Veterinario), Adjuntos($select = Id, Perfil, Nombre, Url, Activo;$filter = Activo)", orderby: "FechaAtencion,HoraAtencion" }
+    }
+};
 
 export const getAtencionDeUnaMascota = (token, filter) => ({
     type: GET_ATENCIONDEUNAMASCOTA,
-    options: { token: token, filter: filter, expand: "Mascota($select = Nombre), Atencion($expand=Veterinario), Chats($select=Id;$top=1)", orderby: "FechaAtencion desc,HoraAtencion desc" }
+    options: { token: token, filter: filter, expand: "Mascota($select = Nombre, Foto), Atencion($expand=Veterinario), Chats($select=Id;$top=1), Adjuntos($select = Id, Perfil, Nombre, Url, Activo;$filter = Activo)", orderby: "FechaAtencion desc,HoraAtencion desc" }
 });
 
 export const add = (body, token) => ({

@@ -243,10 +243,10 @@ export class pieComponente extends connect(store, FOOTHER_TAPA, MEDIA_CHANGE, SC
         store.dispatch(goTo("misConsultas"))
     }
     clickBoton2() {
-        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "ate_agendas"))
+        store.dispatch(getReservasDelDia(null, {}, "ate_agendas"))
     }
     clickBoton3() {
-        store.dispatch(getReservasDelDia("FechaAtencion eq 2020-07-29", {}, "his_Agendas"))
+        store.dispatch(getReservasDelDia(null, {}, "his_Agendas"))
         //store.dispatch(goTo("atencionesMascotas"))
     }
 

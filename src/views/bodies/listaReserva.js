@@ -14,6 +14,9 @@ import {
 import {
     isInLayout
 } from "../../redux/screens/screenLayouts";
+import {
+    delVeterinario, delCliente
+} from "../../redux/adjuntos/actions"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
@@ -114,6 +117,9 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
     }
     clickAtencion(e) {
         let arr = e.currentTarget.item;
+        //store.dispatch(delVeterinario(arr.Id, store.getState().cliente.datos.token))
+        //store.dispatch(delCliente(arr.Id, store.getState().cliente.datos.token))
+
         var vetNombre = ""
         if (arr.Atencion) {
             if (arr.Atencion.Veterinario) {
@@ -130,9 +136,10 @@ export class pantallaListaReserva extends connect(store, MEDIA_CHANGE, SCREEN, R
             AtencionId: arr.Atencion ? arr.Atencion.id : 0,
             VeterinarioId: arr.Atencion ? arr.Atencion.VeterinarioId : 0,
             Veterinario: vetNombre,
-            Diagnostico: arr.Atencion ? arr.Atencion.Diagnostico : 0,
+            Diagnostico: arr.Atencion ? arr.Atencion.Diagnostico : "",
             InicioAtencion: arr.Atencion ? arr.Atencion.InicioAtencion : null,
-            FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null
+            FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null,
+            Adjuntos: arr.Adjuntos
         }
         //graba solo en el STATE
         store.dispatch(agendaAtencionSeleccionada(this.atencionCompleta))

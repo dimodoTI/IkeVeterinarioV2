@@ -28,14 +28,19 @@ import {
 import {
     isInLayout
 } from "../../redux/screens/screenLayouts";
+import {
+    delVeterinario, upload,
+    delCliente
+} from "../../redux/adjuntos/actions"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
 const PUESTO_TIMESTAMP = "puesto.timeStamp"
 const MODO_PANTALLA = "ui.timeStampPantalla"
 const RESERVAS_AGENDAATENCIONSELECCIONADA = "reservas.agendaAtencionSeleccionada"
-
-export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_TIMESTAMP, MODO_PANTALLA, RESERVAS_AGENDAATENCIONSELECCIONADA)(LitElement) {
+const ADJUNTOS_DELVETERINARIOTIMESTAMP = "adjuntos.delVeterinarioTimeStamp"
+const ADJUNTOS_DELCLIENTETIMESTAMP = "adjuntos.delClienteTimeStamp"
+export class diagnosticoDetalleComponente extends connect(store, ADJUNTOS_DELVETERINARIOTIMESTAMP, ADJUNTOS_DELCLIENTETIMESTAMP, MEDIA_CHANGE, SCREEN, PUESTO_TIMESTAMP, MODO_PANTALLA, RESERVAS_AGENDAATENCIONSELECCIONADA)(LitElement) {
     constructor() {
         super();
         this.idioma = "ES"
@@ -43,28 +48,8 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
         this.hidden = true;
         this.reservas = null
         this.atencionEnCurso = []
-        this.archivo = [{
-            nombre: "Documento.jpg"
-        },
-        {
-            nombre: "Estudio.pdf"
-        },
-        {
-            nombre: "Estudio.pdf"
-        },
-        {
-            nombre: "Estudio.pdf"
-        },
-        {
-            nombre: "Estudio.pdf"
-        },
-        {
-            nombre: "Estudio.pdf"
-        },
-        {
-            nombre: "Estudio.pdf"
-        }
-        ]
+        this.archivoC = []
+        this.archivoV = []
     }
 
     static get styles() {
@@ -77,6 +62,7 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
             background-color: var(--color-gris-fondo) !important;
             overflow-x:none;
             overflow-y:auto;
+            padding: 0 0 0 0 !important;
         }
         :host([hidden]){
             display: none; 
@@ -94,12 +80,21 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
             grid-template-columns: 100%;
             align-items: center;
             grid-gap: .5rem;
+            background-color: var(--color-gris-claro);
         }
         :host(:not([media-size="small"])) #divTituloAtencion{
             grid-template-columns: 10% 90%;
         }
         :host([media-size="small"]) #divTituloAtencion{
             display: none;
+        }
+        #divTituloAtencionImg{
+            width: 4vh;
+            height:4vh;
+        }
+        #divTituloAtencionTxt{
+            font-size: var(--font-header-h1-menos-size);
+            font-weight: var(--font-header-h1-menos-weight);
         }
         #divAtencion{
             display:grid;
@@ -136,9 +131,12 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
             align-content: center;
             width: 100%;
             height:5vh;
-            font-size: var(--font-bajada-size);
-            font-weight: var(--font-bajada-weight);   
-        }
+            border-top: solid 1px var(--color-negro);
+            padding-left: 2vw;
+            font-size: var(--font-header-h1-menos-size);
+            font-weight: var(--font-header-h1-menos-weight);   
+            background-color: var(--color-gris-claro);
+       }
         #divDetalle{
             display:grid;
             padding: .5rem 1rem .5rem 1rem;
@@ -147,6 +145,7 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
             background-color: transparent;
             grid-gap: .2rem;
             border-radius: .4rem;
+            background-color: var(--color-gris-fondo);
         }
         `
     }
@@ -169,11 +168,11 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
                 <label  id="lblDiagnostico">${idiomas[this.idioma].diagnosticosDetalle.lblDiagnostico}</label>
                 <textarea id="txtDiagnostico" rows="8" readonly>${this.atencionEnCurso.Diagnostico}</textarea>
                 <div id="divRecetas">
-                    ${this.archivo.map(dato => html`
+                    ${this.archivoV.map(dato => html`
                         <div id="ciDivEtiqueta">
                             <div id="ciDivContenido" style="grid-column-start:1;grid-column-end:3">
-                                <div id="ciDivIcomo">${ARCHIVO}</div>
-                                <div id="ciDivNombre">${dato.nombre}</div>
+                                <div id="ciDivIcomo" .link="${dato.Url}" @click=${this.irA}>${ARCHIVO}</div>
+                                <div id="ciDivNombre" .link="${dato.Url}" @click=${this.irA}>${dato.Nombre}</div>
                             </div>
                         </div>
                     `)} 
@@ -191,11 +190,11 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
                 <label id="lblFecha">${idiomas[this.idioma].diagnosticosDetalle.fecha + " " + this.verFecha()}</label>           
                 <label id="lblHora">${idiomas[this.idioma].diagnosticosDetalle.hora + " " + this.verHora()}</label>
                 <div style="padding-top:.5rem;display:grid;grid-gap:.5rem">
-                    ${this.archivo.map(dato => html`
+                    ${this.archivoC.map(dato => html`
                         <div id="ciDivEtiqueta">
                             <div id="ciDivContenido" style="grid-column-start:1;grid-column-end:3">
-                                <div id="ciDivIcomo">${ARCHIVO}</div>
-                                <div id="ciDivNombre">${dato.nombre}</div>
+                                <div id="ciDivIcomo" .link="${dato.Url}" @click=${this.irA}>${ARCHIVO}</div>
+                                <div id="ciDivNombre" .link="${dato.Url}" @click=${this.irA}>${dato.Nombre}</div>
                             </div>
                         </div>
                     `)}
@@ -209,8 +208,22 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
             this.mediaSize = state.ui.media.size
             if (state.reservas.entitiesAgendaAtencionSeleccionada) {
                 this.atencionEnCurso = state.reservas.entitiesAgendaAtencionSeleccionada;
+                const adj = state.reservas.entitiesAgendaAtencionSeleccionada.Adjuntos
+                this.archivoV = adj ? adj.filter(adj => adj.Perfil == "Veterinario" || adj.Perfil == "veterinario mascotas") : []
+                this.archivoC = adj ? adj.filter(adj => adj.Perfil == "Cliente" || adj.Perfil == "cliente mascotas") : []
+            }
+            if (state.screen.name == "ate_diagnosticosDetalle") {
+
             }
             this.update();
+        }
+        if (name == ADJUNTOS_DELVETERINARIOTIMESTAMP) {
+            //this.archivoV = state.adjuntos.entitityDelVeterinario ? state.adjuntos.entitityDelVeterinario : []
+            //this.update();
+        }
+        if (name == ADJUNTOS_DELCLIENTETIMESTAMP) {
+            //this.archivoC = state.adjuntos.entityDelCliente ? state.adjuntos.entityDelCliente : []
+            //this.update();
         }
         // if (name == RESERVAS_AGENDAATENCIONSELECCIONADA) {
         //     if (state.reservas.entitiesAgendaAtencionSeleccionada) {
@@ -218,6 +231,11 @@ export class diagnosticoDetalleComponente extends connect(store, MEDIA_CHANGE, S
         //         this.update()
         //     }
         // }
+    }
+    irA(e) {
+        if (e.currentTarget.link) {
+            window.open(e.currentTarget.link)
+        }
     }
     comenzo() {
         var ret = ""

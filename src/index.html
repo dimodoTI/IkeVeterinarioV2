@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html translate="no">
 
 <head>
     <title>IKE-Veterinario</title>
@@ -30,7 +30,6 @@
     <meta name="apple-touch-fullscreen" content="yes">
 
     <link rel="manifest" crossorigin="use-credentials" href="manifest.txt" />
-    <meta name="apple-touch-fullscreen" content="yes">
     <style>
         #snackbarFondo {
             position: absolute;
@@ -49,7 +48,7 @@
         #snackbar {
             position: absolute;
             display: none;
-            background-color: rgb(238, 255, 143);
+            background-color: var(--color-celeste);
             color: rgb(0, 0, 0);
             padding: 1.5rem;
             z-index: 1000;
@@ -69,7 +68,7 @@
         }
 
         a {
-            color: #0a488f;
+            color: var(--color-rosa);
             font-weight: bold;
             cursor: pointer;
         }
@@ -93,7 +92,6 @@
 </script>
 
 <script>
-
     let newWorker;
     function showUpdateBar() {
         let snackbar = document.getElementById('snackbar');

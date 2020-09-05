@@ -42,6 +42,9 @@ import {
 import {
   middleware as notificacion
 } from "./notificacion/middleware";
+import {
+  middleware as adjuntos
+} from "./adjuntos/middleware";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -56,8 +59,8 @@ let mdw = [
   ...atenciones,
   ...reservasDelDia,
   ...chat,
-  ...notificacion
-
+  ...notificacion,
+  ...adjuntos
 ]
 
 if (process.env.NODE_ENV !== 'production') {

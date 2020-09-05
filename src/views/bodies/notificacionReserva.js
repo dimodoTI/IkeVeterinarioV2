@@ -305,7 +305,8 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
                     Veterinario: arr.Atencion ? arr.Atencion.Veterinario.Apellido + ", " + arr.Atencion.Veterinario.Nombre : "",
                     Diagnostico: arr.Atencion ? arr.Atencion.Diagnostico : 0,
                     InicioAtencion: arr.Atencion ? arr.Atencion.InicioAtencion : null,
-                    FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null
+                    FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null,
+                    Adjuntos: arr.Adjuntos
                 }
                 store.dispatch(agendaAtencionSeleccionada(atencionCompleta))
                 store.dispatch(goTo("sol_diagnosticodetalle"))
@@ -340,8 +341,8 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
     verDetalle(e) {
         store.dispatch(chatReserva(e.currentTarget.item.item.reservaId))
     }
-    verLink() {
-        window.open("http://www.ikeargentina.com.ar", '_blank')
+    verLink(e) {
+        window.open(e.currentTarget.item.item.link, '_blank')
     }
     responder(e) {
         store.dispatch(footherMuestraTapa(true))

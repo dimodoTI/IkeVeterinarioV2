@@ -17,7 +17,6 @@ import {
 } from "../../redux/datos/idiomas"
 import { ARCHIVO, TRASH } from "../../../assets/icons/icons";
 import { cardArchivo } from "../css/cardArchivo"
-
 import { add as addAtenciones } from "../../redux/atenciones/actions";
 import { agendaAtencionSeleccionada, getAgenda as getReservasAgenda } from "../../redux/reservas/actions";
 import {
@@ -27,14 +26,19 @@ import {
     isInLayout
 } from "../../redux/screens/screenLayouts";
 import { showWarning } from "../../redux/ui/actions";
+import {
+    delVeterinario, upload,
+    borrarAdjunto
+} from "../../redux/adjuntos/actions"
 
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
 const ATENCIONES_ADDTIMESTAMP = "atenciones.addTimeStamp"
 const ATENCIONES_ERROROTROSTIMESTAMP = "atenciones.commandErrorTimeStamp"
 const RESERVAS_NUEVAATENCIONDESDEVIDEO = "reservas.agendaNuevaAtencionDesdeVideo"
+const ADJUNTOS_TIMESTAMP = "adjuntos.delVeterinarioTimeStamp"
 
-export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, RESERVAS_NUEVAATENCIONDESDEVIDEO, ATENCIONES_ADDTIMESTAMP, ATENCIONES_ERROROTROSTIMESTAMP)(LitElement) {
+export class diagnosticoComponente extends connect(store, ADJUNTOS_TIMESTAMP, MEDIA_CHANGE, SCREEN, RESERVAS_NUEVAATENCIONDESDEVIDEO, ATENCIONES_ADDTIMESTAMP, ATENCIONES_ERROROTROSTIMESTAMP)(LitElement) {
     constructor() {
         super();
         this.idioma = "ES"
@@ -42,13 +46,7 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
         this.hidden = false;
         this.atencionCompleta = {}
         this.reservaEnCurso = {}
-        this.archivo = [{ nombre: "Documento.jpg" },
-        { nombre: "Estudio.pdf" },
-        { nombre: "Estudio.pdf" },
-        { nombre: "Estudio.pdf" },
-        { nombre: "Estudio.pdf" },
-        { nombre: "Estudio.pdf" },
-        { nombre: "Estudio.pdf" }]
+        this.archivo = []
     }
 
     static get styles() {
@@ -126,10 +124,10 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
                 ${this.archivo.map(dato => html`
                     <div id="ciDivEtiqueta">
                         <div id="ciDivContenido">
-                            <div id="ciDivIcomo">${ARCHIVO}</div>
-                            <div id="ciDivNombre">${dato.nombre}</div>
+                            <div id="ciDivIcomo" .link="${dato.Url}"  @click=${this.irA}>${ARCHIVO}</div>
+                            <div id="ciDivNombre" .link="${dato.Url}"  @click=${this.irA}>${dato.Nombre}</div>
                         </div>
-                        <div id="ciDivDelete">${TRASH}</div>
+                        <div id="ciDivDelete" .item="${dato}" @click="${this.borrarAdjunto}">${TRASH}</div>
                     </div>
                 `)} 
             </div>
@@ -138,10 +136,75 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
             </div> -->
             <div id="divBtn">
                 <button id="btnAceptar" class="btn" apagado btn1 @click=${this.clickAceptar}>${idiomas[this.idioma].ate_diagnosticos.btnAceptar}</button>
-                <button id="btnAdjuntar" class="btn" btn1 >${idiomas[this.idioma].ate_diagnosticos.btnAdjuntar}</button>
+                <form id="form" name="form" action="/uploader" enctype="multipart/form-data" method="POST" style="justify-self: center;">
+                    <input id="files" name="files" type="file" size="1" style="display:none" @change="${this.uploadFiles}" />
+                    <button type="button" class="btn" id="btnAdjuntar" btn1 @click=${this.adjuntar}>
+                        ${idiomas[this.idioma].ate_diagnosticos.btnAdjuntar}
+                    </button>
+                </form>  
                 <button id="btnCancelar" class="btn" btn3  @click=${this.clickCancelar}>${idiomas[this.idioma].ate_diagnosticos.btnCancelar}</button>
             </div>
         `
+    }
+    stateChanged(state, name) {
+        if ((name == SCREEN || name == MEDIA_CHANGE)) {
+            this.mediaSize = state.ui.media.size
+            if (state.screen.name == "ate_diagnosticos" || state.screen.name == "ate_videos") {
+                store.dispatch(delVeterinario(this.reservaEnCurso.ReservaId, store.getState().cliente.datos.token))
+            }
+            this.update();
+        }
+        // if (state.screen.name == "ate_videos") {
+        //     store.dispatch(delVeterinario(this.reservaEnCurso.ReservaId, store.getState().cliente.datos.token))
+        // }
+        if (name == RESERVAS_NUEVAATENCIONDESDEVIDEO) {
+            this.reservaEnCurso = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
+        }
+        if (name == ATENCIONES_ADDTIMESTAMP && state.screen.name == "ate_diagnosticos") {
+            store.dispatch(agendaAtencionSeleccionada(this.atencionCompleta))
+            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, null))
+            this.shadowRoot.querySelector("#txtDiagnostico").value = ""
+            if (this.mediaSize == "small") {
+                store.dispatch(goTo("ate_diagnosticosDetalle"))
+            } else {
+                store.dispatch(goTo("ate_agendas"))
+            }
+        }
+        if (name == ATENCIONES_ERROROTROSTIMESTAMP && state.screen.name == "ate_diagnosticos") {
+            store.dispatch(showWarning(store.getState().screen.name, 0))
+        }
+        if (name == ADJUNTOS_TIMESTAMP) {
+            this.archivo = state.adjuntos.entitityDelVeterinario ? state.adjuntos.entitityDelVeterinario : []
+            this.update()
+        }
+    }
+
+    irA(e) {
+        if (e.currentTarget.link) {
+            window.open(e.currentTarget.link)
+        }
+    }
+    borrarAdjunto(e) {
+        const id = e.currentTarget.item.Id
+        let datosPatch = [{
+            "op": "replace",
+            "path": "/Activo",
+            "value": false
+        }]
+        store.dispatch(borrarAdjunto(id, datosPatch, store.getState().cliente.datos.token))
+    }
+    adjuntar(e) {
+        this.shadowRoot.querySelector("#files").click()
+    }
+    uploadFiles() {
+        var input = this.shadowRoot.querySelector("#files");
+        var files = input.files;
+        var formData = new FormData();
+        for (var i = 0; i != files.length; i++) {
+            formData.append("files", files[i]);
+        }
+        formData.append("ReservaId", this.reservaEnCurso.ReservaId)
+        store.dispatch(upload(this.reservaEnCurso.ReservaId, formData, store.getState().cliente.datos.token))
     }
     activar() {
         this.activo = true
@@ -158,31 +221,6 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
     }
     firstUpdated(changedProperties) {
     }
-    stateChanged(state, name) {
-        if ((name == SCREEN || name == MEDIA_CHANGE)) {
-            this.mediaSize = state.ui.media.size
-            if (state.screen.name == "ate_diagnosticos") {
-
-            }
-            this.update();
-        }
-        if (name == RESERVAS_NUEVAATENCIONDESDEVIDEO) {
-            this.reservaEnCurso = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
-        }
-        if (name == ATENCIONES_ADDTIMESTAMP && state.screen.name == "ate_diagnosticos") {
-            store.dispatch(agendaAtencionSeleccionada(this.atencionCompleta))
-            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion eq 2020-07-29"))
-            this.shadowRoot.querySelector("#txtDiagnostico").value = ""
-            if (this.mediaSize == "small") {
-                store.dispatch(goTo("ate_diagnosticosDetalle"))
-            } else {
-                store.dispatch(goTo("ate_agendas"))
-            }
-        }
-        if (name == ATENCIONES_ERROROTROSTIMESTAMP && state.screen.name == "ate_diagnosticos") {
-            store.dispatch(showWarning(store.getState().screen.name, 0))
-        }
-    }
     clickCancelar() {
         store.dispatch(goTo("ate_agendas"))
     }
@@ -198,6 +236,20 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
             //     this.reservaEnCurso = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
             // }
             let res = this.reservaEnCurso
+            var arrAdj = []
+            if (res.Adjuntos.length > 0) {
+                res.Adjuntos.forEach(function (p) {
+                    if (p.Perfil == "Cliente" || p.Perfil == "cliente mascota") {
+                        arrAdj.push(p)
+                    }
+                })
+            }
+            if (this.archivo.length > 0) {
+                this.archivo.forEach(function (p) {
+                    let adj = { Id: p.Id, Nombre: p.Nombre, Perfil: p.Perfil, Url: p.Url, Activo: true }
+                    arrAdj.push(adj)
+                })
+            }
             this.atencionCompleta = {
                 ReservaId: res.ReservaId,
                 FechaReserva: res.FechaReserva,
@@ -210,7 +262,8 @@ export class diagnosticoComponente extends connect(store, MEDIA_CHANGE, SCREEN, 
                 Veterinario: res.Veterinario,
                 Diagnostico: this.shadowRoot.querySelector("#txtDiagnostico").value,
                 InicioAtencion: res.InicioAtencion,
-                FinAtencion: d
+                FinAtencion: d,
+                Adjuntos: arrAdj
             }
             let addAte = {
                 ReservaId: res.ReservaId,

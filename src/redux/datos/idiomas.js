@@ -124,7 +124,7 @@ export const idiomas = {
             subTitulo: "Accedé a la atención.",
             tituloDetalle: "Indicá el diagnóstico y pasos a seguir:",
             diagnostico_ph: "Tomar jarabe para la tos CanTos 200ml. 1 tapita cada 8hs durante 7 días. Si el cuadro se prolonga volver a consultar.",
-            btnAdjuntar: "Adjuntar archivo",
+            btnAdjuntar: "Adj.archivo",
             btnAceptar: "Grabar",
             btnCancelar: "Cancelar",
             warningTitulo: ["Campo diagnostico."],

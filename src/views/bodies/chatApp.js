@@ -98,6 +98,10 @@ export class chatApp extends connect(store, CHAT_GRABAR_RESPUESTA, CHAT_GRABAR_R
         :host(:not([media-size="small"])[current="ate_Chat"]) #divTituloChat{
             display: grid;
         }
+        #divTituloChatImg{
+            width: 4vh;
+            height:4vh;
+        }
         #divRegistros{
             display:grid;
             grid-gap: .2rem;

@@ -383,6 +383,9 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         store.dispatch(goTo("ate_agendas"))
 
         let arr = e.currentTarget.item;
+        //store.dispatch(delVeterinario(arr.Id, store.getState().cliente.datos.token))
+        //store.dispatch(delCliente(arr.Id, store.getState().cliente.datos.token))
+
         var d = new Date()
         if (store.getState().reservas.entitiesAgendaNuevaAtencionDesdeVideo) {
             if (store.getState().reservas.entitiesAgendaNuevaAtencionDesdeVideo.ReservaId == arr.Id) {
@@ -398,7 +401,8 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             Motivo: arr.Motivo,
             VeterinarioId: store.getState().cliente.datos.id,
             Veterinario: store.getState().cliente.datos.apellido + " " + store.getState().cliente.datos.nombre,
-            InicioAtencion: d
+            InicioAtencion: d,
+            Adjuntos: arr.Adjuntos
         }
         store.dispatch(agendaNuevaAtencionDesdeVideo(myJson))
         if (this.videoOAtencion) {
@@ -412,6 +416,10 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         }
     }
     clickAtencion(e) {
+        let arr = e.currentTarget.item;
+        //store.dispatch(delVeterinario(arr.Id, store.getState().cliente.datos.token))
+        //store.dispatch(delCliente(arr.Id, store.getState().cliente.datos.token))
+
         this.clickVideoOAtencion = "atencion"
         if (store.getState().screen.name.indexOf("his_") == 0) {
             store.dispatch(goTo("his_Agendas"))
@@ -424,7 +432,6 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             store.dispatch(agendaAtencionSeleccionada(myJson))
         }
 
-        let arr = e.currentTarget.item;
         let filtroPorMascota = "MascotaId eq " + arr.MascotaId
         store.dispatch(getReservasAndAtencionesDeUnaMascota(store.getState().cliente.datos.token, filtroPorMascota))
 
@@ -448,7 +455,8 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
             Veterinario: vetNombre,
             Diagnostico: arr.Atencion ? arr.Atencion.Diagnostico : "",
             InicioAtencion: arr.Atencion ? arr.Atencion.InicioAtencion : null,
-            FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null
+            FinAtencion: arr.Atencion ? arr.Atencion.FinAtencion : null,
+            Adjuntos: arr.Adjuntos
         }
         return myJson
     }
@@ -461,10 +469,10 @@ export class pantallaAgenda extends connect(store, MEDIA_CHANGE, SCREEN, PUESTO_
         let filtroFecha = d.getUTCFullYear() + "-" + (d.getUTCMonth() + 1) + "-" + d.getUTCDate()
         //        store.dispatch(getReservasAgenda(miToken, "FechaAtencion ge " + filtroFecha))
         if (store.getState().screen.name.indexOf("his_") == 0) {
-            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion eq 2020-07-29"))
+            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, null))
         }
         if (store.getState().screen.name.indexOf("ate_") == 0) {
-            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, "FechaAtencion eq 2020-07-29"))
+            store.dispatch(getReservasAgenda(store.getState().cliente.datos.token, null))
         }
         // las consultas las hago en mis consultas, aca, en pie y diagnostico
         this.update()

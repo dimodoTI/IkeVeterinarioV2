@@ -28,16 +28,19 @@ export const cardArchivo = css`
             height:4vh;
             width:4vh;
             justify-self: center;
+            cursor: pointer;
         }
         #ciDivNombre{
             font-size: var(--font-bajada-size);
             font-weight: var(--font-bajada-weight);   
             color: var(--color-celeste);            
+            cursor: pointer;
         }
         #ciDivDelete {
             justify-self: right;
             height:5vh;
             width:5vh;
+            cursor: pointer;
         }
 
 `
