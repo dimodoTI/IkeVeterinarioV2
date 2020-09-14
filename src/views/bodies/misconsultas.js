@@ -182,7 +182,7 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
                         </div>
 
                         <div style="padding-left:.84rem;padding-right: .84rem;padding-bottom: .84rem;">
-                            <button style="width: 100%;height:8vh" id="asistencia" btn1 >${idiomas[this.idioma].misConsultas.footerLeyenda}</button>
+                            <button style="width: 100%;height:8vh" id="asistencia" btn1 @click=${this.clickAyuda}>${idiomas[this.idioma].misConsultas.footerLeyenda}</button>
                         </div>
                     </div>
                 </div>
@@ -202,7 +202,9 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
             this.update();
         }
     }
-
+    clickAyuda(e) {
+        location.href = "tel:08001221453"
+    }
     irAgenda(e) {
         //store.dispatch(goTo("agendas"))
         store.dispatch(getReservasDelDia(null, {}, "ate_agendas"))

@@ -115,6 +115,10 @@ export class pantallaInicioSesion extends connect(store, MEDIA_CHANGE, SCREEN, L
             const haveBodyArea = state.screen.layouts[this.mediaSize].areas.find(a => a == this.area)
             const SeMuestraEnUnasDeEstasPantallas = "-inicioSesion-".indexOf("-" + state.screen.name + "-") != -1
             if (haveBodyArea && SeMuestraEnUnasDeEstasPantallas) {
+                if (localStorage.getItem("email") && localStorage.getItem("clave")) {
+                    this.shadowRoot.querySelector("#txtClave").value = localStorage.getItem("clave")
+                    this.shadowRoot.querySelector("#txtMail").value = localStorage.getItem("email")
+                }
                 this.hidden = false
             }
             this.update();
@@ -126,6 +130,7 @@ export class pantallaInicioSesion extends connect(store, MEDIA_CHANGE, SCREEN, L
         this.activo = true
         const clave = this.shadowRoot.querySelector("#txtClave")
         const email = this.shadowRoot.querySelector("#txtMail")
+
         if (clave.value.length < 4) {
             this.activo = false
         }
@@ -164,6 +169,11 @@ export class pantallaInicioSesion extends connect(store, MEDIA_CHANGE, SCREEN, L
             if (this.valido()) {
                 const clave = this.shadowRoot.querySelector("#txtClave").value
                 const email = this.shadowRoot.querySelector("#txtMail").value
+                if (this.shadowRoot.querySelector("#chk").check) {
+                    localStorage.clear();
+                    localStorage.setItem("email", email);
+                    localStorage.setItem("clave", clave);
+                }
                 store.dispatch(login(email, clave))
                 //store.dispatch(goTo("misConsultas"))
                 //store.dispatch(modoPantalla("principal", "inicioSesion"));

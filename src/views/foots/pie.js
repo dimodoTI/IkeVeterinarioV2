@@ -219,7 +219,7 @@ export class pieComponente extends connect(store, FOOTHER_TAPA, MEDIA_CHANGE, SC
             <div id="divAyudaPie">
                 <hr style="width:90%; border-top: 2px solid var(--color-gris-claro)">
                 <div><label class="lblayudaPie">${idiomas[this.idioma].pie.lblAyuda01}</label></div>
-                <button btn3 id="btn-ayudaPie" @click=${this.clickAyudaPie}>${idiomas[this.idioma].pie.btnAyuda}</button>
+                <button btn3 id="btn-ayudaPie" @click=${this.clickAyuda}>${idiomas[this.idioma].pie.btnAyuda}</button>
             </div>
             <div id="divTapa"></div>
 
@@ -238,6 +238,9 @@ export class pieComponente extends connect(store, FOOTHER_TAPA, MEDIA_CHANGE, SC
             this.update();
         }
 
+    }
+    clickAyuda(e) {
+        location.href = "tel:08001221453"
     }
     clickBoton1() {
         store.dispatch(goTo("misConsultas"))

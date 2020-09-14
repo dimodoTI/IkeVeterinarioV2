@@ -3,12 +3,13 @@ import {
     LitElement,
     css
 } from "lit-element";
-import {store} from "../../redux/store";
-import {connect} from "@brunomon/helpers";
+import { store } from "../../redux/store";
+import { connect } from "@brunomon/helpers";
 export class miCheckbox extends connect(store)(LitElement) {
     constructor() {
         super();
         this.label = ""
+        this.check = false
     }
 
     static get styles() {
@@ -138,20 +139,29 @@ export class miCheckbox extends connect(store)(LitElement) {
         `
     }
     render() {
-        return html `
+        return html`
             <label class="controlCkh controlCkh-checkbox">
                 ${this.label}
-                <input type="checkbox" />
+                <input type="checkbox" @click=${this.click}/>
                 <div class="controlCkh_indicator"></div>
             </label>
         `
     }
+
+    click() {
+        this.check = !this.check
+    }
+
     static get properties() {
         return {
             label: {
                 type: String,
                 reflect: ""
-            }          
+            },
+            check: {
+                type: Boolean,
+                reflect: true
+            }
         }
     }
 }

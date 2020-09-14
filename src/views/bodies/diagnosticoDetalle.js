@@ -60,7 +60,7 @@ export class diagnosticoDetalleComponente extends connect(store, ADJUNTOS_DELVET
             display: grid;
             position: relative;
             background-color: var(--color-gris-fondo) !important;
-            overflow-x:none;
+            overflow-x:hidden;
             overflow-y:auto;
             padding: 0 0 0 0 !important;
         }
