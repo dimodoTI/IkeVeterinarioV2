@@ -251,8 +251,8 @@ export class videoRTC extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
             // const configuration = {
             //     iceServers: [{
             //         urls: [
-            //             "stun:64.227.109.20:80?transport=tcp",
-            //             "stun:64.227.109.20:49160?transport=tcp"
+            //             "stun:64.227.109.20:80",
+            //             "stun:64.227.109.20:3478"
             //         ]
             //     }]
             // };
