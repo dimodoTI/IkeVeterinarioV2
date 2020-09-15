@@ -237,13 +237,22 @@ export class videoRTC extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
             yourVideo.srcObject = this.stream;
             yourVideo.muted = true
 
+            // const configuration = {
+            //     iceServers: [{
+            //         urls: [
+            //             "stun:stun.l.google.com:19302",
+            //             "stun:stun1.l.google.com:19302",
+            //             "stun:stun2.l.google.com:19302",
+            //             "stun:stun.l.google.com:19302?transport=udp",
+            //         ]
+            //     }]
+            // };
+
             const configuration = {
                 iceServers: [{
                     urls: [
-                        "stun:stun.l.google.com:19302",
-                        "stun:stun1.l.google.com:19302",
-                        "stun:stun2.l.google.com:19302",
-                        "stun:stun.l.google.com:19302?transport=udp",
+                        "turn:64.227.109.20:80?transport=tcp",
+                        "turn:64.227.109.20:49160?transport=tcp"
                     ]
                 }]
             };
