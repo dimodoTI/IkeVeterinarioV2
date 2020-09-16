@@ -39,6 +39,7 @@ export class videoRTC extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
         this.area = "body"
         this.idioma = "ES"
         this.current = ""
+        this.reserva = null
     }
 
     static get styles() {
@@ -237,25 +238,23 @@ export class videoRTC extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
             yourVideo.srcObject = this.stream;
             yourVideo.muted = true
 
-            const configuration = {
-                iceServers: [{
-                    urls: [
-                        "stun:stun.l.google.com:19302",
-                        "stun:stun1.l.google.com:19302",
-                        "stun:stun2.l.google.com:19302",
-                        "stun:stun.l.google.com:19302?transport=udp",
-                    ]
-                }]
-            };
-
             // const configuration = {
             //     iceServers: [{
             //         urls: [
-            //             "stun:64.227.109.20:80",
-            //             "stun:64.227.109.20:3478"
+            //             "stun:stun.l.google.com:19302",
+            //             "stun:stun1.l.google.com:19302",
+            //             "stun:stun2.l.google.com:19302",
+            //             "stun:stun.l.google.com:19302?transport=udp",
             //         ]
             //     }]
             // };
+            const configuration = {
+                iceServers: [{
+                    urls: "turn:dimodo.ga",
+                    username: "dimodo",
+                    credential: "dimodo"
+                }]
+            }
 
             const remoteStream = new MediaStream();
             theirVideo.srcObject = remoteStream;
@@ -388,8 +387,9 @@ export class videoRTC extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
             this.orientation = state.ui.media.orientation
             this.current = state.screen.name
             if (this.current == "ate_videos") {
+                this.reserva = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
                 if (!this.yours) {
-                    this.sala = "dimodo"
+                    this.sala = "dimodo" + this.reserva.ReservaId.toString()
                     this.connectVeterinario()
                 }
             }
