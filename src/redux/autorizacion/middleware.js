@@ -116,7 +116,7 @@ export const processLogin = ({
             dispatch(setCampana(getState().cliente.datos.id))
 
 
-            connection = new WebSocket('wss://ws.chat.dimodo.ga:9080');
+            connection = new WebSocket('wss://ws.chat.ikeargentina.com.ar:9080');
             connection.onopen = () => {
                 connection.send(JSON.stringify({
                     type: NEW_CONNECTION,

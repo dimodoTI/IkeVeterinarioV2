@@ -6,16 +6,16 @@ import {
   fetchFactory
 } from "../libs/fetchFactory"
 
-const webApiUsuarios = "https://apis.usuarios.dimodo.ga/api"
-const webApiUsuariosOdata = "https://apis.usuarios.dimodo.ga"
-const webApiMascotas = "https://apis.mascotas.dimodo.ga/api"
-const webApiMascotasOdata = "https://apis.mascotas.dimodo.ga"
-const webApiPublicacion = "https://apis.publicaciones.dimodo.ga/api"
-const webApiPublicacionOdata = "https://apis.publicaciones.dimodo.ga"
+const webApiUsuarios = "https://apis.usuarios.ikeargentina.com.ar/api"
+const webApiUsuariosOdata = "https://apis.usuarios.ikeargentina.com.ar"
+const webApiMascotas = "https://apis.mascotas.ikeargentina.com.ar/api"
+const webApiMascotasOdata = "https://apis.mascotas.ikeargentina.com.ar"
+const webApiPublicacion = "https://apis.publicaciones.ikeargentina.com.ar/api"
+const webApiPublicacionOdata = "https://apis.publicaciones.ikeargentina.com.ar"
 //const webApiChat = "https://localhost:5001/api"
-const webApiChat = "https://apis.chat.dimodo.ga/api"
+const webApiChat = "https://apis.chat.ikeargentina.com.ar/api"
 //const webApiChatOdata = "https://localhost:5001"
-const webApiChatOdata = "https://apis.chat.dimodo.ga"
+const webApiChatOdata = "https://apis.chat.ikeargentina.com.ar"
 
 
 const mascotaOdata = ODataFetchFactory({
