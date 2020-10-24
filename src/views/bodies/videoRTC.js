@@ -250,7 +250,7 @@ export class videoRTC extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
             // };
             const configuration = {
                 iceServers: [{
-                    urls: "turn:ikeargentina.com.ar",
+                    urls: "turn:mascotas.ikeargentina.com.ar",
                     username: "dimodo",
                     credential: "dimodo"
                 }]
