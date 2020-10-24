@@ -137,11 +137,11 @@ export class viewManager extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement
             <pantalla-notificacionreserva class="body"></pantalla-notificacionreserva>
             <diagnostico-detallesolo class="body"></diagnostico-detallesolo>
             <pie-componente class="foot"></pie-componente>
-
-            <chat-solo class="body" ></chat-solo>
-            <historico-compuestas class="body" ></historico-compuestas>
-            <atenciones-compuestas class="body" ></atenciones-compuestas>
-            <pantalla-warning ></pantalla-warning>
+            
+            <chat-solo class="body"></chat-solo>
+            <historico-compuestas class="body"></historico-compuestas>
+            <atenciones-compuestas class="body"></atenciones-compuestas>
+            <pantalla-warning></pantalla-warning>
             <dimodo-spinner type="spinner2"></dimodo-spinner>
 
         `

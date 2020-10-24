@@ -81,7 +81,8 @@ export class pantallaMisconsultas extends connect(store, MEDIA_CHANGE, SCREEN)(L
             width:100%;
             padding-top:.84rem;
             overflow-x: none; 
-            overflow-y: auto; 
+            overflow-y: scroll; 
+            -webkit-overflow-scrolling: touch;
         }
         .cuerpo::-webkit-scrollbar {
             display: none;
