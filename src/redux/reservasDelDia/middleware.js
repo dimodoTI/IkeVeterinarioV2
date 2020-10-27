@@ -27,6 +27,7 @@ export const get = ({
     if (action.type === GET) {
         const token = getState().cliente.datos.token
         action.optionsPuestos.token = token
+        action.optionsPuestos.filter = "Activo"
         const optionsReservas = {}
         optionsReservas.token = token
         optionsReservas.expand = "Mascota($select = Nombre), Tramo, Atencion($expand=Veterinario), Adjuntos($select = Id, Perfil, Nombre, Url, Activo;$filter = Activo)"
