@@ -1,6 +1,6 @@
 /** @format */
 
-import { store } from "../store";
+//import { store } from "../store";
 import { WebSocketNotificaciones } from "../../libs/webSocket";
 
 export const ON_OPEN = "[notificactions] ON_OPEN";
@@ -26,6 +26,6 @@ export const onMessage = (message) => ({
 	message: message,
 });
 
-export const WSconnect = () => {
-	WebSocketNotificaciones(store.dispatch, "wss://ws.chat.ikeargentina.com.ar:9080", store.getState().cliente.datos.id , onOpen, onMessage, onError, onClose);
+export const WSconnect = (dispatch) => {
+	WebSocketNotificaciones(dispatch, "wss://ws.chat.ikeargentina.com.ar:9080", null , onOpen, onMessage, onError, onClose);
 };

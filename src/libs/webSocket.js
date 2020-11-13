@@ -7,18 +7,8 @@ export const WebSocketNotificaciones = (dispatch, url, id, onOpen, onMessage, on
 	let ws = new WebSocket(url);
 
 	ws.onopen = () => {
-		let connectionId = id;
 
-		ws.send(
-			JSON.stringify({
-				type: "new-connection",
-				id: connectionId ,
-				rol: "vet",
-				data: "",
-			})
-		);
-
-		if (onOpen) dispatch(onOpen(ws, connectionId));
+		if (onOpen) dispatch(onOpen(ws, id));
 	};
 
 	ws.onerror = (err) => {

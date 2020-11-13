@@ -134,7 +134,7 @@ export const processLogin = ({
             //     console.log("Got error", err);
             // };
 
-            WSconnect();
+            WSconnect(dispatch);
 
             if (getState().screen.name == "inicioSesion") {
                 if (getState().cliente.datos.perfil.toUpperCase().indexOf("VETERINARIO") != -1 || getState().cliente.datos.perfil == "Admin") {
