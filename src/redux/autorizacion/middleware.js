@@ -35,6 +35,7 @@ import {
 } from "../cliente/actions";
 import { goTo } from "../routing/actions";
 import { showWarning } from "../ui/actions";
+import { WSconnect } from "../notifications/actions";
 
 export const login = ({
     dispatch
@@ -96,7 +97,7 @@ export const updateProfile = ({
         }, UPDATE_PROFILE_SUCCESS, UPDATE_PROFILE_ERROR, action.token))
     }
 };
-
+ 
 const NEW_CONNECTION = "new-connection"
 let connection = null
 export const processLogin = ({
@@ -115,24 +116,25 @@ export const processLogin = ({
             dispatch(setDatos(action.payload.receive))
             dispatch(setCampana(getState().cliente.datos.id))
 
+            // connection = new WebSocket('wss://ws.chat.ikeargentina.com.ar:9080');
+            // connection.onopen = () => {
+            //     connection.send(JSON.stringify({
+            //         type: NEW_CONNECTION,
+            //         id: action.payload.receive.id,
+            //         rol: "vet",
+            //         name: action.payload.receive.nombre
+            //     }));
+            // };
+            // connection.onmessage = (msg) => {
+            //     let data = JSON.parse(msg.data);
+            //     dispatch(showCampana())
+            // };
 
-            connection = new WebSocket('wss://ws.chat.ikeargentina.com.ar:9080');
-            connection.onopen = () => {
-                connection.send(JSON.stringify({
-                    type: NEW_CONNECTION,
-                    id: action.payload.receive.id,
-                    rol: "vet",
-                    name: action.payload.receive.nombre
-                }));
-            };
-            connection.onmessage = (msg) => {
-                let data = JSON.parse(msg.data);
-                dispatch(showCampana())
-            };
+            // connection.onerror = (err) => {
+            //     console.log("Got error", err);
+            // };
 
-            connection.onerror = (err) => {
-                console.log("Got error", err);
-            };
+            WSconnect();
 
             if (getState().screen.name == "inicioSesion") {
                 if (getState().cliente.datos.perfil.toUpperCase().indexOf("VETERINARIO") != -1 || getState().cliente.datos.perfil == "Admin") {
