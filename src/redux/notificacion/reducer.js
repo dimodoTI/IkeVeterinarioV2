@@ -10,7 +10,7 @@ import {
     GET_NOTIFICACION_PENDIENTES_SUCCESS,
     GET_NOTIFICACION_PENDIENTES_ERROR,
     GET_NOTIFICACION_CHAT_PENDIENTES_SUCCESS,
-    GET_NOTIFICACION_CHAT_PENDIENTES_ERROR
+    GET_NOTIFICACION_CHAT_PENDIENTES_ERROR, ELIMINADO_ERROR, ELIMINADO_SUCCESS 
 } from "../notificacion/actions";
 import { store } from "../store";
 
@@ -20,9 +20,11 @@ const initialState = {
     timeStamp: null,
     updateTimeStamp: null,
     leidoTimeStamp: null,
+    eliminadoTimeStamp: null,
     errorTimeStamp: null,
     commandErrorTimeStamp: null,
     leidoErrorTimeStamp: null,
+    eliminadoErrorTimeStamp: null,
     entityDetalleCabecera: null,
     entityDetalleCabeceraError: null,
     entityDetalleCabeceraTimeStamp: null,
@@ -63,6 +65,9 @@ export const reducer = (state = initialState, action) => {
         case LEIDO_SUCCESS:
             newState.leidoTimeStamp = (new Date()).getTime();
             break;
+        case ELIMINADO_SUCCESS:
+            newState.eliminadoTimeStamp = new Date().getTime();
+            break;    
         case GET_ERROR:
             newState.errorTimeStamp = (new Date()).getTime();
             break;
@@ -81,7 +86,9 @@ export const reducer = (state = initialState, action) => {
         case LEIDO_ERROR:
             newState.leidoErrorTimeStamp = (new Date()).getTime();
             break;
-
+        case ELIMINADO_ERROR:
+            newState.eliminadoErrorTimeStamp = new Date().getTime();
+            break;
     }
     return newState;
 };

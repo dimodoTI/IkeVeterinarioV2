@@ -169,6 +169,9 @@ export class diagnosticoComponente extends connect(store, ADJUNTOS_TIMESTAMP, ME
             } else {
                 store.dispatch(goTo("ate_agendas"))
             }
+            if (this.leave){
+                this.leave()
+            }
         }
         if (name == ATENCIONES_ERROROTROSTIMESTAMP && state.screen.name == "ate_diagnosticos") {
             store.dispatch(showWarning(store.getState().screen.name, 0))
@@ -234,7 +237,8 @@ export class diagnosticoComponente extends connect(store, ADJUNTOS_TIMESTAMP, ME
             let h = (d.getHours() * 100) + d.getMinutes()
             // if (state.reservas.entitiesAgendaNuevaAtencionDesdeVideo) {
             //     this.reservaEnCurso = state.reservas.entitiesAgendaNuevaAtencionDesdeVideo
-            // }
+            // } 
+
             let res = this.reservaEnCurso
             var arrAdj = []
             if (res.Adjuntos.length > 0) {

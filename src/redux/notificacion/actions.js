@@ -19,6 +19,10 @@ export const GET_NOTIFICACION_CHAT_PENDIENTES_ERROR = "[notificacion] GET_NOTIFI
 export const PATCH_ERROR = "[notificacion] PATCH error";
 export const LEIDO_ERROR = "[notificacion] LEIDO error";
 
+export const ELIMINADO = "[notificacion] eliminado";
+export const ELIMINADO_SUCCESS = "[notificacion] eliminado success";
+export const ELIMINADO_ERROR = "[notificacion] eliminado error";
+
 export const get = (options, onSuccess = GET_SUCCESS, onError = GET_ERROR) => ({
     type: GET,
     options: options,
@@ -68,4 +72,10 @@ export const leido = (id, body, token) => ({
     id: id,
     body: body,
     token: token
+});
+export const eliminado = (id, body, token) => ({
+    type: ELIMINADO,
+    id: id,
+    body: body,
+    token: token,
 });

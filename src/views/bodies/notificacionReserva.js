@@ -12,7 +12,7 @@ import {
     paginaAnterior, footherMuestraTapa, headerMuestraTapa, showWarning
 } from "../../redux/ui/actions"
 import { getAgenda, agendaAtencionSeleccionada } from "../../redux/reservas/actions"
-import { leido as leidoNotificacion, patch as patchNotificacion } from "../../redux/notificacion/actions"
+import { leido as leidoNotificacion, eliminado, patch as patchNotificacion } from "../../redux/notificacion/actions"
 import {
     goTo
 } from "../../redux/routing/actions"
@@ -26,12 +26,14 @@ const CHAT_GRABAR_RESPUESTA = "chat.grabarRespuestaTimeStamp"
 const CHAT_GRABAR_RESPUESTA_ERROR = "chat.grabarRespuestaErrorTimeStamp"
 const NOTIF_LEIDO_TIMESTAMP = "notificacion.leidoTimeStamp"
 const NOTIF_LEIDO_ERROR = "notificacion.leidoErrorTimeStamp"
+const NOTIF_ELIMINADO_TIMESTAMP = "notificacion.eliminadoTimeStamp"
+const NOTIF_ELIMINADO_ERROR = "notificacion.eliminadoErrorTimeStamp"
 const NOTIF_PATCH_TIMESTAMP = "notificacion.updateTimeStamp"
 const NOTIF_PATCH_ERROR = "notificacion.commandErrorTimeStamp"
 const MEDIA_CHANGE = "ui.media.timeStamp"
 const SCREEN = "screen.timeStamp";
 
-export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIMESTAMP, NOTIF_PATCH_ERROR, NOTIF_LEIDO_TIMESTAMP, NOTIF_LEIDO_ERROR, RESERVA_GET_AGENDA_SUCCESS, RESERVA_GET_AGENDA_ERROR, CHAT_GRABAR_RESPUESTA, CHAT_GRABAR_RESPUESTA_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
+export class pantallaNotificacionReserva extends connect(store, NOTIF_ELIMINADO_TIMESTAMP, NOTIF_ELIMINADO_ERROR, NOTIF_PATCH_TIMESTAMP, NOTIF_PATCH_ERROR, NOTIF_LEIDO_TIMESTAMP, NOTIF_LEIDO_ERROR, RESERVA_GET_AGENDA_SUCCESS, RESERVA_GET_AGENDA_ERROR, CHAT_GRABAR_RESPUESTA, CHAT_GRABAR_RESPUESTA_ERROR, MEDIA_CHANGE, SCREEN)(LitElement) {
     constructor() {
         super();
         this.hidden = true
@@ -263,7 +265,7 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
                     <label id="textoCuerpo"></label>
                     <div id="divNotifBotones">
                         <button id="btnDelete" btn1 @click="${this.delete}" >${idiomas[this.idioma].notificacionReserva.btnDelete}</button>
-                        <button  id="btnVolver" btn3 @click="${this.volver}">${idiomas[this.idioma].notificacionReserva.btnVolver}</button>
+                        <button  id="btnVolver" btn3 @click="${this.leido}">${idiomas[this.idioma].notificacionReserva.btnVolver}</button>
                     </div>  
                 </div>  
             </div>
@@ -324,6 +326,15 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
         if (name == NOTIF_LEIDO_ERROR && this.current == "notificacionReserva") {
             store.dispatch(showWarning())
         }
+        if (name == NOTIF_ELIMINADO_TIMESTAMP && this.current == "notificacionReserva") {
+            store.dispatch(footherMuestraTapa(false))
+            store.dispatch(headerMuestraTapa(false))
+            this.shadowRoot.querySelector("#divNotificacion").style.display = "none"
+            this.update();
+        }
+        if (name == NOTIF_ELIMINADO_ERROR && this.current == "notificacionReserva") {
+            store.dispatch(showWarning())
+        }
     }
     cancelar() {
         store.dispatch(footherMuestraTapa(false))
@@ -375,7 +386,9 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
         const textoCuerpo = this.shadowRoot.querySelector("#textoCuerpo")
         const divNotificacion = this.shadowRoot.querySelector("#divNotificacion")
         const btnDelete = this.shadowRoot.querySelector("#btnDelete")
+        const btnVolver = this.shadowRoot.querySelector("#btnVolver")
         btnDelete.setAttribute('detalleid', notif.item.detalleId)
+        btnVolver.setAttribute('detalleid', notif.item.detalleId)
         this.shadowRoot.querySelector("#textoTitulo").value = ""
         this.shadowRoot.querySelector("#textoCuerpo").value = ""
         divNotificacion.style.display = "grid"
@@ -397,13 +410,27 @@ export class pantallaNotificacionReserva extends connect(store, NOTIF_PATCH_TIME
     }
 
     delete(e) {
-        //let detalleid = { entity: "/Leido(" + e.currentTarget.getAttribute("detalleid") + ")" }
-        //store.dispatch(leidoNotificacion(detalleid, store.getState().cliente.datos.token))
+        //let detalleid = e.currentTarget.getAttribute("detalleid")
+        //store.dispatch(leidoNotificacion(detalleid, null, store.getState().cliente.datos.token))
+    
+        let detalleid = e.currentTarget.getAttribute("detalleid")
+        //store.dispatch(headerMuestraTapa(false));
+        store.dispatch(eliminado(detalleid, null, store.getState().cliente.datos.token));
+        //const notificacion = this.shadowRoot.querySelector("#notificacion");
+        //notificacion.style.display = "none";
+        this.update();
+    }
+    leido(e) {
         let detalleid = e.currentTarget.getAttribute("detalleid")
         store.dispatch(leidoNotificacion(detalleid, null, store.getState().cliente.datos.token))
 
-
+        // store.dispatch(headerMuestraTapa(false));
+        // store.dispatch(leido(e.currentTarget.value, null, store.getState().cliente.datos.token));
+        // const notificacion = this.shadowRoot.querySelector("#notificacion");
+        // notificacion.style.display = "none";
+        // this.update();
     }
+
     firstUpdated() { }
 
     static get properties() {

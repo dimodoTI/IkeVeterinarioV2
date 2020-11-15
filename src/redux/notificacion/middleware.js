@@ -17,7 +17,10 @@ import {
     LEIDO,
     LEIDO_SUCCESS,
     LEIDO_ERROR,
-    getNotificacionChatPendientes as getPendientes
+    getNotificacionChatPendientes as getPendientes,
+    ELIMINADO,
+    ELIMINADO_SUCCESS,
+    ELIMINADO_ERROR,
 } from "../notificacion/actions";
 
 import {
@@ -31,7 +34,7 @@ import {
     ikeNotificacionDetalle,
     ikeChatQuery,
     ikeNotificaciones,
-    ikeNotificacionesQuery
+    ikeNotificacionesQuery, ikeNotificacionEliminado
 } from "../fetchs"
 
 import {
@@ -63,7 +66,8 @@ export const getNotificacionChatPendientes = ({
         optionsChat.filter = "Tipo eq 0 and Respondido eq 0"
         const optionsNotif = {}
         optionsNotif.expand = "Cabecera"
-        optionsNotif.filter = "Leido eq 0 and ClienteId eq " + action.clienteId
+        optionsNotif.filter = "Leido ge 0 and ClienteId eq " + action.clienteId
+        optionsNotif.orderby = "Id desc"
         var dataChat = null
         var dataNotif = null
         dispatch(showSpinner(ikeChatQuery))
@@ -140,6 +144,13 @@ export const leido = ({
     }
 };
 
+export const eliminado = ({ dispatch }) => (next) => (action) => {
+    next(action);
+    if (action.type === ELIMINADO) {
+        dispatch(RESTAdd(ikeNotificacionEliminado, action.body, ELIMINADO_SUCCESS, ELIMINADO_ERROR, action.token, action.id));
+    }
+};
+
 export const processGet = ({
     dispatch
 }) => next => action => {
@@ -157,7 +168,7 @@ export const processComand = ({
     if (action.type === PATCH_SUCCESS) {
 
     }
-    if (action.type === LEIDO_SUCCESS) {
+    if (action.type === LEIDO_SUCCESS || action.type === ELIMINADO_SUCCESS)  {
         dispatch(getPendientes(getState().cliente.datos.id))
         dispatch(setCampana(getState().cliente.datos.id))
     }
@@ -167,9 +178,9 @@ export const processError = ({
     dispatch
 }) => next => action => {
     next(action);
-    if (action.type === GET_ERROR || action.type === GET_DETALLE_CABECERA_ERROR || action.type === PATCH_ERROR || action.type === LEIDO_ERROR) {
+    if (action.type === GET_ERROR || action.type === GET_DETALLE_CABECERA_ERROR || action.type === PATCH_ERROR || action.type === LEIDO_ERROR || action.type === ELIMINADO_ERROR) {
 
     }
 };
 
-export const middleware = [get, getNotificacionChatPendientes, patch, leido, processGet, processComand, processError];
+export const middleware = [get, getNotificacionChatPendientes, patch, leido, eliminado, processGet, processComand, processError];
