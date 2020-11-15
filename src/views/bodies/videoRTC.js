@@ -145,7 +145,7 @@ export class videoRTC extends connect(store, MEDIA_CHANGE, SCREEN)(LitElement) {
     firstUpdated(changedProperties) {
         this.videoLocal = this.shadowRoot.querySelector('#videoLocal');
         this.videoRemoto = this.shadowRoot.querySelector('#videoRemoto');
-        this.addEventListener("onSaveDiagnostico", this.leave.bind(this));
+        document.addEventListener("onSaveDiagnostico", this.leave.bind(this));
     }
 
     connectVideo(rol, room, theirVideo, yourVideo) {
