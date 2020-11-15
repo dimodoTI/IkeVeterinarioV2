@@ -169,9 +169,8 @@ export class diagnosticoComponente extends connect(store, ADJUNTOS_TIMESTAMP, ME
             } else {
                 store.dispatch(goTo("ate_agendas"))
             }
-            if (this.leave){
-                this.leave()
-            }
+            const event = new CustomEvent("onSaveDiagnostico");
+            event.dispatchEvent(event);
         }
         if (name == ATENCIONES_ERROROTROSTIMESTAMP && state.screen.name == "ate_diagnosticos") {
             store.dispatch(showWarning(store.getState().screen.name, 0))
